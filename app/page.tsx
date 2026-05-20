@@ -66,7 +66,7 @@ if (error) {
 async function addItem() {
     if (!title) return;
 
-    const status = dueDate ? "active" : "active";
+    const status = "active";
 
 const { error } = await supabase.from("items").insert({
   title,
