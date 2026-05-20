@@ -149,7 +149,7 @@ const { error } = await supabase.from("items").insert({
   <button
  
   onClick={() => completeItem(item.id)}
-  className="mt-2 text-sm bg-black text-white px-3 py-1 rounded"
+  className="mt-2 text-sm border border-gray-300 px-3 py-1 rounded w-fit text-sm hover:bg-gray-100"
 >
   Complete
 </button>
@@ -186,7 +186,7 @@ const { error } = await supabase.from("items").insert({
 
           <button
             onClick={() => completeItem(item.id)}
-            className="mt-2 text-sm bg-black text-white px-3 py-1 rounded"
+            className="mt-2 text-sm border border-gray-300 px-3 py-1 rounded w-fit text-sm hover:bg-gray-100"
           >
             Complete
           </button>
@@ -214,7 +214,7 @@ const { error } = await supabase.from("items").insert({
 
           <button
             onClick={() => completeItem(item.id)}
-            className="mt-2 text-sm bg-black text-white px-3 py-1 rounded"
+            className="mt-2 text-sm border border-gray-300 px-3 py-1 rounded w-fit text-sm hover:bg-gray-100"
           >
             Complete
           </button>
