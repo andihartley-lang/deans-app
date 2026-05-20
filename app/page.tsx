@@ -207,7 +207,7 @@ const { error } = await supabase.from("items").insert({
     .map((item) => (
       <div
         key={item.id}
-        className="border border-yellow-500 bg-yellow-50 p-3 rounded"
+        className="bg-yellow-50 p-4 rounded-3xl shadow-sm border border-yellow-100"
       >
         <div className="flex flex-col gap-2">
           {item.title}
