@@ -55,10 +55,11 @@ async function completeItem(id: string) {
     })
     .eq("id", id);
 
-  if (error) {
-    console.error(error);
-    return;
-  }
+if (error) {
+  alert(error.message);
+  console.error(error);
+  return;
+}
 
   fetchItems();
 }
