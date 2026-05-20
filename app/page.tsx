@@ -66,7 +66,7 @@ if (error) {
 async function addItem() {
     if (!title) return;
 
-    const status = dueDate ? "scheduled" : "captured";
+    const status = dueDate ? "active" : "active";
 
 const { error } = await supabase.from("items").insert({
   title,
@@ -121,17 +121,7 @@ const { error } = await supabase.from("items").insert({
 
   <div className="space-y-2">
   {items
-  .filter((item) => {
-    const status = getStatus(item.due_date);
-
-    return (
-  item.status !== "completed" &&
-  (
-    status === "active" ||
-    status === "critical"
-  )
-);
-  })
+.filter((item) => item.status !== "completed")
   .map((item) => (
       <div
         key={item.id}
