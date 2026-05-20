@@ -118,10 +118,17 @@ const { error } = await supabase.from("items").insert({
   <h2 className="text-2xl font-semibold mb-4">
     Upcoming
   </h2>
-
+<h3 className="text-lg font-semibold mb-2">
+  Soon
+</h3>
   <div className="space-y-2">
   {items
-.filter((item) => item.status !== "completed" && item.due_date)
+.filter(
+  (item) =>
+    item.status !== "completed" &&
+    item.due_date &&
+    getStatus(item.due_date) === "critical"
+)
   .map((item) => (
       <div
         key={item.id}
@@ -151,6 +158,42 @@ const { error } = await supabase.from("items").insert({
       </div>
     ))}
   </div>
+  <h3 className="text-lg font-semibold mb-2 mt-6">
+  Later
+</h3>
+
+<div className="space-y-2">
+  {items
+    .filter(
+      (item) =>
+        item.status !== "completed" &&
+        item.due_date &&
+        getStatus(item.due_date) !== "critical"
+    )
+    .map((item) => (
+      <div
+        key={item.id}
+        className="border border-gray-300 bg-gray-50 p-3 rounded"
+      >
+        <div className="flex flex-col gap-2">
+          {item.title}
+
+          {item.due_date && (
+            <div className="text-sm text-gray-500">
+              Due: {new Date(item.due_date).toLocaleDateString()}
+            </div>
+          )}
+
+          <button
+            onClick={() => completeItem(item.id)}
+            className="mt-2 text-sm bg-black text-white px-3 py-1 rounded"
+          >
+            Complete
+          </button>
+        </div>
+      </div>
+    ))}
+</div>
   <h2 className="text-2xl font-semibold mb-4 mt-8">
   Inbox
 </h2>
