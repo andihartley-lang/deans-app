@@ -75,7 +75,7 @@ const { error } = await supabase.from("items").insert({
 });
 
     if (error) {
-      alert("Error saving item");
+      alert(error.message);
       console.error(error);
       return;
     }
