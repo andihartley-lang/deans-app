@@ -205,26 +205,25 @@ const { error } = await supabase.from("items").insert({
         item.status !== "completed" && !item.due_date
     )
     .map((item) => (
-      <div
-        key={item.id}
-        className="bg-yellow-50 p-4 rounded-3xl shadow-sm border border-yellow-100"
-      >
-        <div className="flex items-center justify-between">
-  <div className="flex items-center gap-2 text-base">
-    <span>📝</span>
-    <span>{item.title}</span>
-  </div>
-
-  <button
-    onClick={() => completeItem(item.id)}
-    className="text-sm border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-100"
+  <div
+    key={item.id}
+    className="bg-yellow-50 p-4 rounded-3xl shadow-sm border border-yellow-100"
   >
-    ✓
-  </button>
+    <div className="flex items-center justify-between">
+      <div className="flex items-center gap-2 text-base">
+        <span>📝</span>
+        <span>{item.title}</span>
+      </div>
+
+      <button
+        onClick={() => completeItem(item.id)}
+        className="text-sm border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-100"
+      >
+        ✓
+      </button>
+    </div>
+  </div>
+))}
 </div>
 
-    ))}
-</div>
-</div></main>
-  );
-}
+</main>
