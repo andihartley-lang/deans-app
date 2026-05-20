@@ -116,12 +116,12 @@ const { error } = await supabase.from("items").insert({
       </div>
     <div>
   <h2 className="text-2xl font-semibold mb-4">
-    Saved Items
+    Upcoming
   </h2>
 
   <div className="space-y-2">
   {items
-.filter((item) => item.status !== "completed")
+.filter((item) => item.status !== "completed" && item.due_date)
   .map((item) => (
       <div
         key={item.id}
@@ -151,6 +151,34 @@ const { error } = await supabase.from("items").insert({
       </div>
     ))}
   </div>
+  <h2 className="text-2xl font-semibold mb-4 mt-8">
+  Inbox
+</h2>
+
+<div className="space-y-2">
+  {items
+    .filter(
+      (item) =>
+        item.status !== "completed" && !item.due_date
+    )
+    .map((item) => (
+      <div
+        key={item.id}
+        className="border border-yellow-500 bg-yellow-50 p-3 rounded"
+      >
+        <div className="flex flex-col gap-2">
+          {item.title}
+
+          <button
+            onClick={() => completeItem(item.id)}
+            className="mt-2 text-sm bg-black text-white px-3 py-1 rounded"
+          >
+            Complete
+          </button>
+        </div>
+      </div>
+    ))}
+</div>
 </div></main>
   );
 }
