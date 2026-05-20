@@ -131,7 +131,7 @@ const { error } = await supabase.from("items").insert({
     : "border-yellow-500 bg-yellow-50"
 }`}
       ><div className="flex flex-col gap-2">
- {item.title} — {getStatus(item.due_date)}
+ {item.title}
 
   {item.due_date && (
     <div className="text-sm text-gray-500">
