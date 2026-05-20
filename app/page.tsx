@@ -198,7 +198,7 @@ const { error } = await supabase.from("items").insert({
   Inbox
 </h2>
 
-<div className="space-y-2">
+<div className="grid grid-cols-2 gap-2">
   {items
     .filter(
       (item) =>
