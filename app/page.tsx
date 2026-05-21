@@ -233,15 +233,29 @@ const { error } = await supabase.from("items").insert({
   <span>Upcoming</span>
 </button>
       
-        <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
-          <span className="text-2xl">📥</span>
-          <span>Inbox</span>
-        </div>
+        <button
+  onClick={() => setCurrentView("inbox")}
+  className={`flex flex-col items-center gap-2 transition ${
+    currentView === "inbox"
+      ? "text-yellow-300"
+      : "opacity-80 hover:opacity-100"
+  }`}
+>
+  <span className="text-2xl">📥</span>
+  <span>Inbox</span>
+</button>
 
-        <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
-          <span className="text-2xl">⚙️</span>
-          <span>Settings</span>
-        </div>
+        <button
+  onClick={() => setCurrentView("settings")}
+  className={`flex flex-col items-center gap-2 transition ${
+    currentView === "settings"
+      ? "text-yellow-300"
+      : "opacity-80 hover:opacity-100"
+  }`}
+>
+  <span className="text-2xl">⚙️</span>
+  <span>Settings</span>
+</button>
 
       </div>
     </div>
@@ -252,13 +266,33 @@ const { error } = await supabase.from("items").insert({
       {/* HERO */}
       <div className="bg-gradient-to-r from-indigo-950 to-purple-800 px-12 py-10 text-white shadow-xl">
 
-        <p className="text-indigo-200 mb-2 text-lg">
-          {`${getGreeting()}, Andy 👋`}
-        </p>
+        <p className="text-indigo-100 text-xl">
+
+  {currentView === "dashboard" &&
+    "Here’s what’s in your orbit."}
+
+  {currentView === "upcoming" &&
+    "Upcoming tasks and scheduled items."}
+
+  {currentView === "inbox" &&
+    "Captured tasks waiting to be organised."}
+
+  {currentView === "settings" &&
+    "Manage your Orbit preferences."}
+
+</p>
 
         <h1 className="text-6xl font-bold mb-3">
-          Orbit
-        </h1>
+
+  {currentView === "dashboard" && "Orbit"}
+
+  {currentView === "upcoming" && "Upcoming"}
+
+  {currentView === "inbox" && "Inbox"}
+
+  {currentView === "settings" && "Settings"}
+
+</h1>
 
         <p className="text-indigo-100 text-xl">
           Here’s what’s in your orbit.
@@ -297,30 +331,163 @@ const { error } = await supabase.from("items").insert({
         </div>
 
         
-        {/* UPCOMING */}
-        <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
 
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-4xl font-bold text-indigo-950">
-              Upcoming
-            </h2>
+                {(currentView === "dashboard" || currentView === "upcoming") && (
 
-            <span className="text-indigo-600">
-              View all
-            </span>
-          </div>
+          <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
 
-          {/* SOON */}
-          <div className="mb-8">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-4xl font-bold text-indigo-950">
+                Upcoming
+              </h2>
 
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-semibold text-indigo-950">
-                Soon
-              </h3>
-
-              <span className="text-indigo-600 text-sm">
+              <span className="text-indigo-600">
                 View all
               </span>
+            </div>
+
+            {/* SOON */}
+            <div className="mb-8">
+
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-semibold text-indigo-950">
+                  Soon
+                </h3>
+
+                <span className="text-indigo-600 text-sm">
+                  View all
+                </span>
+              </div>
+
+              <div className="space-y-4">
+
+                {items
+                  .filter(
+                    (item) =>
+                      item.status !== "completed" &&
+                      item.due_date &&
+                      getStatus(item.due_date) === "critical"
+                  )
+                  .map((item) => (
+
+                    <div
+                      key={item.id}
+                      className="bg-gradient-to-r from-red-50 to-white border border-red-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
+                    >
+
+                      <div className="flex items-center gap-4">
+
+                        <div className="bg-red-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+                          {getItemIcon(item.title)}
+                        </div>
+
+                        <div>
+                          <div className="text-2xl font-semibold text-red-900">
+                            {item.title}
+                          </div>
+
+                          <div className="text-red-700">
+                            Due: {new Date(item.due_date).toLocaleDateString()}
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <button
+                        onClick={() => completeItem(item.id)}
+                        className="border border-red-200 rounded-2xl px-6 py-3 hover:bg-red-50"
+                      >
+                        Complete
+                      </button>
+
+                    </div>
+
+                  ))}
+
+              </div>
+
+            </div>
+
+            {/* LATER */}
+            <div>
+
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-2xl font-semibold text-indigo-950">
+                  Later
+                </h3>
+
+                <span className="text-indigo-600 text-sm">
+                  View all
+                </span>
+              </div>
+
+              <div className="space-y-4">
+
+                {items
+                  .filter(
+                    (item) =>
+                      item.status !== "completed" &&
+                      item.due_date &&
+                      getStatus(item.due_date) !== "critical"
+                  )
+                  .map((item) => (
+
+                    <div
+                      key={item.id}
+                      className="bg-gradient-to-r from-blue-50 to-white border border-blue-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
+                    >
+
+                      <div className="flex items-center gap-4">
+
+                        <div className="bg-blue-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+                          {getItemIcon(item.title)}
+                        </div>
+
+                        <div>
+                          <div className="text-2xl font-semibold text-indigo-950">
+                            {item.title}
+                          </div>
+
+                          <div className="text-blue-700">
+                            Due: {new Date(item.due_date).toLocaleDateString()}
+                          </div>
+                        </div>
+
+                      </div>
+
+                      <button
+                        onClick={() => completeItem(item.id)}
+                        className="border border-blue-200 rounded-2xl px-6 py-3 hover:bg-blue-50"
+                      >
+                        Complete
+                      </button>
+
+                    </div>
+
+                  ))}
+
+              </div>
+
+            </div>
+
+          </div>
+
+        )}
+
+        {(currentView === "dashboard" || currentView === "inbox") && (
+
+          <div className="bg-white rounded-3xl shadow-lg p-8">
+
+            <div className="flex items-center justify-between mb-6">
+
+              <h2 className="text-4xl font-bold text-indigo-950">
+                Inbox
+              </h2>
+
+              <span className="text-indigo-600">
+                View all
+              </span>
+
             </div>
 
             <div className="space-y-4">
@@ -329,39 +496,32 @@ const { error } = await supabase.from("items").insert({
                 .filter(
                   (item) =>
                     item.status !== "completed" &&
-                    item.due_date &&
-                    getStatus(item.due_date) === "critical"
+                    !item.due_date
                 )
                 .map((item) => (
 
                   <div
                     key={item.id}
-                    className="bg-gradient-to-r from-red-50 to-white border border-red-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
+                    className="bg-gradient-to-r from-yellow-50 to-white border border-yellow-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
                   >
 
                     <div className="flex items-center gap-4">
 
-                      <div className="bg-red-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+                      <div className="bg-yellow-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
                         {getItemIcon(item.title)}
                       </div>
 
-                      <div>
-                        <div className="text-2xl font-semibold text-red-900">
-                          {item.title}
-                        </div>
-
-                        <div className="text-red-700">
-                          Due: {new Date(item.due_date).toLocaleDateString()}
-                        </div>
+                      <div className="text-2xl font-semibold text-indigo-950">
+                        {item.title}
                       </div>
 
                     </div>
 
                     <button
                       onClick={() => completeItem(item.id)}
-                      className="border border-red-200 rounded-2xl px-6 py-3 hover:bg-red-50"
+                      className="border border-yellow-200 rounded-full w-14 h-14 text-xl hover:bg-yellow-50"
                     >
-                      Complete
+                      ✓
                     </button>
 
                   </div>
@@ -372,131 +532,12 @@ const { error } = await supabase.from("items").insert({
 
           </div>
 
-          {/* LATER */}
-          <div>
-
-            <div className="flex items-center justify-between mb-4">
-              <h3 className="text-2xl font-semibold text-indigo-950">
-                Later
-              </h3>
-
-              <span className="text-indigo-600 text-sm">
-                View all
-              </span>
-            </div>
-
-            <div className="space-y-4">
-
-              {items
-                .filter(
-                  (item) =>
-                    item.status !== "completed" &&
-                    item.due_date &&
-                    getStatus(item.due_date) !== "critical"
-                )
-                .map((item) => (
-
-                  <div
-                    key={item.id}
-                    className="bg-gradient-to-r from-blue-50 to-white border border-blue-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
-                  >
-
-                    <div className="flex items-center gap-4">
-
-                      <div className="bg-blue-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                        {getItemIcon(item.title)}
-                      </div>
-
-                      <div>
-                        <div className="text-2xl font-semibold text-indigo-950">
-                          {item.title}
-                        </div>
-
-                        <div className="text-blue-700">
-                          Due: {new Date(item.due_date).toLocaleDateString()}
-                        </div>
-                      </div>
-
-                    </div>
-
-                    <button
-                      onClick={() => completeItem(item.id)}
-                      className="border border-blue-200 rounded-2xl px-6 py-3 hover:bg-blue-50"
-                    >
-                      Complete
-                    </button>
-
-                  </div>
-
-                ))}
-
-            </div>
-
-          </div>
-
-        </div>
-
-        {/* INBOX */}
-        <div className="bg-white rounded-3xl shadow-lg p-8">
-
-          <div className="flex items-center justify-between mb-6">
-
-            <h2 className="text-4xl font-bold text-indigo-950">
-              Inbox
-            </h2>
-
-            <span className="text-indigo-600">
-              View all
-            </span>
-
-          </div>
-
-          <div className="space-y-4">
-
-            {items
-              .filter(
-                (item) =>
-                  item.status !== "completed" &&
-                  !item.due_date
-              )
-              .map((item) => (
-
-                <div
-                  key={item.id}
-                  className="bg-gradient-to-r from-yellow-50 to-white border border-yellow-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
-                >
-
-                  <div className="flex items-center gap-4">
-
-                    <div className="bg-yellow-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                      {getItemIcon(item.title)}
-                    </div>
-
-                    <div className="text-2xl font-semibold text-indigo-950">
-                      {item.title}
-                    </div>
-
-                  </div>
-
-                  <button
-                    onClick={() => completeItem(item.id)}
-                    className="border border-yellow-200 rounded-full w-14 h-14 text-xl hover:bg-yellow-50"
-                  >
-                    ✓
-                  </button>
-
-                </div>
-
-              ))}
-
-          </div>
-
-        </div>
+        )}
 
       </div>
 
     </div>
 
- </main>
+  </main>
   );
 }
