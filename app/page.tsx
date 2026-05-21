@@ -7,6 +7,7 @@ export default function Home() {
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState("");
 const [items, setItems] = useState<any[]>([]);
+const [currentView, setCurrentView] = useState("dashboard");
 async function fetchItems() {
   const { data, error } = await supabase
     .from("items")
@@ -45,6 +46,115 @@ function getStatus(dueDate: string | null) {
   }
 
   return "scheduled";
+}
+function getItemIcon(title: string) {
+  const lower = title.toLowerCase();
+
+  if (
+    lower.includes("mot") ||
+    lower.includes("car") ||
+    lower.includes("garage")
+  ) {
+    return "🚗";
+  }
+
+  if (
+    lower.includes("doctor") ||
+    lower.includes("gp") ||
+    lower.includes("hospital")
+  ) {
+    return "🩺";
+  }
+
+  if (lower.includes("dentist")) {
+    return "🦷";
+  }
+
+  if (
+    lower.includes("shop") ||
+    lower.includes("milk") ||
+    lower.includes("buy")
+  ) {
+    return "🛒";
+  }
+
+  if (lower.includes("passport")) {
+    return "🛂";
+  }
+
+  if (lower.includes("insurance")) {
+    return "🛡️";
+  }
+
+  if (
+    lower.includes("call") ||
+    lower.includes("phone")
+  ) {
+    return "📞";
+  }
+
+  if (
+    lower.includes("flight") ||
+    lower.includes("holiday")
+  ) {
+    return "✈️";
+  }
+  if (
+    lower.includes("tax") ||
+    lower.includes("hmrc") ||
+    lower.includes("invoice") ||
+    lower.includes("bill") ||
+    lower.includes("payment") ||
+    lower.includes("bank")
+  ) {
+    return "🧾";
+  }
+
+  if (
+    lower.includes("boiler") ||
+    lower.includes("plumber") ||
+    lower.includes("electric") ||
+    lower.includes("gas") ||
+    lower.includes("water") ||
+    lower.includes("internet") ||
+    lower.includes("broadband")
+  ) {
+    return "🏠";
+  }
+
+  if (
+    lower.includes("dog") ||
+    lower.includes("cat") ||
+    lower.includes("vet")
+  ) {
+    return "🐾";
+  }
+
+  if (
+    lower.includes("school") ||
+    lower.includes("nursery") ||
+    lower.includes("parents")
+  ) {
+    return "🎒";
+  }
+  return "📝";
+}
+function getGreeting() {
+  const hour = new Date(
+  new Date().toLocaleString("en-GB", {
+    timeZone: "Europe/London",
+  })
+).getHours();
+
+  if (hour < 12) {
+    return "Good morning";
+  }
+
+  if (hour < 24) {
+    return "Good afternoon";
+  }
+
+  return "Good evening";
 }
 async function completeItem(id: string) {
   const { error } = await supabase
@@ -99,16 +209,30 @@ const { error } = await supabase.from("items").insert({
 
       <div className="flex flex-col gap-8 text-sm items-center">
 
-        <div className="flex flex-col items-center gap-2 text-yellow-300">
-          <span className="text-2xl">📊</span>
-          <span>Dashboard</span>
-        </div>
-
-        <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
-          <span className="text-2xl">📅</span>
-          <span>Upcoming</span>
-        </div>
-
+        <button
+  onClick={() => setCurrentView("dashboard")}
+  className={`flex flex-col items-center gap-2 transition ${
+    currentView === "dashboard"
+      ? "text-yellow-300"
+      : "opacity-80 hover:opacity-100"
+  }`}
+>
+  <span className="text-2xl">📊</span>
+  <span>Dashboard</span>
+</button>
+       
+        <button
+  onClick={() => setCurrentView("upcoming")}
+  className={`flex flex-col items-center gap-2 transition ${
+    currentView === "upcoming"
+      ? "text-yellow-300"
+      : "opacity-80 hover:opacity-100"
+  }`}
+>
+  <span className="text-2xl">🗓️</span>
+  <span>Upcoming</span>
+</button>
+      
         <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
           <span className="text-2xl">📥</span>
           <span>Inbox</span>
@@ -129,7 +253,7 @@ const { error } = await supabase.from("items").insert({
       <div className="bg-gradient-to-r from-indigo-950 to-purple-800 px-12 py-10 text-white shadow-xl">
 
         <p className="text-indigo-200 mb-2 text-lg">
-          Good evening, Andy 👋
+          {`${getGreeting()}, Andy 👋`}
         </p>
 
         <h1 className="text-6xl font-bold mb-3">
@@ -172,6 +296,7 @@ const { error } = await supabase.from("items").insert({
 
         </div>
 
+        
         {/* UPCOMING */}
         <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
 
@@ -217,7 +342,7 @@ const { error } = await supabase.from("items").insert({
                     <div className="flex items-center gap-4">
 
                       <div className="bg-red-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                        🚗
+                        {getItemIcon(item.title)}
                       </div>
 
                       <div>
@@ -279,7 +404,7 @@ const { error } = await supabase.from("items").insert({
                     <div className="flex items-center gap-4">
 
                       <div className="bg-blue-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                        🛡️
+                        {getItemIcon(item.title)}
                       </div>
 
                       <div>
@@ -344,7 +469,7 @@ const { error } = await supabase.from("items").insert({
                   <div className="flex items-center gap-4">
 
                     <div className="bg-yellow-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                      📝
+                      {getItemIcon(item.title)}
                     </div>
 
                     <div className="text-2xl font-semibold text-indigo-950">
