@@ -88,143 +88,290 @@ const { error } = await supabase.from("items").insert({
   }
 
   return (
-    <main className="min-h-screen bg-white p-8">
-      <h1 className="text-4xl font-bold mb-6">
-        Dean's App
-      </h1>
+  <main className="min-h-screen bg-[#f3f4f8] flex">
 
-      <div className="flex gap-2 mb-8">
-        <input
-          type="text"
-          placeholder="Add life admin..."
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          className="border p-3 rounded w-full max-w-md"
-        />
-<input
-  type="date"
-  value={dueDate}
-  onChange={(e) => setDueDate(e.target.value)}
-  className="border p-3 rounded"
-/>
-        <button
-          onClick={addItem}
-          className="bg-black text-white px-4 rounded"
-        >
-          Add
-        </button>
+    {/* SIDEBAR */}
+    <div className="w-24 bg-gradient-to-b from-indigo-950 to-purple-900 text-white flex flex-col items-center py-8 rounded-r-3xl shadow-2xl">
+
+      <div className="bg-yellow-400 text-indigo-950 font-bold text-3xl w-14 h-14 rounded-2xl flex items-center justify-center mb-10 shadow-lg">
+        O
       </div>
-    <div>
-  <h2 className="text-2xl font-semibold mb-4">
-    Upcoming
-  </h2>
-<h3 className="text-lg font-semibold mb-2">
-  Soon
-</h3>
-  <div className="space-y-2">
-  {items
-.filter(
-  (item) =>
-    item.status !== "completed" &&
-    item.due_date &&
-    getStatus(item.due_date) === "critical"
-)
-  .map((item) => (
-      <div
-        key={item.id}
-      className={`border p-3 rounded ${
-  getStatus(item.due_date) === "critical"
-    ? "border-red-500 bg-red-50"
-    : "border-yellow-500 bg-yellow-50"
-}`}
-      ><div className="flex flex-col gap-2">
- {item.title}
 
-  {item.due_date && (
-    <div className="text-sm text-gray-500">
-     Due: {new Date(item.due_date).toLocaleDateString()}
+      <div className="flex flex-col gap-8 text-sm items-center">
 
+        <div className="flex flex-col items-center gap-2 text-yellow-300">
+          <span className="text-2xl">📊</span>
+          <span>Dashboard</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
+          <span className="text-2xl">📅</span>
+          <span>Upcoming</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
+          <span className="text-2xl">📥</span>
+          <span>Inbox</span>
+        </div>
+
+        <div className="flex flex-col items-center gap-2 opacity-80 hover:opacity-100">
+          <span className="text-2xl">⚙️</span>
+          <span>Settings</span>
+        </div>
+
+      </div>
     </div>
-  )}
-  <button
- 
-  onClick={() => completeItem(item.id)}
-  className="mt-2 text-sm border border-gray-300 px-3 py-1 rounded w-fit text-sm hover:bg-gray-100"
->
-  Complete
-</button>
-</div>
+
+    {/* MAIN CONTENT */}
+    <div className="flex-1">
+
+      {/* HERO */}
+      <div className="bg-gradient-to-r from-indigo-950 to-purple-800 px-12 py-10 text-white shadow-xl">
+
+        <p className="text-indigo-200 mb-2 text-lg">
+          Good evening, Andy 👋
+        </p>
+
+        <h1 className="text-6xl font-bold mb-3">
+          Orbit
+        </h1>
+
+        <p className="text-indigo-100 text-xl">
+          Here’s what’s in your orbit.
+        </p>
 
       </div>
-    ))}
-  </div>
-  <h3 className="text-lg font-semibold mb-2 mt-6">
-  Later
-</h3>
 
-<div className="space-y-2">
-  {items
-    .filter(
-      (item) =>
-        item.status !== "completed" &&
-        item.due_date &&
-        getStatus(item.due_date) !== "critical"
-    )
-    .map((item) => (
-      <div
-        key={item.id}
-        className="border border-gray-300 bg-gray-50 p-3 rounded"
-      >
-        <div className="flex flex-col gap-2">
-          {item.title}
+      {/* CONTENT WRAPPER */}
+      <div className="max-w-6xl mx-auto -mt-10 pb-12 px-6">
 
-          {item.due_date && (
-            <div className="text-sm text-gray-500">
-              Due: {new Date(item.due_date).toLocaleDateString()}
-            </div>
-          )}
+        {/* INPUT PANEL */}
+        <div className="bg-white rounded-3xl shadow-xl p-4 flex gap-3 items-center mb-8">
+
+          <input
+            type="text"
+            placeholder="Add life admin..."
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none"
+          />
+
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+            className="border border-gray-200 rounded-2xl p-4"
+          />
 
           <button
-            onClick={() => completeItem(item.id)}
-            className="mt-2 text-sm border border-gray-300 px-3 py-1 rounded w-fit text-sm hover:bg-gray-100"
+            onClick={addItem}
+            className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl transition"
           >
-            Complete
+            Add
           </button>
-        </div>
-      </div>
-    ))}
-</div>
-  <h2 className="text-2xl font-semibold mb-4 mt-8">
-  Inbox
-</h2>
 
-<div className="grid grid-cols-2 gap-2">
-  {items
-    .filter((item) => item.status !== "completed" && !item.due_date)
-    .map((item) => (
-      <div
-        key={item.id}
-        className="bg-yellow-50 p-4 rounded-3xl shadow-sm border border-yellow-100"
-      >
-        <div className="flex items-center justify-between">
-          <div className="flex items-center gap-2 text-base">
-            <span>📝</span>
-            <span>{item.title}</span>
+        </div>
+
+        {/* UPCOMING */}
+        <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
+
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-4xl font-bold text-indigo-950">
+              Upcoming
+            </h2>
+
+            <span className="text-indigo-600">
+              View all
+            </span>
           </div>
 
-          <button
-            onClick={() => completeItem(item.id)}
-            className="text-sm border border-gray-300 rounded-full px-3 py-1 hover:bg-gray-100"
-          >
-            ✓
-          </button>
+          {/* SOON */}
+          <div className="mb-8">
+
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-semibold text-indigo-950">
+                Soon
+              </h3>
+
+              <span className="text-indigo-600 text-sm">
+                View all
+              </span>
+            </div>
+
+            <div className="space-y-4">
+
+              {items
+                .filter(
+                  (item) =>
+                    item.status !== "completed" &&
+                    item.due_date &&
+                    getStatus(item.due_date) === "critical"
+                )
+                .map((item) => (
+
+                  <div
+                    key={item.id}
+                    className="bg-gradient-to-r from-red-50 to-white border border-red-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
+                  >
+
+                    <div className="flex items-center gap-4">
+
+                      <div className="bg-red-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+                        🚗
+                      </div>
+
+                      <div>
+                        <div className="text-2xl font-semibold text-red-900">
+                          {item.title}
+                        </div>
+
+                        <div className="text-red-700">
+                          Due: {new Date(item.due_date).toLocaleDateString()}
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <button
+                      onClick={() => completeItem(item.id)}
+                      className="border border-red-200 rounded-2xl px-6 py-3 hover:bg-red-50"
+                    >
+                      Complete
+                    </button>
+
+                  </div>
+
+                ))}
+
+            </div>
+
+          </div>
+
+          {/* LATER */}
+          <div>
+
+            <div className="flex items-center justify-between mb-4">
+              <h3 className="text-2xl font-semibold text-indigo-950">
+                Later
+              </h3>
+
+              <span className="text-indigo-600 text-sm">
+                View all
+              </span>
+            </div>
+
+            <div className="space-y-4">
+
+              {items
+                .filter(
+                  (item) =>
+                    item.status !== "completed" &&
+                    item.due_date &&
+                    getStatus(item.due_date) !== "critical"
+                )
+                .map((item) => (
+
+                  <div
+                    key={item.id}
+                    className="bg-gradient-to-r from-blue-50 to-white border border-blue-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
+                  >
+
+                    <div className="flex items-center gap-4">
+
+                      <div className="bg-blue-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+                        🛡️
+                      </div>
+
+                      <div>
+                        <div className="text-2xl font-semibold text-indigo-950">
+                          {item.title}
+                        </div>
+
+                        <div className="text-blue-700">
+                          Due: {new Date(item.due_date).toLocaleDateString()}
+                        </div>
+                      </div>
+
+                    </div>
+
+                    <button
+                      onClick={() => completeItem(item.id)}
+                      className="border border-blue-200 rounded-2xl px-6 py-3 hover:bg-blue-50"
+                    >
+                      Complete
+                    </button>
+
+                  </div>
+
+                ))}
+
+            </div>
+
+          </div>
+
         </div>
+
+        {/* INBOX */}
+        <div className="bg-white rounded-3xl shadow-lg p-8">
+
+          <div className="flex items-center justify-between mb-6">
+
+            <h2 className="text-4xl font-bold text-indigo-950">
+              Inbox
+            </h2>
+
+            <span className="text-indigo-600">
+              View all
+            </span>
+
+          </div>
+
+          <div className="space-y-4">
+
+            {items
+              .filter(
+                (item) =>
+                  item.status !== "completed" &&
+                  !item.due_date
+              )
+              .map((item) => (
+
+                <div
+                  key={item.id}
+                  className="bg-gradient-to-r from-yellow-50 to-white border border-yellow-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
+                >
+
+                  <div className="flex items-center gap-4">
+
+                    <div className="bg-yellow-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+                      📝
+                    </div>
+
+                    <div className="text-2xl font-semibold text-indigo-950">
+                      {item.title}
+                    </div>
+
+                  </div>
+
+                  <button
+                    onClick={() => completeItem(item.id)}
+                    className="border border-yellow-200 rounded-full w-14 h-14 text-xl hover:bg-yellow-50"
+                  >
+                    ✓
+                  </button>
+
+                </div>
+
+              ))}
+
+          </div>
+
+        </div>
+
       </div>
-    ))}
-</div>
 
-</div>
+    </div>
 
-</main>
+ </main>
   );
 }
