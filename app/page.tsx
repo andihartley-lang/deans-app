@@ -280,6 +280,8 @@ const { error } = await supabase.from("items").insert({
 
   {currentView === "dashboard" &&
     "Here’s what’s in your orbit."}
+    {currentView === "today" &&
+  "Focus only on what matters today."}
 
   {currentView === "upcoming" &&
     "Upcoming tasks and scheduled items."}
@@ -488,7 +490,12 @@ const { error } = await supabase.from("items").insert({
 
         )}
 
-        {(currentView === "dashboard" || currentView === "inbox") && (
+        {(
+  currentView === "dashboard" ||
+  currentView === "upcoming" ||
+  currentView === "today" ||
+  currentView === "inbox"
+) && (
 
           <div className="bg-white rounded-3xl shadow-lg p-8">
 
