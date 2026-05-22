@@ -220,7 +220,17 @@ const { error } = await supabase.from("items").insert({
   <span className="text-2xl">📊</span>
   <span>Dashboard</span>
 </button>
-       
+  <button
+  onClick={() => setCurrentView("today")}
+  className={`flex flex-col items-center gap-2 transition ${
+    currentView === "today"
+      ? "text-yellow-300"
+      : "opacity-80 hover:opacity-100"
+  }`}
+>
+  <span className="text-2xl">☀️</span>
+  <span>Today</span>
+</button>     
         <button
   onClick={() => setCurrentView("upcoming")}
   className={`flex flex-col items-center gap-2 transition ${
@@ -332,7 +342,11 @@ const { error } = await supabase.from("items").insert({
 
         
 
-                {(currentView === "dashboard" || currentView === "upcoming") && (
+                {(
+  currentView === "dashboard" ||
+  currentView === "upcoming" ||
+  currentView === "today"
+) && (
 
           <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
 
