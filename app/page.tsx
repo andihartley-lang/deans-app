@@ -7,10 +7,11 @@ import Sidebar from "@/components/Sidebar";
 import UpcomingSection from "@/components/UpcomingSection";
 import InboxSection from "@/components/InboxSection";
 import HeroSection from "../components/HeroSection";
+import { Item } from "../types/item";
 export default function Home() {
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState("");
-const [items, setItems] = useState<any[]>([]);
+const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 async function fetchItems() {
   const { data, error } = await supabase

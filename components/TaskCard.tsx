@@ -1,5 +1,7 @@
+import { Item } from "../types/item";
+
 interface TaskCardProps {
-  item: any;
+  item: Item;
   getItemIcon: (title: string) => string;
   completeItem: (id: string) => void;
   colour: "red" | "blue";
@@ -45,8 +47,10 @@ export default function TaskCard({
           </div>
 
           <div className={styles.date}>
-            Due: {new Date(item.due_date).toLocaleDateString()}
-          </div>
+  Due: {item.due_date
+    ? new Date(item.due_date).toLocaleDateString()
+    : "No due date"}
+</div>
         </div>
       </div>
 

@@ -1,7 +1,8 @@
 import TaskCard from "@/components/TaskCard";
+import { Item } from "../types/item";
 interface UpcomingSectionProps {
   currentView: string;
-  items: any[];
+  items: Item[];
   getStatus: (dueDate: string | null) => string;
   getItemIcon: (title: string) => string;
   completeItem: (id: string) => void;

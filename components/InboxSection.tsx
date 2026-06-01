@@ -1,6 +1,8 @@
+import { Item } from "../types/item";
 interface InboxSectionProps {
+    
   currentView: string;
-  items: any[];
+  items: Item[];
   getItemIcon: (title: string) => string;
   completeItem: (id: string) => void;
 }
