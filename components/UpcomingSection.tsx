@@ -1,3 +1,4 @@
+import TaskCard from "@/components/TaskCard";
 interface UpcomingSectionProps {
   currentView: string;
   items: any[];
@@ -52,41 +53,16 @@ export default function UpcomingSection({
                       item.due_date &&
                       getStatus(item.due_date) === "critical"
                   )
+
                   .map((item) => (
-
-                    <div
-                      key={item.id}
-                      className="bg-gradient-to-r from-red-50 to-white border border-red-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
-                    >
-
-                      <div className="flex items-center gap-4">
-
-                        <div className="bg-red-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                          {getItemIcon(item.title)}
-                        </div>
-
-                        <div>
-                          <div className="text-2xl font-semibold text-red-900">
-                            {item.title}
-                          </div>
-
-                          <div className="text-red-700">
-                            Due: {new Date(item.due_date).toLocaleDateString()}
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <button
-                        onClick={() => completeItem(item.id)}
-                        className="border border-red-200 rounded-2xl px-6 py-3 hover:bg-red-50"
-                      >
-                        Complete
-                      </button>
-
-                    </div>
-
-                  ))}
+  <TaskCard
+  key={item.id}
+  item={item}
+  getItemIcon={getItemIcon}
+  completeItem={completeItem}
+  colour="red"
+/>
+))}
 
               </div>
 
@@ -115,40 +91,14 @@ export default function UpcomingSection({
                       getStatus(item.due_date) !== "critical"
                   )
                   .map((item) => (
-
-                    <div
-                      key={item.id}
-                      className="bg-gradient-to-r from-blue-50 to-white border border-blue-100 rounded-3xl p-5 flex items-center justify-between shadow-sm"
-                    >
-
-                      <div className="flex items-center gap-4">
-
-                        <div className="bg-blue-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
-                          {getItemIcon(item.title)}
-                        </div>
-
-                        <div>
-                          <div className="text-2xl font-semibold text-indigo-950">
-                            {item.title}
-                          </div>
-
-                          <div className="text-blue-700">
-                            Due: {new Date(item.due_date).toLocaleDateString()}
-                          </div>
-                        </div>
-
-                      </div>
-
-                      <button
-                        onClick={() => completeItem(item.id)}
-                        className="border border-blue-200 rounded-2xl px-6 py-3 hover:bg-blue-50"
-                      >
-                        Complete
-                      </button>
-
-                    </div>
-
-                  ))}
+  <TaskCard
+    key={item.id}
+    item={item}
+    getItemIcon={getItemIcon}
+    completeItem={completeItem}
+    colour="blue"
+  />
+))}
 
               </div>
 
