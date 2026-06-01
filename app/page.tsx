@@ -8,6 +8,7 @@ import UpcomingSection from "@/components/UpcomingSection";
 import InboxSection from "@/components/InboxSection";
 import HeroSection from "../components/HeroSection";
 import { Item } from "../types/item";
+import { getStatus } from "../lib/itemUtils";
 export default function Home() {
   const [title, setTitle] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -30,28 +31,7 @@ async function fetchItems() {
 useEffect(() => {
   fetchItems();
 }, []);  
-function getStatus(dueDate: string | null) {
-  if (!dueDate) return "captured";
 
-  const now = new Date();
-  const due = new Date(dueDate);
-
-  const diffTime = due.getTime() - now.getTime();
-
-  const diffDays = Math.ceil(
-    diffTime / (1000 * 60 * 60 * 24)
-  );
-
-  if (diffDays <= 2) {
-    return "critical";
-  }
-
-  if (diffDays <= 14) {
-    return "active";
-  }
-
-  return "scheduled";
-}
 function getItemIcon(title: string) {
   const lower = title.toLowerCase();
 
