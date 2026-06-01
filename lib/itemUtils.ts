@@ -20,3 +20,97 @@ export function getStatus(dueDate: string | null) {
 
   return "scheduled";
 }
+export function getItemIcon(title: string) {
+  const lower = title.toLowerCase();
+
+  if (
+    lower.includes("mot") ||
+    lower.includes("car") ||
+    lower.includes("garage")
+  ) {
+    return "🚗";
+  }
+
+  if (
+    lower.includes("doctor") ||
+    lower.includes("gp") ||
+    lower.includes("hospital")
+  ) {
+    return "🩺";
+  }
+
+  if (lower.includes("dentist")) {
+    return "🦷";
+  }
+
+  if (
+    lower.includes("shop") ||
+    lower.includes("milk") ||
+    lower.includes("buy")
+  ) {
+    return "🛒";
+  }
+
+  if (lower.includes("passport")) {
+    return "🛂";
+  }
+
+  if (lower.includes("insurance")) {
+    return "🛡️";
+  }
+
+  if (
+    lower.includes("call") ||
+    lower.includes("phone")
+  ) {
+    return "📞";
+  }
+
+  if (
+    lower.includes("flight") ||
+    lower.includes("holiday")
+  ) {
+    return "✈️";
+  }
+
+  if (
+    lower.includes("tax") ||
+    lower.includes("hmrc") ||
+    lower.includes("invoice") ||
+    lower.includes("bill") ||
+    lower.includes("payment") ||
+    lower.includes("bank")
+  ) {
+    return "🧾";
+  }
+
+  if (
+    lower.includes("boiler") ||
+    lower.includes("plumber") ||
+    lower.includes("electric") ||
+    lower.includes("gas") ||
+    lower.includes("water") ||
+    lower.includes("internet") ||
+    lower.includes("broadband")
+  ) {
+    return "🏠";
+  }
+
+  if (
+    lower.includes("dog") ||
+    lower.includes("cat") ||
+    lower.includes("vet")
+  ) {
+    return "🐾";
+  }
+
+  if (
+    lower.includes("school") ||
+    lower.includes("nursery") ||
+    lower.includes("parents")
+  ) {
+    return "🎒";
+  }
+
+  return "📝";
+}
