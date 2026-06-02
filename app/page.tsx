@@ -7,6 +7,7 @@ import Sidebar from "@/components/Sidebar";
 import UpcomingSection from "@/components/UpcomingSection";
 import InboxSection from "@/components/InboxSection";
 import HeroSection from "../components/HeroSection";
+import AuthSection from "@/components/AuthSection";
 import { Item } from "../types/item";
 import {
   getStatus,
@@ -135,7 +136,7 @@ const { error } = await supabase.from("items").insert({
           </button>
 
         </div>
-
+<AuthSection />
         
 {(
   currentView === "dashboard" ||
