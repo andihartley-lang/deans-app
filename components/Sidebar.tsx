@@ -8,8 +8,7 @@ export default function Sidebar({
   setCurrentView,
 }: SidebarProps) {
   return (
-
-    <div className="w-24 bg-gradient-to-b from-indigo-950 to-purple-900 text-white flex flex-col items-center py-8 rounded-r-3xl shadow-2xl">
+    <div className="w-32 min-h-screen bg-gradient-to-b from-indigo-950 to-purple-900 text-white flex flex-col items-center py-8 rounded-r-3xl shadow-2xl">
 
       <div className="bg-yellow-400 text-indigo-950 font-bold text-3xl w-14 h-14 rounded-2xl flex items-center justify-center mb-10 shadow-lg">
         O
@@ -79,8 +78,14 @@ export default function Sidebar({
 
       </div>
 
-    </div>
+      <div className="mt-8 text-center text-xs text-indigo-200">
+        <div className="mb-2">👤 Andy</div>
 
+        <button className="bg-red-500 px-3 py-2 rounded-xl text-white">
+          Logout
+        </button>
+      </div>
+
+    </div>
   );
-  
 }

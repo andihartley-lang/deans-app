@@ -19,10 +19,19 @@ export default function Home() {
 const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 async function fetchItems() {
+  const {
+  data: { user },
+} = await supabase.auth.getUser();
+
+if (!user) {
+  setItems([]);
+  return;
+}
   const { data, error } = await supabase
-    .from("items")
-    .select("*")
-    .order("created_at", { ascending: false });
+  .from("items")
+  .select("*")
+  .eq("user_id", user.id)
+  .order("created_at", { ascending: false });
 
   if (error) {
     console.error(error);
@@ -75,11 +84,20 @@ async function addItem() {
     if (!title) return;
 
     const status = "active";
+    const {
+  data: { user },
+} = await supabase.auth.getUser();
+
+if (!user) {
+  alert("Please sign in.");
+  return;
+}
 
 const { error } = await supabase.from("items").insert({
   title,
   due_date: dueDate || null,
   status,
+  user_id: user.id,
 });
 
     if (error) {
@@ -136,7 +154,7 @@ const { error } = await supabase.from("items").insert({
           </button>
 
         </div>
-<AuthSection />
+{currentView === "settings" && <AuthSection />}
         
 {(
   currentView === "dashboard" ||
