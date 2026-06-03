@@ -50,7 +50,7 @@ export default function AuthSection() {
 
 setUser(user);
 
-    alert("Signed in.");
+window.location.href = "/app";
   }
 
   return (

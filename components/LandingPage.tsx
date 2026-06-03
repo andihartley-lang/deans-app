@@ -1,12 +1,16 @@
+import Link from "next/link";
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 via-indigo-900 to-indigo-950 text-white">
       <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
         <div className="text-2xl font-semibold">Orbit</div>
 
-        <button className="rounded-xl border border-white/20 px-5 py-2 hover:bg-white/10 transition">
-          Sign In
-        </button>
+        <Link
+  href="/auth"
+  className="rounded-xl border border-white/20 px-5 py-2 hover:bg-white/10 transition"
+>
+  Sign In
+</Link>
       </nav>
 
       <section className="max-w-6xl mx-auto px-6 pt-2 pb-8">
@@ -22,13 +26,19 @@ export default function LandingPage() {
             </p>
 
             <div className="mt-6 flex flex-wrap gap-4">
-              <button className="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-2xl hover:bg-yellow-300 transition">
-                Create Free Account
-              </button>
+              <Link
+  href="/auth"
+  className="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-2xl hover:bg-yellow-300 transition"
+>
+  Create Free Account
+</Link>
 
-              <button className="border border-white/20 px-6 py-3 rounded-2xl hover:bg-white/10 transition">
-                Sign In
-              </button>
+              <Link
+  href="/auth"
+  className="border border-white/20 px-6 py-3 rounded-2xl hover:bg-white/10 transition"
+>
+  Sign In
+</Link>
             </div>
           </div>
 
