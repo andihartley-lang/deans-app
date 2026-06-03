@@ -1,3 +1,4 @@
+import { supabase } from "@/lib/supabase";
 interface SidebarProps {
   currentView: string;
   setCurrentView: (view: string) => void;
@@ -81,9 +82,15 @@ export default function Sidebar({
       <div className="mt-8 text-center text-xs text-indigo-200">
         <div className="mb-2">👤 Andy</div>
 
-        <button className="bg-red-500 px-3 py-2 rounded-xl text-white">
-          Logout
-        </button>
+        <button
+  onClick={async () => {
+    await supabase.auth.signOut();
+    window.location.href = "/";
+  }}
+  className="bg-red-500 px-3 py-2 rounded-xl text-white"
+>
+  Logout
+</button>
       </div>
 
     </div>

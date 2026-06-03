@@ -3,9 +3,9 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
-import LandingPage from '@/components/LandingPage';
+import AuthSection from '@/components/AuthSection';
 
-export default function Home() {
+export default function AuthPage() {
   const router = useRouter();
   const [loading, setLoading] = useState(true);
 
@@ -30,5 +30,9 @@ export default function Home() {
     return null;
   }
 
-  return <LandingPage />;
+  return (
+    <main className="min-h-screen bg-[#f3f4f8] flex items-center justify-center p-6">
+      <AuthSection />
+    </main>
+  );
 }
