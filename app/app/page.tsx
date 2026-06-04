@@ -8,6 +8,7 @@ import UpcomingSection from "@/components/UpcomingSection";
 import InboxSection from "@/components/InboxSection";
 import HeroSection from "../../components/HeroSection";
 import AuthSection from "@/components/AuthSection";
+import ProfileSection from "@/components/ProfileSection";
 import { Item } from "../../types/item";
 import {
   getStatus,
@@ -129,32 +130,36 @@ const { error } = await supabase.from("items").insert({
       <div className="max-w-6xl mx-auto -mt-10 pb-12 px-6">
 
         {/* INPUT PANEL */}
-        <div className="bg-white rounded-3xl shadow-xl p-4 flex gap-3 items-center mb-8">
+        {currentView !== "settings" && (
+  <div className="bg-white rounded-3xl shadow-xl p-4 flex gap-3 items-center mb-8">
 
-          <input
-            type="text"
-            placeholder="Add life admin..."
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none"
-          />
+    <input
+      type="text"
+      placeholder="Add life admin..."
+      value={title}
+      onChange={(e) => setTitle(e.target.value)}
+      className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none"
+    />
 
-          <input
-            type="date"
-            value={dueDate}
-            onChange={(e) => setDueDate(e.target.value)}
-            className="border border-gray-200 rounded-2xl p-4"
-          />
+    <input
+      type="date"
+      value={dueDate}
+      onChange={(e) => setDueDate(e.target.value)}
+      className="border border-gray-200 rounded-2xl p-4"
+    />
 
-          <button
-            onClick={addItem}
-            className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl transition"
-          >
-            Add
-          </button>
+    <button
+      onClick={addItem}
+      className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl transition"
+    >
+      Add
+    </button>
 
-        </div>
-{currentView === "settings" && <AuthSection />}
+  </div>
+)}
+
+      
+{currentView === "settings" && <ProfileSection />}
         
 {(
   currentView === "dashboard" ||

@@ -80,7 +80,7 @@ export default function Sidebar({
       </div>
 
       <div className="mt-8 text-center text-xs text-indigo-200">
-        <div className="mb-2">👤 Andy</div>
+        
 
         <button
   onClick={async () => {
