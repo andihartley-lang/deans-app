@@ -21,6 +21,12 @@ const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 const [displayName, setDisplayName] = useState("");
 const [showToast, setShowToast] = useState(false);
+
+useEffect(() => {
+  if (!showToast) return;
+  const timer = setTimeout(() => setShowToast(false), 2000);
+  return () => clearTimeout(timer);
+}, [showToast]);
 async function fetchItems() {
   const {
   data: { user },
@@ -209,8 +215,8 @@ const { error } = await supabase.from("items").insert({
 
       {showToast && (
         <div
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-indigo-900 text-white px-8 py-4 rounded-2xl shadow-xl text-lg font-medium toast-animate"
-          onAnimationEnd={() => setShowToast(false)}
+          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-indigo-900 text-white px-8 py-4 rounded-2xl shadow-xl text-lg font-medium"
+          style={{ animation: 'toast-fade 2s ease forwards' }}
         >
           Item saved
         </div>
