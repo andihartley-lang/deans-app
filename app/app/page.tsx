@@ -19,6 +19,7 @@ export default function Home() {
   const [dueDate, setDueDate] = useState("");
 const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
+const [displayName, setDisplayName] = useState("");
 async function fetchItems() {
   const {
   data: { user },
@@ -44,7 +45,26 @@ if (!user) {
 
 useEffect(() => {
   fetchItems();
-}, []);  
+  fetchDisplayName();
+}, []);
+
+async function fetchDisplayName() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("display_name")
+    .eq("user_id", user.id)
+    .single();
+
+  if (profile?.display_name) {
+    setDisplayName(profile.display_name);
+  }
+}
 
 
 function getGreeting() {
@@ -124,7 +144,7 @@ const { error } = await supabase.from("items").insert({
     {/* MAIN CONTENT */}
     <div className="flex-1">
 
-     <HeroSection currentView={currentView} />
+     <HeroSection currentView={currentView} greeting={getGreeting()} displayName={displayName} />
 
       {/* CONTENT WRAPPER */}
       <div className="max-w-6xl mx-auto -mt-10 pb-12 px-6">
