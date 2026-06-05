@@ -15,6 +15,8 @@ export default function UpcomingSection({
   getItemIcon,
   completeItem,
 }: UpcomingSectionProps) {
+  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/London" });
+
     return currentView === "dashboard" ||
   currentView === "upcoming" ||
   currentView === "today" ? (
@@ -22,6 +24,11 @@ export default function UpcomingSection({
 
           <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
 
+            {currentView === "today" ? (
+              <h2 className="text-2xl font-semibold text-indigo-950 mb-6">
+                On your plate today
+              </h2>
+            ) : (
             <div className="flex items-center justify-between mb-6">
               <h2 className="text-4xl font-bold text-indigo-950">
                 Upcoming
@@ -31,10 +38,12 @@ export default function UpcomingSection({
                 View all
               </span>
             </div>
+            )}
 
             {/* SOON */}
             <div className="mb-8">
 
+              {currentView !== "today" && (
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-semibold text-indigo-950">
                   Soon
@@ -44,6 +53,7 @@ export default function UpcomingSection({
                   View all
                 </span>
               </div>
+              )}
 
               <div className="space-y-4">
 
@@ -52,7 +62,8 @@ export default function UpcomingSection({
                     (item) =>
                       item.status !== "completed" &&
                       item.due_date &&
-                      getStatus(item.due_date) === "critical"
+                      getStatus(item.due_date) === "critical" &&
+                      (currentView !== "today" || item.due_date <= todayStr)
                   )
 
                   .map((item) => (
@@ -72,6 +83,7 @@ export default function UpcomingSection({
             {/* LATER */}
             <div>
 
+              {currentView !== "today" && (
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-2xl font-semibold text-indigo-950">
                   Later
@@ -81,6 +93,7 @@ export default function UpcomingSection({
                   View all
                 </span>
               </div>
+              )}
 
               <div className="space-y-4">
 
@@ -89,7 +102,8 @@ export default function UpcomingSection({
                     (item) =>
                       item.status !== "completed" &&
                       item.due_date &&
-                      getStatus(item.due_date) !== "critical"
+                      getStatus(item.due_date) !== "critical" &&
+                      currentView !== "today"
                   )
                   .map((item) => (
   <TaskCard
