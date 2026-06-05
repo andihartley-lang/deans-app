@@ -15,7 +15,6 @@ export default function InboxSection({
 }: InboxSectionProps) {
   return currentView === "dashboard" ||
     currentView === "upcoming" ||
-    currentView === "today" ||
     currentView === "inbox" ? (
  <div className="bg-white rounded-3xl shadow-lg p-8">
 
