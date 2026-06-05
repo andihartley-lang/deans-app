@@ -14,14 +14,11 @@ export default function HeroSection({
 
       <p className="text-indigo-100 text-xl">
 
-        {currentView === "dashboard" &&
-          "Here’s what’s in your orbit."}
-
         {currentView === "today" &&
           "Focus on what matters today."}
 
         {currentView === "upcoming" &&
-          "What's on the horizon."}
+          "What’s on the horizon."}
 
         {currentView === "inbox" &&
           "The everyday stuff, all in one place."}
@@ -38,6 +35,12 @@ export default function HeroSection({
 {currentView === "settings" && "Settings"}
 
       </h1>
+
+      {currentView === "dashboard" && (
+        <p className="text-indigo-100 text-xl">
+          Here’s what’s in your orbit.
+        </p>
+      )}
 
     </div>
   );
