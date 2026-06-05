@@ -14,7 +14,6 @@ export default function InboxSection({
   completeItem,
 }: InboxSectionProps) {
   return currentView === "dashboard" ||
-    currentView === "upcoming" ||
     currentView === "inbox" ? (
  <div className="bg-white rounded-3xl shadow-lg p-8">
 
