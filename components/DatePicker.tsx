@@ -21,7 +21,8 @@ export default forwardRef<DatePickerHandle, DatePickerProps>(function DatePicker
   { value, onChange, disabled },
   ref
 ) {
-  const today = new Date().toLocaleDateString("en-CA");
+  const _now = new Date();
+  const today = `${_now.getFullYear()}-${String(_now.getMonth() + 1).padStart(2, "0")}-${String(_now.getDate()).padStart(2, "0")}`;
 
   const initialDate = value ? new Date(value + "T12:00:00") : new Date();
   const [viewYear, setViewYear] = useState(initialDate.getFullYear());
@@ -60,7 +61,9 @@ export default forwardRef<DatePickerHandle, DatePickerProps>(function DatePicker
   }
 
   function selectDay(day: number) {
-    const iso = new Date(viewYear, viewMonth, day).toLocaleDateString("en-CA");
+    const mm = String(viewMonth + 1).padStart(2, "0");
+    const dd = String(day).padStart(2, "0");
+    const iso = `${viewYear}-${mm}-${dd}`;
     onChange(iso);
     setOpen(false);
   }

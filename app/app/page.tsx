@@ -136,12 +136,12 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       return false;
     }
 
+    await fetchItems();
     setShowToast(true);
     setTitle("");
     setDueDate("");
     setShowDateNudge(false);
     setPendingTitle("");
-    fetchItems();
     return true;
   }
 

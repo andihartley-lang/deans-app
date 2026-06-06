@@ -16,21 +16,48 @@ export default function UpcomingSection({
   getItemIcon,
   completeItem,
 }: UpcomingSectionProps) {
-  const todayStr = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/London" });
+  const now = new Date();
+  const ty = now.getFullYear();
+  const tm = now.getMonth();
+  const td = now.getDate();
+
+  function dayOf(due: string) {
+    const d = new Date(due);
+    return { y: d.getFullYear(), m: d.getMonth(), day: d.getDate() };
+  }
+
+  function isToday(due: string) {
+    const { y, m, day } = dayOf(due);
+    return y === ty && m === tm && day === td;
+  }
+
+  function isBeforeToday(due: string) {
+    const { y, m, day } = dayOf(due);
+    if (y !== ty) return y < ty;
+    if (m !== tm) return m < tm;
+    return day < td;
+  }
+
+  function isAfterToday(due: string) {
+    const { y, m, day } = dayOf(due);
+    if (y !== ty) return y > ty;
+    if (m !== tm) return m > tm;
+    return day > td;
+  }
 
   if (currentView === "today") {
     const overdueItems = items.filter(
       (item) =>
         item.status !== "completed" &&
         item.due_date &&
-        item.due_date.slice(0, 10) < todayStr
+        isBeforeToday(item.due_date)
     );
 
     const todayItems = items.filter(
       (item) =>
         item.status !== "completed" &&
         item.due_date &&
-        item.due_date.slice(0, 10) === todayStr
+        isToday(item.due_date)
     );
 
     return (
@@ -74,8 +101,38 @@ export default function UpcomingSection({
     );
   }
 
-  return currentView === "dashboard" || currentView === "upcoming" ? (
+  if (currentView === "dashboard" || currentView === "upcoming") {
+    const overdueItems = items.filter(
+      (item) =>
+        item.status !== "completed" &&
+        item.due_date &&
+        isBeforeToday(item.due_date)
+    );
 
+    const todayItems = items.filter(
+      (item) =>
+        item.status !== "completed" &&
+        item.due_date &&
+        isToday(item.due_date)
+    );
+
+    const soonItems = items.filter(
+      (item) =>
+        item.status !== "completed" &&
+        item.due_date &&
+        isAfterToday(item.due_date) &&
+        getStatus(item.due_date) === "critical"
+    );
+
+    const laterItems = items.filter(
+      (item) =>
+        item.status !== "completed" &&
+        item.due_date &&
+        isAfterToday(item.due_date) &&
+        getStatus(item.due_date) !== "critical"
+    );
+
+    return (
     <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
 
       <div className="flex items-center justify-between mb-6">
@@ -87,26 +144,14 @@ export default function UpcomingSection({
         </span>
       </div>
 
-      {/* SOON */}
-      <div className="mb-8">
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-2xl font-semibold text-indigo-950">
-            Soon
+      {/* OVERDUE */}
+      {overdueItems.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-2xl font-semibold text-indigo-950 mb-4">
+            Still to do
           </h3>
-          <span className="text-indigo-600 text-sm">
-            View all
-          </span>
-        </div>
-        <div className="space-y-4">
-          {items
-            .filter(
-              (item) =>
-                item.status !== "completed" &&
-                item.due_date &&
-                item.due_date.slice(0, 10) > todayStr &&
-                getStatus(item.due_date) === "critical"
-            )
-            .map((item) => (
+          <div className="space-y-4">
+            {overdueItems.map((item) => (
               <TaskCard
                 key={item.id}
                 item={item}
@@ -115,29 +160,62 @@ export default function UpcomingSection({
                 colour="red"
               />
             ))}
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* TODAY */}
+      {todayItems.length > 0 && (
+        <div className="mb-8">
+          <h3 className="text-2xl font-semibold text-indigo-950 mb-4">
+            On your plate today
+          </h3>
+          <div className="space-y-4">
+            {todayItems.map((item) => (
+              <TaskCard
+                key={item.id}
+                item={item}
+                getItemIcon={getItemIcon}
+                completeItem={completeItem}
+                colour="red"
+              />
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* SOON */}
+      {soonItems.length > 0 && (
+        <div className="mb-8">
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-2xl font-semibold text-indigo-950">
+              Soon
+            </h3>
+          </div>
+          <div className="space-y-4">
+            {soonItems.map((item) => (
+              <TaskCard
+                key={item.id}
+                item={item}
+                getItemIcon={getItemIcon}
+                completeItem={completeItem}
+                colour="red"
+              />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* LATER */}
-      <div>
-        <div className="flex items-center justify-between mb-4">
-          <h3 className="text-2xl font-semibold text-indigo-950">
-            Later
-          </h3>
-          <span className="text-indigo-600 text-sm">
-            View all
-          </span>
-        </div>
-        <div className="space-y-4">
-          {items
-            .filter(
-              (item) =>
-                item.status !== "completed" &&
-                item.due_date &&
-                item.due_date.slice(0, 10) > todayStr &&
-                getStatus(item.due_date) !== "critical"
-            )
-            .map((item) => (
+      {laterItems.length > 0 && (
+        <div>
+          <div className="flex items-center justify-between mb-4">
+            <h3 className="text-2xl font-semibold text-indigo-950">
+              Later
+            </h3>
+          </div>
+          <div className="space-y-4">
+            {laterItems.map((item) => (
               <TaskCard
                 key={item.id}
                 item={item}
@@ -146,10 +224,13 @@ export default function UpcomingSection({
                 colour="blue"
               />
             ))}
+          </div>
         </div>
-      </div>
+      )}
 
     </div>
+    );
+  }
 
-  ) : null;
+  return null;
 }
