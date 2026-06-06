@@ -165,7 +165,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       }
     }
 
-    const finalDueDate = dueDate || null;
+    const finalDueDate = dueDate || datePickerRef.current?.value || null;
 
     const timeSensitiveKeywords = /\b(mot|insurance|passport|appointment|renewal|booking)\b/i;
     if (!finalDueDate && timeSensitiveKeywords.test(parsedTitle)) {
