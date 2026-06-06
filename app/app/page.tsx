@@ -16,7 +16,7 @@ import {
 } from "../../lib/itemUtils";
 export default function Home() {
   const [title, setTitle] = useState("");
-  const [dueDate, setDueDate] = useState("");
+  const [isAdding, setIsAdding] = useState(false);
 const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 const [displayName, setDisplayName] = useState("");
@@ -109,36 +109,54 @@ if (error) {
   fetchItems();
 }
 async function addItem() {
-    if (!title) return;
+    if (!title.trim() || isAdding) return;
 
-    const status = "active";
+    setIsAdding(true);
+
+    let parsedTitle = title;
+    let parsedDueDate: string | null = null;
+
+    try {
+      const res = await fetch("/api/parse-item", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: title }),
+      });
+      const parsed = await res.json();
+      parsedTitle = parsed.title || title;
+      parsedDueDate = parsed.due_date || null;
+    } catch {
+      // Fall back to original input if AI parsing fails
+    }
+
     const {
-  data: { user },
-} = await supabase.auth.getUser();
+      data: { user },
+    } = await supabase.auth.getUser();
 
-if (!user) {
-  alert("Please sign in.");
-  return;
-}
+    if (!user) {
+      alert("Please sign in.");
+      setIsAdding(false);
+      return;
+    }
 
-const { error } = await supabase.from("items").insert({
-  title,
-  due_date: dueDate || null,
-  status,
-  user_id: user.id,
-});
+    const { error } = await supabase.from("items").insert({
+      title: parsedTitle,
+      due_date: parsedDueDate,
+      status: "active",
+      user_id: user.id,
+    });
 
     if (error) {
       alert(error.message);
       console.error(error);
+      setIsAdding(false);
       return;
     }
 
     setShowToast(true);
-
     setTitle("");
-    setDueDate("");
     fetchItems();
+    setIsAdding(false);
   }
 
   return (
@@ -165,21 +183,17 @@ const { error } = await supabase.from("items").insert({
       placeholder="Add life admin..."
       value={title}
       onChange={(e) => setTitle(e.target.value)}
-      className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none"
-    />
-
-    <input
-      type="date"
-      value={dueDate}
-      onChange={(e) => setDueDate(e.target.value)}
-      className="border border-gray-200 rounded-2xl p-4"
+      onKeyDown={(e) => e.key === "Enter" && addItem()}
+      disabled={isAdding}
+      className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none disabled:opacity-50"
     />
 
     <button
       onClick={addItem}
-      className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl transition"
+      disabled={isAdding}
+      className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl transition disabled:opacity-50 disabled:cursor-not-allowed"
     >
-      Add
+      {isAdding ? "Adding..." : "Add"}
     </button>
 
   </div>
