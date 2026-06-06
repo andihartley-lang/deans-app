@@ -9,6 +9,7 @@ import InboxSection from "@/components/InboxSection";
 import HeroSection from "../../components/HeroSection";
 import AuthSection from "@/components/AuthSection";
 import ProfileSection from "@/components/ProfileSection";
+import DatePicker, { DatePickerHandle } from "@/components/DatePicker";
 import { Item } from "../../types/item";
 import {
   getStatus,
@@ -20,7 +21,7 @@ export default function Home() {
   const [isAdding, setIsAdding] = useState(false);
   const [showDateNudge, setShowDateNudge] = useState(false);
   const [pendingTitle, setPendingTitle] = useState("");
-  const datePickerRef = useRef<HTMLInputElement>(null);
+  const datePickerRef = useRef<DatePickerHandle>(null);
 const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 const [displayName, setDisplayName] = useState("");
@@ -165,7 +166,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       }
     }
 
-    const finalDueDate = dueDate || datePickerRef.current?.value || null;
+    const finalDueDate = dueDate || null;
 
     const timeSensitiveKeywords = /\b(mot|insurance|passport|appointment|renewal|booking)\b/i;
     if (!finalDueDate && timeSensitiveKeywords.test(parsedTitle)) {
@@ -187,7 +188,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
     setTitle(pendingTitle);
     setPendingTitle("");
     setShowDateNudge(false);
-    setTimeout(() => datePickerRef.current?.showPicker(), 0);
+    setTimeout(() => datePickerRef.current?.open(), 0);
   }
 
   return (
@@ -219,13 +220,11 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none disabled:opacity-50"
     />
 
-    <input
+    <DatePicker
       ref={datePickerRef}
-      type="date"
       value={dueDate}
-      onChange={(e) => setDueDate(e.target.value)}
+      onChange={setDueDate}
       disabled={isAdding}
-      className="border border-gray-200 rounded-2xl p-4 text-gray-500 outline-none disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-inner-spin-button]:hidden [&::-webkit-clear-button]:hidden"
     />
 
     <button
