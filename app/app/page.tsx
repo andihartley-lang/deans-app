@@ -1,7 +1,7 @@
 "use client";
 
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import Sidebar from "@/components/Sidebar";
 import UpcomingSection from "@/components/UpcomingSection";
@@ -16,7 +16,11 @@ import {
 } from "../../lib/itemUtils";
 export default function Home() {
   const [title, setTitle] = useState("");
+  const [dueDate, setDueDate] = useState("");
   const [isAdding, setIsAdding] = useState(false);
+  const [showDateNudge, setShowDateNudge] = useState(false);
+  const [pendingTitle, setPendingTitle] = useState("");
+  const datePickerRef = useRef<HTMLInputElement>(null);
 const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 const [displayName, setDisplayName] = useState("");
@@ -108,40 +112,19 @@ if (error) {
 
   fetchItems();
 }
-async function addItem() {
-    if (!title.trim() || isAdding) return;
-
-    setIsAdding(true);
-
-    let parsedTitle = title;
-    let parsedDueDate: string | null = null;
-
-    try {
-      const res = await fetch("/api/parse-item", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input: title }),
-      });
-      const parsed = await res.json();
-      parsedTitle = parsed.title || title;
-      parsedDueDate = parsed.due_date || null;
-    } catch {
-      // Fall back to original input if AI parsing fails
-    }
-
+async function saveItem(itemTitle: string, itemDueDate: string | null) {
     const {
       data: { user },
     } = await supabase.auth.getUser();
 
     if (!user) {
       alert("Please sign in.");
-      setIsAdding(false);
-      return;
+      return false;
     }
 
     const { error } = await supabase.from("items").insert({
-      title: parsedTitle,
-      due_date: parsedDueDate,
+      title: itemTitle,
+      due_date: itemDueDate,
       status: "active",
       user_id: user.id,
     });
@@ -149,14 +132,62 @@ async function addItem() {
     if (error) {
       alert(error.message);
       console.error(error);
-      setIsAdding(false);
-      return;
+      return false;
     }
 
     setShowToast(true);
     setTitle("");
+    setDueDate("");
+    setShowDateNudge(false);
+    setPendingTitle("");
     fetchItems();
+    return true;
+  }
+
+  async function addItem() {
+    if (!title.trim() || isAdding) return;
+
+    setIsAdding(true);
+
+    let parsedTitle = title;
+
+    if (title.trim().split(/\s+/).length > 6) {
+      try {
+        const res = await fetch("/api/parse-item", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ input: title }),
+        });
+        const parsed = await res.json();
+        parsedTitle = parsed.title || title;
+      } catch {
+        // Fall back to original input if AI parsing fails
+      }
+    }
+
+    const finalDueDate = dueDate || null;
+
+    const timeSensitiveKeywords = /\b(mot|insurance|passport|appointment|renewal|booking)\b/i;
+    if (!finalDueDate && timeSensitiveKeywords.test(parsedTitle)) {
+      setPendingTitle(parsedTitle);
+      setShowDateNudge(true);
+      setIsAdding(false);
+      return;
+    }
+
+    await saveItem(parsedTitle, finalDueDate);
     setIsAdding(false);
+  }
+
+  async function saveWithNoDate() {
+    await saveItem(pendingTitle, null);
+  }
+
+  function handleAddDate() {
+    setTitle(pendingTitle);
+    setPendingTitle("");
+    setShowDateNudge(false);
+    setTimeout(() => datePickerRef.current?.showPicker(), 0);
   }
 
   return (
@@ -188,6 +219,15 @@ async function addItem() {
       className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none disabled:opacity-50"
     />
 
+    <input
+      ref={datePickerRef}
+      type="date"
+      value={dueDate}
+      onChange={(e) => setDueDate(e.target.value)}
+      disabled={isAdding}
+      className="border border-gray-200 rounded-2xl p-4 text-gray-500 outline-none disabled:opacity-50 [&::-webkit-calendar-picker-indicator]:cursor-pointer [&::-webkit-inner-spin-button]:hidden [&::-webkit-clear-button]:hidden"
+    />
+
     <button
       onClick={addItem}
       disabled={isAdding}
@@ -199,7 +239,28 @@ async function addItem() {
   </div>
 )}
 
-      
+{showDateNudge && currentView !== "settings" && (
+  <div className="bg-amber-50 border border-amber-100 rounded-3xl shadow-lg px-8 py-6 flex items-center justify-between mb-8 -mt-4">
+    <p className="text-indigo-950 text-base font-medium">
+      This one might need a date — want to add one?
+    </p>
+    <div className="flex gap-3">
+      <button
+        onClick={handleAddDate}
+        className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-2xl transition"
+      >
+        Add a date
+      </button>
+      <button
+        onClick={saveWithNoDate}
+        className="bg-white border border-amber-200 hover:bg-amber-100 text-indigo-950 font-medium px-6 py-3 rounded-2xl transition"
+      >
+        No date needed
+      </button>
+    </div>
+  </div>
+)}
+
 {currentView === "settings" && <ProfileSection />}
         
 {(
