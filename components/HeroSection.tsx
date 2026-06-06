@@ -24,7 +24,7 @@ export default function HeroSection({
           "The everyday stuff, all in one place."}
 
         {currentView === "settings" &&
-          "Manage your Orbit preferences."}
+          "Manage your Orbit preferences and get help."}
 
       </p>
 
@@ -32,7 +32,7 @@ export default function HeroSection({
 
         {currentView === "dashboard" && (displayName ? `${greeting}, ${displayName}` : greeting)}
 
-{currentView === "settings" && "Settings"}
+{currentView === "settings" && "Help & Settings"}
 
       </h1>
 

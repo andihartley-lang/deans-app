@@ -74,7 +74,7 @@ export default function Sidebar({
           }`}
         >
           <span className="text-2xl">⚙️</span>
-          <span>Settings</span>
+          <span>Help &amp; Settings</span>
         </button>
 
       </div>

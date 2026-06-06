@@ -50,35 +50,60 @@ export default function ProfileSection() {
     alert("Profile saved.");
   }
 
+  const card = "bg-white rounded-3xl shadow-lg p-8";
+
   return (
-    <div className="bg-white rounded-3xl shadow-lg p-8 mt-6">
-      <h2 className="text-2xl font-bold mb-2">
-  About You
-</h2>
+    <div className="mt-6 space-y-6">
 
-<p className="text-gray-600 mb-4">
-  What would you like Orbit to call you?
-</p>
+      <div className={card}>
+        <h2 className="text-2xl font-bold mb-2">About You</h2>
+        <p className="text-gray-600 mb-4">What would you like Orbit to call you?</p>
+        <input
+          type="text"
+          placeholder="Your name"
+          maxLength={30}
+          value={displayName}
+          onChange={(e) => setDisplayName(e.target.value)}
+          className="border rounded-xl p-3 w-full mb-2"
+        />
+        <p className="text-sm text-gray-500 mb-4">Maximum 30 characters</p>
+        <button
+          onClick={saveProfile}
+          className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
+        >
+          Save
+        </button>
+      </div>
 
-      <input
-  type="text"
-  placeholder="Your name"
-  maxLength={30}
-  value={displayName}
-  onChange={(e) => setDisplayName(e.target.value)}
-  className="border rounded-xl p-3 w-full mb-2"
-/>
+      <div className={card}>
+        <h2 className="text-2xl font-bold mb-2">Security</h2>
+        <p className="text-gray-600 mb-4">Manage your account security.</p>
+        <div className="flex items-center justify-between">
+          <span className="text-indigo-950 font-medium">Change your password</span>
+          <button
+            disabled
+            className="bg-gray-100 text-gray-400 px-6 py-3 rounded-xl cursor-not-allowed"
+          >
+            Coming soon
+          </button>
+        </div>
+      </div>
 
-<p className="text-sm text-gray-500 mb-4">
-  Maximum 30 characters
-</p>
+      <div className={card}>
+        <h2 className="text-2xl font-bold mb-2">How Orbit Works</h2>
+        <p className="text-gray-400">Guide coming soon.</p>
+      </div>
 
-      <button
-        onClick={saveProfile}
-        className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
-      >
-        Save
-      </button>
+      <div className={card}>
+        <h2 className="text-2xl font-bold mb-2">Share Your Thoughts</h2>
+        <p className="text-gray-600 mb-4">We'd love to hear how Orbit is working for you.</p>
+        <textarea
+          disabled
+          placeholder="Feedback coming soon."
+          className="border rounded-xl p-3 w-full h-28 text-gray-400 bg-gray-50 cursor-not-allowed resize-none"
+        />
+      </div>
+
     </div>
   );
 }
