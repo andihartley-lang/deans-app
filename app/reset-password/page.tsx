@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 
 export default function ResetPasswordPage() {
@@ -30,13 +29,15 @@ export default function ResetPasswordPage() {
       <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md">
         {done ? (
           <>
-            <h2 className="text-3xl font-bold mb-2">Password updated</h2>
-            <p className="text-gray-600 mb-6">
-              Your password has been changed. You can now sign in with your new password.
-            </p>
-            <Link href="/auth" className="text-indigo-600 hover:underline">
-              Back to login
-            </Link>
+            <h2 className="text-3xl font-bold mb-6">Your password has been updated.</h2>
+            <button
+              onClick={() => {
+                window.location.href = "/app";
+              }}
+              className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
+            >
+              Continue to Orbit
+            </button>
           </>
         ) : (
           <>
