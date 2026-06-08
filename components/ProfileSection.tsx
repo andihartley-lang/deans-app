@@ -67,10 +67,10 @@ export default function ProfileSection({ onDisplayNameSaved }: ProfileSectionPro
     alert("Profile saved.");
   }
 
-  const card = "bg-white rounded-3xl shadow-lg p-8";
+  const card = "bg-white rounded-3xl shadow-lg p-8 w-full";
 
   return (
-    <div className="mt-6 space-y-6">
+    <div className="mt-6 space-y-6 w-full">
 
       <div className={card}>
         <h2 className="text-2xl font-bold mb-2">About You</h2>
