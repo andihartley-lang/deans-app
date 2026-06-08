@@ -40,6 +40,13 @@ export default function LandingPage() {
   Sign In
 </Link>
             </div>
+
+            <Link
+  href="/auth?view=forgot"
+  className="mt-3 inline-block text-sm text-indigo-200 hover:text-white hover:underline transition"
+>
+  Forgot your password?
+</Link>
           </div>
 
           <div className="space-y-3">

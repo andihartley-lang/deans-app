@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { supabase } from '@/lib/supabase';
+import { isPasswordRecoveryLink } from '@/lib/auth';
 import LandingPage from '@/components/LandingPage';
 
 export default function Home() {
@@ -11,9 +12,16 @@ export default function Home() {
 
   useEffect(() => {
     async function checkUser() {
+      const isRecovery = isPasswordRecoveryLink();
+
       const {
         data: { user },
       } = await supabase.auth.getUser();
+
+      if (isRecovery) {
+        router.replace('/reset-password');
+        return;
+      }
 
       if (user) {
         router.replace('/app');
