@@ -158,7 +158,6 @@ export default function AuthSection() {
       {!user && authView === "signup" && (
         <div>
           <h1 className="text-3xl font-bold mb-2">Create your Orbit</h1>
-          <p className="text-indigo-100 mb-6">Free to start. No credit card needed.</p>
 
           <div className="space-y-4">
             <input

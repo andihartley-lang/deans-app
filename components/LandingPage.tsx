@@ -30,7 +30,7 @@ export default function LandingPage() {
   href="/auth?view=signup"
   className="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-2xl hover:bg-yellow-300 transition"
 >
-  Create Free Account
+  Create New Account
 </Link>
 
               <Link
