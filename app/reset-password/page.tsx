@@ -1,23 +1,38 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import Toast from "@/components/Toast";
 
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [done, setDone] = useState(false);
 
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  useEffect(() => {
+    if (!showToast) return;
+    const timer = setTimeout(() => setShowToast(false), 2000);
+    return () => clearTimeout(timer);
+  }, [showToast]);
+
+  function triggerToast(message: string) {
+    setToastMessage(message);
+    setShowToast(true);
+  }
+
   async function savePassword() {
     if (password !== confirmPassword) {
-      alert("Passwords don't match.");
+      triggerToast("Passwords don't match.");
       return;
     }
 
     const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
-      alert(error.message);
+      triggerToast(error.message);
       return;
     }
 
@@ -26,6 +41,8 @@ export default function ResetPasswordPage() {
 
   return (
     <main className="min-h-screen bg-[#f3f4f8] flex items-center justify-center p-6">
+      <Toast message={toastMessage} show={showToast} />
+
       <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md">
         {done ? (
           <>

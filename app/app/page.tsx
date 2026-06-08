@@ -9,6 +9,7 @@ import InboxSection from "@/components/InboxSection";
 import HeroSection from "../../components/HeroSection";
 import AuthSection from "@/components/AuthSection";
 import ProfileSection from "@/components/ProfileSection";
+import Toast from "@/components/Toast";
 import DatePicker, { DatePickerHandle } from "@/components/DatePicker";
 import { Item } from "../../types/item";
 import {
@@ -26,12 +27,18 @@ const [items, setItems] = useState<Item[]>([]);
 const [currentView, setCurrentView] = useState("dashboard");
 const [displayName, setDisplayName] = useState("");
 const [showToast, setShowToast] = useState(false);
+const [toastMessage, setToastMessage] = useState("");
 
 useEffect(() => {
   if (!showToast) return;
   const timer = setTimeout(() => setShowToast(false), 2000);
   return () => clearTimeout(timer);
 }, [showToast]);
+
+function triggerToast(message: string) {
+  setToastMessage(message);
+  setShowToast(true);
+}
 async function fetchItems() {
   const {
   data: { user },
@@ -106,7 +113,7 @@ async function completeItem(id: string) {
     .eq("id", id);
 
 if (error) {
-  alert(error.message);
+  triggerToast(error.message);
   console.error(error);
   return;
 }
@@ -119,7 +126,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
     } = await supabase.auth.getUser();
 
     if (!user) {
-      alert("Please sign in.");
+      triggerToast("Please sign in.");
       return false;
     }
 
@@ -131,13 +138,13 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
     });
 
     if (error) {
-      alert(error.message);
+      triggerToast(error.message);
       console.error(error);
       return false;
     }
 
     await fetchItems();
-    setShowToast(true);
+    triggerToast("Item saved");
     setTitle("");
     setDueDate("");
     setShowDateNudge(false);
@@ -260,7 +267,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
   </div>
 )}
 
-{currentView === "settings" && <ProfileSection onDisplayNameSaved={setDisplayName} />}
+{currentView === "settings" && <ProfileSection onDisplayNameSaved={setDisplayName} onToast={triggerToast} />}
         
 {(
   currentView === "dashboard" ||
@@ -287,14 +294,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
 
     </div>
 
-      {showToast && (
-        <div
-          className="fixed bottom-8 left-1/2 -translate-x-1/2 z-50 bg-indigo-900 text-white px-8 py-4 rounded-2xl shadow-xl text-lg font-medium"
-          style={{ animation: 'toast-fade 2s ease forwards' }}
-        >
-          Item saved
-        </div>
-      )}
+      <Toast message={toastMessage} show={showToast} />
 
   </main>
   );

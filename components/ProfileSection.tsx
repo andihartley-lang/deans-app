@@ -5,9 +5,10 @@ import { supabase } from "@/lib/supabase";
 
 interface ProfileSectionProps {
   onDisplayNameSaved?: (name: string) => void;
+  onToast?: (message: string) => void;
 }
 
-export default function ProfileSection({ onDisplayNameSaved }: ProfileSectionProps) {
+export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileSectionProps) {
   const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
@@ -47,7 +48,7 @@ export default function ProfileSection({ onDisplayNameSaved }: ProfileSectionPro
       .eq("user_id", user.id);
 
     if (error) {
-      alert(error.message);
+      onToast?.(error.message);
       return;
     }
 
@@ -58,19 +59,19 @@ export default function ProfileSection({ onDisplayNameSaved }: ProfileSectionPro
       .single();
 
     if (confirmError || !profile) {
-      alert(confirmError?.message ?? "Could not confirm the saved profile.");
+      onToast?.(confirmError?.message ?? "Could not confirm the saved profile.");
       return;
     }
 
     setDisplayName(profile.display_name ?? "");
     onDisplayNameSaved?.(profile.display_name ?? "");
-    alert("Profile saved.");
+    onToast?.("Profile saved.");
   }
 
   const card = "bg-white rounded-3xl shadow-lg p-8 w-full";
 
   return (
-    <div className="mt-6 space-y-6 w-full">
+    <div className="mt-6 max-w-6xl mx-auto space-y-6 w-full">
 
       <div className={card}>
         <h2 className="text-2xl font-bold mb-2">About You</h2>

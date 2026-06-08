@@ -1,6 +1,33 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
+## SESSION 4 — June 2026 (2026-06-08)
+Status: Auth redesign, profile save fix, and toast consistency complete.
+
+### Completed
+- ProfileSection save handler now confirms the Supabase write by re-fetching the profile before showing a success toast, and updates the dashboard display name via an onDisplayNameSaved callback
+- Auth page (/auth) redesigned into two distinct dark-themed views — Sign In and Create Account — matching the landing page gradient styling, replacing the old single-card layout with two headings and inconsistent button colours
+- Auth views are URL-driven (?view=signin / ?view=signup / ?view=forgot) and linked correctly from the landing page
+- Create Account subtext trimmed; CTA button renamed to Create New Account
+- Investigated reported Help & Settings card width inconsistency — could not reproduce across 8 viewport widths with pixel measurements and screenshots; added explicit w-full to all four cards, their inner input/textarea, and a shared max-w-6xl wrapper as a defensive measure
+- Replaced every browser alert() across the app with the existing styled purple toast system — created a shared components/Toast.tsx component and wired it into app/app/page.tsx, ProfileSection.tsx, AuthSection.tsx, and reset-password/page.tsx, so all save and error confirmations now look and behave consistently with no native dialog boxes
+
+### Known Issues Outstanding
+- Settings section cards reported as inconsistent width on the user's screen — not reproducible in code or in testing; defensive w-full classes added but root cause unconfirmed (possible browser cache, zoom, or display scaling on the user's side)
+- MOT and compound keywords not always triggering time-sensitive prompt
+- View all buttons not wired up
+- Keyboard shortcuts in VS Code terminal behaving oddly — close and reopen VS Code to fix
+
+### Next Priorities
+1. Logo integration
+2. Recurring tasks
+3. Wire up feedback form
+4. Domain registration — orbit.co.uk
+5. Email address — hello@orbit.co.uk
+6. T&Cs and privacy policy
+
+---
+
 ## SESSION 3 — June 2026 (2026-06-08)
 Status: Password reset complete. MD project files being set up.
 

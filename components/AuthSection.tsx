@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
+import Toast from "@/components/Toast";
 
 const inputClasses =
   "bg-white/10 border border-white/20 rounded-xl p-3 w-full text-white placeholder-indigo-300 focus:outline-none focus:border-white/40 transition";
@@ -22,6 +23,20 @@ export default function AuthSection() {
 
   const [authView, setAuthView] = useState<"signin" | "signup" | "forgot" | "forgotSent">("signin");
   const [resetEmail, setResetEmail] = useState("");
+
+  const [showToast, setShowToast] = useState(false);
+  const [toastMessage, setToastMessage] = useState("");
+
+  useEffect(() => {
+    if (!showToast) return;
+    const timer = setTimeout(() => setShowToast(false), 2000);
+    return () => clearTimeout(timer);
+  }, [showToast]);
+
+  function triggerToast(message: string) {
+    setToastMessage(message);
+    setShowToast(true);
+  }
 
   useEffect(() => {
     async function loadUser() {
@@ -54,11 +69,11 @@ export default function AuthSection() {
     });
 
     if (error) {
-      alert(error.message);
+      triggerToast(error.message);
       return;
     }
 
-    alert("Check your email to verify your account.");
+    triggerToast("Check your email to verify your account.");
   }
 
   async function signIn() {
@@ -68,7 +83,7 @@ export default function AuthSection() {
     });
 
     if (error) {
-      alert(error.message);
+      triggerToast(error.message);
       return;
     }
 
@@ -103,7 +118,7 @@ export default function AuthSection() {
     });
 
     if (error) {
-      alert(error.message);
+      triggerToast(error.message);
       return;
     }
 
@@ -112,6 +127,8 @@ export default function AuthSection() {
 
   return (
     <div className="w-full max-w-md">
+      <Toast message={toastMessage} show={showToast} />
+
       {!user && authView === "signin" && (
         <div>
           <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
