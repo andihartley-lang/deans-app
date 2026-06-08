@@ -6,7 +6,7 @@ export default function LandingPage() {
         <div className="text-2xl font-semibold">Orbit</div>
 
         <Link
-  href="/auth"
+  href="/auth?view=signin"
   className="rounded-xl border border-white/20 px-5 py-2 hover:bg-white/10 transition"
 >
   Sign In
@@ -27,14 +27,14 @@ export default function LandingPage() {
 
             <div className="mt-6 flex flex-wrap gap-4">
               <Link
-  href="/auth"
+  href="/auth?view=signup"
   className="bg-yellow-400 text-black font-semibold px-6 py-3 rounded-2xl hover:bg-yellow-300 transition"
 >
   Create Free Account
 </Link>
 
               <Link
-  href="/auth"
+  href="/auth?view=signin"
   className="border border-white/20 px-6 py-3 rounded-2xl hover:bg-white/10 transition"
 >
   Sign In

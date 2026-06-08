@@ -1,15 +1,26 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
+const inputClasses =
+  "bg-white/10 border border-white/20 rounded-xl p-3 w-full text-white placeholder-indigo-300 focus:outline-none focus:border-white/40 transition";
+
+const primaryButtonClasses =
+  "bg-yellow-400 text-black font-semibold px-6 py-3 rounded-2xl hover:bg-yellow-300 transition w-full";
+
+const quietLinkClasses = "text-sm text-indigo-300 hover:text-white transition";
+
 export default function AuthSection() {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<any>(null);
-  const [displayName, setDisplayName] = useState("");
 
-  const [authView, setAuthView] = useState<"credentials" | "forgot" | "forgotSent">("credentials");
+  const [authView, setAuthView] = useState<"signin" | "signup" | "forgot" | "forgotSent">("signin");
   const [resetEmail, setResetEmail] = useState("");
 
   useEffect(() => {
@@ -25,10 +36,16 @@ export default function AuthSection() {
   }, []);
 
   useEffect(() => {
-    if (new URLSearchParams(window.location.search).get("view") === "forgot") {
+    const view = searchParams.get("view");
+
+    if (view === "signup") {
+      setAuthView("signup");
+    } else if (view === "forgot") {
       setAuthView("forgot");
+    } else {
+      setAuthView("signin");
     }
-  }, []);
+  }, [searchParams]);
 
   async function signUp() {
     const { error } = await supabase.auth.signUp({
@@ -45,40 +62,40 @@ export default function AuthSection() {
   }
 
   async function signIn() {
-  const { error } = await supabase.auth.signInWithPassword({
-    email,
-    password,
-  });
-
-  if (error) {
-    alert(error.message);
-    return;
-  }
-
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-
-  if (!user) {
-    return;
-  }
-
-  const { data: profile } = await supabase
-    .from("profiles")
-    .select("id")
-    .eq("user_id", user.id)
-    .single();
-
-  if (!profile) {
-    await supabase.from("profiles").insert({
-      user_id: user.id,
+    const { error } = await supabase.auth.signInWithPassword({
+      email,
+      password,
     });
+
+    if (error) {
+      alert(error.message);
+      return;
+    }
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      return;
+    }
+
+    const { data: profile } = await supabase
+      .from("profiles")
+      .select("id")
+      .eq("user_id", user.id)
+      .single();
+
+    if (!profile) {
+      await supabase.from("profiles").insert({
+        user_id: user.id,
+      });
+    }
+
+    setUser(user);
+
+    window.location.href = "/app";
   }
-
-  setUser(user);
-
-  window.location.href = "/app";
-}
 
   async function sendResetLink() {
     const { error } = await supabase.auth.resetPasswordForEmail(resetEmail, {
@@ -94,91 +111,108 @@ export default function AuthSection() {
   }
 
   return (
-    <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md">
-      <h2 className="text-3xl font-bold mb-2">
-        Welcome to Orbit
-      </h2>
+    <div className="w-full max-w-md">
+      {!user && authView === "signin" && (
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Welcome back</h1>
+          <p className="text-indigo-100 mb-6">Sign in to your Orbit</p>
 
-      <p className="text-gray-600 mb-6">
-        Sign in or create an account to continue.
-      </p>
+          <div className="space-y-4">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={inputClasses}
+            />
 
-      <h2 className="text-3xl font-bold mb-2">
-  Account
-</h2>
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={inputClasses}
+            />
 
-<p className="text-gray-600 mb-6">
-  Manage your Orbit account.
-</p>
-
-      {!user && authView === "credentials" && (
-        <div className="space-y-4">
-          <input
-            type="email"
-            placeholder="Email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            className="border rounded-xl p-3 w-full"
-          />
-
-          <input
-            type="password"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            className="border rounded-xl p-3 w-full"
-          />
-
-          <div className="flex gap-4">
-            <button
-              onClick={signUp}
-              className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
-            >
-              Create Account
+            <button onClick={signIn} className={primaryButtonClasses}>
+              Sign In
             </button>
 
             <button
-              onClick={signIn}
-              className="bg-green-600 text-white px-6 py-3 rounded-xl"
+              onClick={() => router.push("/auth?view=forgot")}
+              className={quietLinkClasses}
             >
-              Sign In
+              Forgot your password?
             </button>
           </div>
 
           <button
-            onClick={() => setAuthView("forgot")}
-            className="text-indigo-600 text-sm hover:underline"
+            onClick={() => router.push("/auth?view=signup")}
+            className={`mt-8 block ${quietLinkClasses}`}
           >
-            Forgot your password?
+            New to Orbit? Create a free account
+          </button>
+        </div>
+      )}
+
+      {!user && authView === "signup" && (
+        <div>
+          <h1 className="text-3xl font-bold mb-2">Create your Orbit</h1>
+          <p className="text-indigo-100 mb-6">Free to start. No credit card needed.</p>
+
+          <div className="space-y-4">
+            <input
+              type="email"
+              placeholder="Email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className={inputClasses}
+            />
+
+            <input
+              type="password"
+              placeholder="Password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className={inputClasses}
+            />
+
+            <button onClick={signUp} className={primaryButtonClasses}>
+              Create Free Account
+            </button>
+          </div>
+
+          <button
+            onClick={() => router.push("/auth?view=signin")}
+            className={`mt-8 block ${quietLinkClasses}`}
+          >
+            Already have an account? Sign in
           </button>
         </div>
       )}
 
       {!user && authView === "forgot" && (
-        <div className="space-y-4">
-          <p className="text-gray-600">
+        <div>
+          <p className="text-indigo-100 mb-6">
             Enter your email and we&apos;ll send you a link to reset your password.
           </p>
 
-          <input
-            type="email"
-            placeholder="Email"
-            value={resetEmail}
-            onChange={(e) => setResetEmail(e.target.value)}
-            className="border rounded-xl p-3 w-full"
-          />
+          <div className="space-y-4">
+            <input
+              type="email"
+              placeholder="Email"
+              value={resetEmail}
+              onChange={(e) => setResetEmail(e.target.value)}
+              className={inputClasses}
+            />
 
-          <div className="flex items-center gap-4">
-            <button
-              onClick={sendResetLink}
-              className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
-            >
+            <button onClick={sendResetLink} className={primaryButtonClasses}>
               Send reset link
             </button>
 
             <button
-              onClick={() => setAuthView("credentials")}
-              className="text-gray-500 text-sm hover:underline"
+              onClick={() => router.push("/auth?view=signin")}
+              className={quietLinkClasses}
             >
               Back to sign in
             </button>
@@ -188,13 +222,13 @@ export default function AuthSection() {
 
       {!user && authView === "forgotSent" && (
         <div className="space-y-4">
-          <p className="text-gray-600">
+          <p className="text-indigo-100">
             Check your email for a link to reset your password.
           </p>
 
           <button
-            onClick={() => setAuthView("credentials")}
-            className="text-indigo-600 text-sm hover:underline"
+            onClick={() => router.push("/auth?view=signin")}
+            className={quietLinkClasses}
           >
             Back to sign in
           </button>

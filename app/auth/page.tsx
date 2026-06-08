@@ -39,7 +39,7 @@ export default function AuthPage() {
   }
 
   return (
-    <main className="min-h-screen bg-[#f3f4f8] flex items-center justify-center p-6">
+    <main className="min-h-screen bg-gradient-to-b from-indigo-950 via-indigo-900 to-indigo-950 text-white flex items-center justify-center p-6">
       <AuthSection />
     </main>
   );
