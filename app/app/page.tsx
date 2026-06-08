@@ -260,7 +260,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
   </div>
 )}
 
-{currentView === "settings" && <ProfileSection />}
+{currentView === "settings" && <ProfileSection onDisplayNameSaved={setDisplayName} />}
         
 {(
   currentView === "dashboard" ||

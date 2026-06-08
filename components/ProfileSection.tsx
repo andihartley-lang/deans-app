@@ -3,7 +3,11 @@
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 
-export default function ProfileSection() {
+interface ProfileSectionProps {
+  onDisplayNameSaved?: (name: string) => void;
+}
+
+export default function ProfileSection({ onDisplayNameSaved }: ProfileSectionProps) {
   const [displayName, setDisplayName] = useState("");
 
   useEffect(() => {
@@ -47,6 +51,19 @@ export default function ProfileSection() {
       return;
     }
 
+    const { data: profile, error: confirmError } = await supabase
+      .from("profiles")
+      .select("display_name")
+      .eq("user_id", user.id)
+      .single();
+
+    if (confirmError || !profile) {
+      alert(confirmError?.message ?? "Could not confirm the saved profile.");
+      return;
+    }
+
+    setDisplayName(profile.display_name ?? "");
+    onDisplayNameSaved?.(profile.display_name ?? "");
     alert("Profile saved.");
   }
 
