@@ -41,6 +41,10 @@ Password reset flow — fully working on live URL. Forgot password link on landi
 - MOT and compound keywords not always triggering time-sensitive date prompt
 - View all buttons not wired up
 - Keyboard shortcuts Ctrl+C and Ctrl+V stopped working in VS Code terminal — close and reopen VS Code to fix
+- Password reset on live URL not fully tested — Supabase email rate limit hit during testing. Test this first next session before anything else.
+- Auth page styling: two headings showing, inconsistent button colours
+- Help and Settings card widths inconsistent
+- Help and Settings sections Security, How Orbit Works and Share Your Thoughts are all placeholders — need building
 
 ## Next Priorities In Order
 1. Fix auth page styling — one clean heading, consistent purple buttons, tidy layout
