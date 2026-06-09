@@ -29,12 +29,13 @@ All core features are complete:
 - Natural language capture — AI fires for inputs over 6 words, extracts title only
 - Date picker — calendar only, optional
 - Time-sensitive task prompt — gentle amber card, Add a date or No date needed
-- Help and Settings page — four sections, About You working, others placeholder
+- Help and Settings page — About You and Share Your Thoughts working; Security and How Orbit Works placeholder
 - Toast notifications — single shared purple toast system (components/Toast.tsx)
 - Page metadata
 - Recurring tasks — full feature complete (see below)
+- Feedback form — working EmailJS integration in Share Your Thoughts (see below)
 
-## Recurring Tasks Feature (completed this session)
+## Recurring Tasks Feature (complete)
 Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
 - Checkbox "Add a reminder for next year" (ticked by default)
 - Date picker pre-set to one year from the task's own due date (falls back to one year from today if no due date)
@@ -45,14 +46,26 @@ Ticked + confirm: completes current item, creates new identical recurring item w
 
 Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their own per-card state. Logic lives in `completeItemWithRecurring` in page.tsx.
 
+## EmailJS Feedback Form (complete — pending Vercel env var confirmation)
+Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
+- Service ID: `service_ecsh1ih` (in source)
+- Template ID: `template_3etw4ta` (in source)
+- Public Key: `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` — stored in `.env.local` (not committed), must also be set in Vercel environment variables
+- On success: clears textarea, shows toast "Thank you — your thoughts help shape Orbit"
+- On failure: shows toast "Something went wrong — please try again"
+- Send button disabled when textarea is empty or while sending
+
+**Action required:** Confirm `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=yueNLUFED-Z-NSr5W` is set in Vercel → Project → Settings → Environment Variables. Without it the send will fail on the live URL. After adding it, redeploy (or push any change) to pick it up.
+
 ## Known Issues
+- Vercel env var for EmailJS public key may not yet be confirmed set — actual email delivery needs user to test by signing in and sending a real message
 - Settings section cards reported as inconsistent width — not reproducible in testing; defensive w-full classes added
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing, separate from recurring feature)
 - View all buttons not wired up
-- Help and Settings sections Security, How Orbit Works and Share Your Thoughts are all placeholders
+- Security and How Orbit Works sections are placeholders
 
 ## Next Priorities In Order
-1. Wire up feedback form in Help and Settings
+1. Confirm Vercel env var is set and verify real email delivery (user signs in, sends message, checks inbox)
 2. How Orbit Works — design and content for help section
 3. Domain registration — orbit.co.uk
 4. Email address — hello@orbit.co.uk
@@ -66,8 +79,8 @@ Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their o
 - Email rate limit on free tier: 2 per hour — affects signup and password reset testing
 
 ## Environment Variables
-- .env.local contains NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, ANTHROPIC_API_KEY
-- All three are also set in Vercel environment variables
+- .env.local contains NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, ANTHROPIC_API_KEY, NEXT_PUBLIC_EMAILJS_PUBLIC_KEY
+- All must also be set in Vercel environment variables
 - Never commit .env.local to GitHub
 
 ## Development Workflow

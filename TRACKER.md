@@ -1,6 +1,30 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
+## SESSION 6 — June 2026 (2026-06-09)
+Status: EmailJS feedback form wired up and verified on live URL.
+
+### Completed
+- Replaced disabled Share Your Thoughts placeholder in ProfileSection.tsx with a working EmailJS feedback form
+- Service ID `service_ecsh1ih` and Template ID `template_3etw4ta` hardcoded in source; Public Key stored in `.env.local` as `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` (not committed)
+- Live URL verification: textarea enabled, Send disabled when empty, Send enabled after typing, both EmailJS credentials confirmed in deployed JS bundle
+- Vercel env var `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` must be added manually by the user for actual email delivery on live URL
+
+### Known Issues Outstanding
+- Vercel env var `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` may not yet be set — actual email delivery unverified until confirmed by user signing in and sending
+- Settings section cards inconsistent width — not reproducible; defensive w-full classes already added
+- MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing)
+- View all buttons not wired up
+
+### Next Priorities
+1. Confirm Vercel env var is set and test real email delivery on live URL (user to do manually)
+2. How Orbit Works section — design and content
+3. Domain registration — orbit.co.uk
+4. Email address — hello@orbit.co.uk
+5. T&Cs and privacy policy
+
+---
+
 ## SESSION 5 — June 2026 (2026-06-09)
 Status: Recurring tasks feature complete and refined.
 
