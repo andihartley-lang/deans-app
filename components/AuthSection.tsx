@@ -204,11 +204,11 @@ export default function AuthSection() {
               />
               <span className="text-sm text-indigo-200 leading-relaxed">
                 I agree to the{" "}
-                <Link href="/terms" target="_blank" className="underline hover:text-white transition">
+                <Link href="/terms" className="underline hover:text-white transition">
                   Terms of Service
                 </Link>
                 {" "}and{" "}
-                <Link href="/privacy" target="_blank" className="underline hover:text-white transition">
+                <Link href="/privacy" className="underline hover:text-white transition">
                   Privacy Policy
                 </Link>
               </span>

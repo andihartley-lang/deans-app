@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 
 const sections = [
   {
@@ -48,18 +51,19 @@ const sections = [
 ];
 
 export default function TermsPage() {
+  const router = useRouter();
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 via-indigo-900 to-indigo-950 text-white">
       <nav className="max-w-3xl mx-auto flex items-center justify-between px-6 py-5">
         <Link href="/" className="text-2xl font-semibold hover:opacity-80 transition">
           Orbit
         </Link>
-        <Link
-          href="/"
+        <button
+          onClick={() => router.back()}
           className="rounded-xl border border-white/20 px-5 py-2 text-sm hover:bg-white/10 transition"
         >
           ← Back
-        </Link>
+        </button>
       </nav>
 
       <article className="max-w-3xl mx-auto px-6 pb-20">
