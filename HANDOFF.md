@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-09, session 8)
+Last updated: June 2026 (2026-06-09, session 9)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -26,7 +26,7 @@ All core features are complete:
 - User-owned items with RLS
 - Profiles and display name — save handler confirms the write via re-fetch before showing success and updating the dashboard
 - View filtering — Today, Upcoming, Inbox, Dashboard all mutually exclusive
-- Natural language capture — AI fires for inputs over 6 words, extracts title only
+- Natural language capture — AI fires for inputs over 6 words, extracts title only (see AI Processing section below)
 - Date picker — calendar only, optional
 - Time-sensitive task prompt — gentle amber card, Add a date or No date needed
 - Help and Settings page — About You, How Orbit Works, and Share Your Thoughts all working; Security placeholder
@@ -35,6 +35,7 @@ All core features are complete:
 - Recurring tasks — full feature complete (see below)
 - Feedback form — working EmailJS integration in Share Your Thoughts (see below)
 - How Orbit Works — five accordion sections, smooth expand/collapse, one open at a time (see below)
+- Legal pages — Terms of Service and Privacy Policy pages live; linked from landing page, signup flow, and Help & Settings (see below)
 
 ## Recurring Tasks Feature (complete)
 Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
@@ -49,6 +50,22 @@ Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their o
 
 ## How Orbit Works Accordion (complete)
 Five accordion sections in the How Orbit Works card: Capture it, Your views, Check in daily, Forgotten your password?, Coming soon. One section open at a time — CSS grid row transition for smooth expand/collapse, arrow rotates on open. Body text at 16px / 1.8 line-height for accessibility. Verified on live URL.
+
+## Legal Pages (complete)
+- Terms of Service at `/terms` — 11 sections, dark landing-page styling, context-aware back button
+- Privacy Policy at `/privacy` — 13 sections, same styling, context-aware back button
+- Back button uses `router.back()` — returns to whichever page the user came from (auth, Help & Settings, or landing page)
+- Linked from landing page footer
+- Linked from signup flow — checkbox "I agree to the Terms of Service and Privacy Policy" required; Create Account button disabled until ticked
+- Linked from bottom of Help & Settings page
+
+## AI Processing (current implementation)
+- Trigger: only fires when user input exceeds 6 words
+- What is sent to Anthropic: the user's raw task description verbatim, wrapped in a system prompt
+- What Anthropic returns: a clean 3–5 word title as JSON
+- What is stored in Supabase: the returned title only — the original input is never written to the database
+- Original text may still appear in Vercel infrastructure logs and Anthropic API logs — both outside Orbit's direct control
+- Outstanding: user-facing disclosure and AI transparency review (see priorities below)
 
 ## EmailJS Feedback Form (complete)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
@@ -68,14 +85,14 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 ## Next Priorities In Order
 
 ### Critical — before public launch
-1. Account deletion — build self-service account deletion flow in Help & Settings; must delete all associated data (tasks, profile, account); aligns with Privacy Policy 30-day commitment
+1. Account deletion — self-service flow in Help & Settings; must delete: all tasks, profile record, and Supabase auth account; must include a confirmation step with permanent deletion warning; aligns with Privacy Policy 30-day commitment
 2. Security review — confirm RLS is correctly configured on all tables; confirm users can only access their own records; confirm no secrets are exposed client-side
 3. Domain registration — orbit.co.uk
 4. Email address — hello@orbit.co.uk
 
 ### High — do soon after launch
 5. Sensitive information warning — brief in-app notice that Orbit is for task management only, not storage of sensitive information; location TBD, likely Help & Settings or task capture area
-6. AI transparency — confirm exactly what data is sent to Anthropic, what is stored in Supabase, and what is retained in logs; add any required user-facing disclosure
+6. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
 7. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
 8. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
 
