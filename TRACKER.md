@@ -1,41 +1,33 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
-## SESSION 7 — June 2026 (2026-06-09)
-Status: How Orbit Works accordion complete and verified on live URL.
+## SESSION 8 — June 2026 (2026-06-09)
+Status: Legal pages, compliance actions recorded, HANDOFF updated.
 
 ### Completed
-- Replaced "Guide coming soon." placeholder in How Orbit Works card with five accordion sections: Capture it, Your views, Check in daily, Forgotten your password?, Coming soon
-- One section open at a time — opening a new one closes the previous; tapping an open section closes it
-- Smooth expand/collapse via CSS grid row transition (grid-rows-[0fr] → grid-rows-[1fr])
-- Arrow rotates 180° when section is open
-- Body text set at 16px minimum with 1.8 line-height for accessibility
-- Card styling matches the rest of Help & Settings exactly
-- Verified on live URL: all five headings visible when collapsed, correct open/close behaviour, correct aria-expanded state, 16px confirmed
-
-### Also completed this session
-- Terms of Service page (/terms) — dark landing-page styling, 11 sections, context-aware back button
+- Terms of Service page (/terms) — dark landing-page styling matching the rest of the app, 11 sections, context-aware back button using router.back()
 - Privacy Policy page (/privacy) — same styling, 13 sections, context-aware back button
-- Landing page footer — Terms and Privacy links
-- Signup flow — terms/privacy checkbox, Create Account button disabled until ticked
-- Help & Settings — Terms and Privacy links at the bottom
-- Back button fix — uses router.back() so it returns to auth page, Help & Settings, or landing page as appropriate
+- Landing page footer — Terms of Service and Privacy Policy links
+- Signup flow — "I agree to the Terms of Service and Privacy Policy" checkbox above Create Account button; button disabled until ticked; links navigate in-tab so back button returns to auth page
+- Help & Settings — Terms of Service and Privacy Policy links at the bottom of the page
+- Context-aware back navigation — back button returns to whichever page the user came from (auth page, Help & Settings, or landing page)
+- Compliance and legal actions identified, documented in HANDOFF and TRACKER
 
-### Compliance and Legal Actions Noted
-The following actions were identified and must be tracked. They are not yet built.
+### Compliance Actions Outstanding (not yet built)
 
 **Critical — before public launch:**
-- Account deletion — self-service flow in Help & Settings; must delete tasks, profile and account; aligns with Privacy Policy 30-day commitment
+- Account deletion — self-service flow in Help & Settings; must delete: all tasks, profile record, and Supabase auth account; must include confirmation step and permanent deletion warning; aligns with Privacy Policy 30-day commitment
 - Security review — audit RLS on all tables; confirm users can only access own records; confirm no client-side secret exposure
 
 **High — do soon after launch:**
-- Sensitive information warning — in-app notice that Orbit is not for sensitive data; location TBD
-- AI transparency — confirm and document exactly what is sent to Anthropic, stored in Supabase, retained in logs; add user-facing disclosure if needed
-- Data retention — confirm completed tasks retained indefinitely; assess alignment with Privacy Policy; decide on automated deletion if needed
-- Company information — update "Orbit, a business" in Terms and Privacy once Orbit Limited is incorporated
+- Sensitive information warning — brief in-app notice that Orbit is for task management only, not storage of sensitive information; location TBD, likely Help & Settings or task capture area
+- AI transparency — implement user-facing AI transparency wording consistent with the Privacy Policy; current implementation sends raw task descriptions over 6 words to Anthropic, stores only the returned title in Supabase, and may involve temporary infrastructure/provider logging
+- Data retention — decide whether completed tasks should be retained indefinitely or archived; current Privacy Policy supports indefinite retention while the account remains active
+- Anthropic API policy review — review Anthropic API retention, training and data-processing policies to ensure alignment with Orbit Privacy Policy
+- Company information — update "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
 
 **Lower priority — post launch:**
-- GDPR export features — assess effort only; do not build yet
+- GDPR export features — assess effort for "export my data" and "download my account data" functionality; do not build yet
 
 ### Known Issues Outstanding
 - Settings section cards inconsistent width — not reproducible; defensive w-full classes already added
@@ -48,6 +40,32 @@ The following actions were identified and must be tracked. They are not yet buil
 2. Security review (critical — before launch)
 3. Domain registration — orbit.co.uk
 4. Email address — hello@orbit.co.uk
+
+---
+
+## SESSION 7 — June 2026 (2026-06-09)
+Status: How Orbit Works accordion complete and verified on live URL.
+
+### Completed
+- Replaced "Guide coming soon." placeholder in How Orbit Works card with five accordion sections: Capture it, Your views, Check in daily, Forgotten your password?, Coming soon
+- One section open at a time — opening a new one closes the previous; tapping an open section closes it
+- Smooth expand/collapse via CSS grid row transition (grid-rows-[0fr] → grid-rows-[1fr])
+- Arrow rotates 180° when section is open
+- Body text set at 16px minimum with 1.8 line-height for accessibility
+- Card styling matches the rest of Help & Settings exactly
+- Verified on live URL: all five headings visible when collapsed, correct open/close behaviour, correct aria-expanded state, 16px confirmed
+
+### Known Issues Outstanding
+- Settings section cards inconsistent width — not reproducible; defensive w-full classes already added
+- MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing)
+- View all buttons not wired up
+- Security section is a placeholder
+
+### Next Priorities
+1. Domain registration — orbit.co.uk
+2. Email address — hello@orbit.co.uk
+3. T&Cs and privacy policy
+4. Security section — change password
 
 ---
 
