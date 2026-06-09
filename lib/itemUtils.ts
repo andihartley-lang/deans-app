@@ -1,3 +1,14 @@
+export function nextYearISO(): string {
+  const d = new Date();
+  d.setFullYear(d.getFullYear() + 1);
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+export function formatDDMMYY(iso: string): string {
+  const d = new Date(iso + "T12:00:00");
+  return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getFullYear()).slice(2)}`;
+}
+
 export function getStatus(dueDate: string | null) {
   if (!dueDate) return "captured";
 

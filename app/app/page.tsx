@@ -120,6 +120,43 @@ if (error) {
 
   fetchItems();
 }
+async function completeItemWithRecurring(id: string, title: string, newDueDate: string) {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return;
+
+  const { error: completeError } = await supabase
+    .from("items")
+    .update({ status: "completed", completed_at: new Date() })
+    .eq("id", id);
+
+  if (completeError) {
+    triggerToast(completeError.message);
+    return;
+  }
+
+  const { error: insertError } = await supabase.from("items").insert({
+    title,
+    due_date: newDueDate,
+    status: "active",
+    user_id: user.id,
+    is_recurring: true,
+  });
+
+  if (insertError) {
+    triggerToast(insertError.message);
+    return;
+  }
+
+  await fetchItems();
+  const d = new Date(newDueDate + "T12:00:00");
+  const dd = String(d.getDate()).padStart(2, "0");
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const yy = String(d.getFullYear()).slice(2);
+  triggerToast(`Done — your ${title} is saved for ${dd}/${mm}/${yy}`);
+}
+
 async function saveItem(itemTitle: string, itemDueDate: string | null) {
     const {
       data: { user },
@@ -130,11 +167,17 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       return false;
     }
 
+    const recurringKeywords = ["insurance", "mot", "road tax", "boiler service", "tv licence"];
+    const isRecurring = recurringKeywords.some((kw) =>
+      itemTitle.toLowerCase().includes(kw)
+    );
+
     const { error } = await supabase.from("items").insert({
       title: itemTitle,
       due_date: itemDueDate,
       status: "active",
       user_id: user.id,
+      is_recurring: isRecurring,
     });
 
     if (error) {
@@ -280,6 +323,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
   getStatus={getStatus}
   getItemIcon={getItemIcon}
   completeItem={completeItem}
+  completeItemWithRecurring={completeItemWithRecurring}
 />
 )}
 <InboxSection
@@ -287,6 +331,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
   items={items}
   getItemIcon={getItemIcon}
   completeItem={completeItem}
+  completeItemWithRecurring={completeItemWithRecurring}
 />
   
 

@@ -7,6 +7,7 @@ interface UpcomingSectionProps {
   getStatus: (dueDate: string | null) => string;
   getItemIcon: (title: string) => string;
   completeItem: (id: string) => void;
+  completeItemWithRecurring: (id: string, title: string, newDueDate: string) => void;
 }
 
 export default function UpcomingSection({
@@ -15,6 +16,7 @@ export default function UpcomingSection({
   getStatus,
   getItemIcon,
   completeItem,
+  completeItemWithRecurring,
 }: UpcomingSectionProps) {
   const now = new Date();
   const ty = now.getFullYear();
@@ -74,6 +76,7 @@ export default function UpcomingSection({
                 item={item}
                 getItemIcon={getItemIcon}
                 completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
                 colour="red"
               />
             ))}
@@ -91,6 +94,7 @@ export default function UpcomingSection({
                 item={item}
                 getItemIcon={getItemIcon}
                 completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
                 colour="red"
               />
             ))}
@@ -157,6 +161,7 @@ export default function UpcomingSection({
                 item={item}
                 getItemIcon={getItemIcon}
                 completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
                 colour="red"
               />
             ))}
@@ -177,6 +182,7 @@ export default function UpcomingSection({
                 item={item}
                 getItemIcon={getItemIcon}
                 completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
                 colour="red"
               />
             ))}
@@ -199,6 +205,7 @@ export default function UpcomingSection({
                 item={item}
                 getItemIcon={getItemIcon}
                 completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
                 colour="red"
               />
             ))}
@@ -221,6 +228,7 @@ export default function UpcomingSection({
                 item={item}
                 getItemIcon={getItemIcon}
                 completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
                 colour="blue"
               />
             ))}

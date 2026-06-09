@@ -5,4 +5,5 @@ export interface Item {
   status: string;
   created_at: string;
   completed_at: string | null;
+  is_recurring?: boolean;
 }

@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-08)
+Last updated: June 2026 (2026-06-09)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -28,35 +28,31 @@ All core features are complete:
 - View filtering — Today, Upcoming, Inbox, Dashboard all mutually exclusive
 - Natural language capture — AI fires for inputs over 6 words, extracts title only
 - Date picker — calendar only, optional
-- Time-sensitive prompt — appears when task has no date and keywords match
+- Time-sensitive task prompt — gentle amber card, Add a date or No date needed
 - Help and Settings page — four sections, About You working, others placeholder
-- Toast notifications — single shared purple toast system (components/Toast.tsx) used everywhere; no native browser alert() dialogs remain anywhere in the app
+- Toast notifications — single shared purple toast system (components/Toast.tsx)
 - Page metadata
+- Recurring tasks — annual renewals auto-detected at capture, inline completion prompt, new task created on confirm
 
 ## What Was Just Completed
-Replaced every browser alert() in the codebase with the existing styled toast notification system. Created a shared components/Toast.tsx presentational component (exact same styling and 2-second fade animation as the original "Item saved" toast) and wired it into app/app/page.tsx, ProfileSection.tsx, AuthSection.tsx, and reset-password/page.tsx. ProfileSection reuses the parent page's toast instance via an onToast callback; AuthSection and reset-password (separate route trees) manage their own local toast state using the same pattern. No save logic, error handling, or control flow was changed — purely a swap of the notification mechanism. Verified on localhost with a headless browser: triggered the "Passwords don't match." and "Invalid login credentials" toasts, confirmed they render as the styled purple toast with zero native dialogs, and confirmed tsc --noEmit passes with no remaining alert( calls anywhere in the codebase.
-
-Also completed earlier in this session: ProfileSection save handler now confirms writes via re-fetch before showing success, the /auth page was redesigned into Sign In / Create Account views matching the landing page, two small text edits were made, and the Help & Settings card width report was investigated (could not reproduce — defensive w-full classes added).
+Recurring tasks feature. Five keywords (insurance, mot, road tax, boiler service, tv licence) are detected in `saveItem` after AI title parsing and silently set `is_recurring: true` on the Supabase insert. A new `completeItemWithRecurring` function in page.tsx completes the current item, inserts a new identical one with `is_recurring: true` and the chosen due date, and shows a toast "Done — your [title] is saved for [dd/mm/yy]". TaskCard and InboxSection both show an inline prompt when a recurring item is completed — checkbox "Add a reminder for next year" (ticked by default), DatePicker pre-set to one year from today, and a Confirm button. Ticked + confirm = recurring; unticked + confirm = normal complete; non-recurring items complete immediately with no prompt.
 
 ## Known Issues
-- Settings section cards reported as inconsistent width by the user — not reproducible in code or in pixel-measurement testing across 8 viewport widths; defensive w-full classes added to all four cards, their inputs/textarea, and a shared max-width wrapper, but the root cause is unconfirmed. Possibly browser cache, zoom, or display scaling on the user's side — ask for a screenshot if it resurfaces
-- MOT and compound keywords not always triggering time-sensitive date prompt
+- Settings section cards reported as inconsistent width by the user — not reproducible in code or in pixel-measurement testing; defensive w-full classes added, root cause unconfirmed
+- MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing issue, separate from recurring feature)
 - View all buttons not wired up
-- Keyboard shortcuts Ctrl+C and Ctrl+V stopped working in VS Code terminal — close and reopen VS Code to fix
+- Date picker in the recurring prompt shows date in the picker's own format ("9 Jun 2027") rather than dd/mm/yy — dd/mm/yy appears correctly in the toast
 - Help and Settings sections Security, How Orbit Works and Share Your Thoughts are all placeholders — need building
-- "Item saved" and "Profile saved" toasts (which require a logged-in session to trigger) were not directly exercised in the latest browser test — they use the identical Toast component already verified working for the error-toast paths, so should behave identically. Worth a quick authenticated check on the live URL
 
 ## Next Priorities In Order
-1. Logo integration — two PNG concepts exist, Image 1 (glowing ring) for app icon and sidebar, Image 2 (intertwining rings) for landing page
-2. Recurring tasks — annual renewals auto-recreate on completion eg MOT, insurance, passport
-3. Wire up feedback form in Help and Settings
-4. How Orbit Works — design and content for help section
-5. Domain registration — orbit.co.uk
-6. Email address — hello@orbit.co.uk
-7. T&Cs and privacy policy
+1. Wire up feedback form in Help and Settings
+2. How Orbit Works — design and content for help section
+3. Domain registration — orbit.co.uk
+4. Email address — hello@orbit.co.uk
+5. T&Cs and privacy policy
 
 ## Supabase Notes
-- items table: id, user_id, title, due_date (type: date), status, created_at, completed_at
+- items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at
 - profiles table: id, user_id, display_name, created_at
 - RLS enabled on both tables
 - Redirect URLs include: http://localhost:3000 and https://deans-app.vercel.app and https://deans-app.vercel.app/reset-password
