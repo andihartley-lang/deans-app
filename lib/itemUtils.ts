@@ -4,6 +4,12 @@ export function nextYearISO(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
+export function nextYearFromDate(dueDate: string | null): string {
+  const base = dueDate ? new Date(dueDate + "T12:00:00") : new Date();
+  base.setFullYear(base.getFullYear() + 1);
+  return `${base.getFullYear()}-${String(base.getMonth() + 1).padStart(2, "0")}-${String(base.getDate()).padStart(2, "0")}`;
+}
+
 export function formatDDMMYY(iso: string): string {
   const d = new Date(iso + "T12:00:00");
   return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${String(d.getFullYear()).slice(2)}`;

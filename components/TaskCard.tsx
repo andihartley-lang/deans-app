@@ -2,7 +2,7 @@
 import { useState } from "react";
 import { Item } from "../types/item";
 import DatePicker from "./DatePicker";
-import { nextYearISO } from "../lib/itemUtils";
+import { nextYearFromDate } from "../lib/itemUtils";
 
 interface TaskCardProps {
   item: Item;
@@ -21,7 +21,7 @@ export default function TaskCard({
 }: TaskCardProps) {
   const [showPrompt, setShowPrompt] = useState(false);
   const [addReminder, setAddReminder] = useState(true);
-  const [reminderDate, setReminderDate] = useState(nextYearISO());
+  const [reminderDate, setReminderDate] = useState(nextYearFromDate(item.due_date));
 
   const styles =
     colour === "red"
@@ -44,7 +44,7 @@ export default function TaskCard({
 
   function handleCompleteClick() {
     if (item.is_recurring) {
-      setReminderDate(nextYearISO());
+      setReminderDate(nextYearFromDate(item.due_date));
       setAddReminder(true);
       setShowPrompt(true);
     } else {
@@ -55,7 +55,7 @@ export default function TaskCard({
   function handleConfirm() {
     setShowPrompt(false);
     if (addReminder) {
-      completeItemWithRecurring(item.id, item.title, reminderDate || nextYearISO());
+      completeItemWithRecurring(item.id, item.title, reminderDate || nextYearFromDate(item.due_date));
     } else {
       completeItem(item.id);
     }
