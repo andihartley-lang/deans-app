@@ -1,5 +1,5 @@
 # Orbit — Master Product Brief
-Version 3.0 | June 2026 | Single source of truth
+Version 4.0 | June 2026 | Single source of truth
 
 ## What Orbit Is
 Orbit is a calm life-admin application designed to reduce cognitive overload.
@@ -86,6 +86,8 @@ AI should reduce thinking, not create more interaction. AI is never the interfac
 ### Priority 1 — Natural Language Capture (Complete)
 User types a long or conversational sentence. AI extracts a clean short title only. Date always set by user via calendar picker. AI call only fires for inputs over 6 words.
 
+Data processing: the raw task description (over 6 words) is sent to Anthropic as part of a system prompt. Anthropic returns a simplified 3–5 word title. Only the returned title is stored in Supabase — the original raw description is not intentionally stored in the Orbit application database. Raw descriptions may appear in Vercel infrastructure logs and Anthropic API logs, both outside Orbit's direct control. Anthropic data retention, training usage and processing terms must be reviewed before public launch to ensure alignment with the published Privacy Policy.
+
 ### Priority 2 — Intelligent Categorisation
 Currently handled by keyword matching in getItemIcon(). Full AI categorisation is a future enhancement.
 
@@ -130,6 +132,7 @@ Future. Orbit recognises related tasks and groups automatically.
 - title
 - due_date (type: date — plain date, no timezone)
 - status (critical / active / scheduled / captured / completed)
+- is_recurring (boolean, default false — set automatically at capture for insurance, MOT, road tax, boiler service, TV licence)
 - created_at
 - completed_at
 
@@ -148,6 +151,8 @@ RLS enabled on both tables. All future tables must have RLS enabled by default.
 - /auth Authentication
 - /app Orbit application
 - /reset-password Password reset
+- /terms Terms of Service
+- /privacy Privacy Policy
 
 ### Components
 - Sidebar.tsx
@@ -182,10 +187,12 @@ RLS enabled on both tables. All future tables must have RLS enabled by default.
 - User chooses "Add a date" or "No date needed" before task saves
 
 ## Help & Settings
-- About You — display name (working)
-- Security — Change your password (placeholder)
-- How Orbit Works — guide (placeholder)
-- Share Your Thoughts — feedback (placeholder)
+- About You — display name management (working)
+- Security — Change password (placeholder)
+- How Orbit Works — complete five-section accordion guide (working): Capture it, Your views, Check in daily, Forgotten your password?, Coming soon
+- Share Your Thoughts — EmailJS feedback form (working)
+- Terms of Service link — links to /terms
+- Privacy Policy link — links to /privacy
 
 ## Security Principles
 - Minimal password requirements — 8 characters minimum, no complexity rules
@@ -195,6 +202,7 @@ RLS enabled on both tables. All future tables must have RLS enabled by default.
 - Minimal personal data collection
 - ANTHROPIC_API_KEY in .env.local and Vercel environment variables
 - Never commit .env.local to GitHub
+- Orbit is not intended for storage of highly sensitive personal information including medical records, financial account details, government identification documents or passwords
 
 ## Known Technical Debt
 - Significant rendering logic remains in app/app/page.tsx
@@ -203,19 +211,25 @@ RLS enabled on both tables. All future tables must have RLS enabled by default.
 - No mobile optimisation
 - No automated testing
 - View all buttons not wired up
+- No self-service account deletion — required before public launch; must delete tasks, profile and Supabase auth account with confirmation step
+- No GDPR data export functionality — assess effort post launch; do not build yet
 
 ## Go-To-Market Strategy
 
-### Phase 1 — Home Carers
-- Join UK carer Facebook groups and Reddit communities
-- Share the founder story
-- Target: 50 beta users
+Orbit launches as a consumer product — designed for individual users managing their own life admin. The caregiver and care-home opportunity is a commercial expansion path built on top of the core consumer product, not a replacement for it. The founder story connects both: it is authentic to carers and equally resonant with anyone who has felt overwhelmed by life admin.
+
+### Phase 1 — Consumer Launch via Carer Communities
+- Orbit is positioned as a tool for the individual — including adults caring for a parent
+- Join UK carer Facebook groups and Reddit communities; share the founder story
+- Target: 50 beta users who use Orbit for themselves, not to manage someone else
 
 ### Phase 2 — AppSumo Lifetime Deal
 - Price: £49-69 one-off
 - Target: 100 sales = £6,000
 
 ### Phase 3 — B2B Outreach
+- Care homes: residents use Orbit for their own independence; managers may support adoption
+- ADHD coaches: recommend Orbit to clients as a personal organisation tool
 - Care homes: £150-300/month per home
 - ADHD coaches: £50-100/month per coach
 - Target: 3 B2B clients = £5k/month
