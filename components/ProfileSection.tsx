@@ -4,6 +4,29 @@ import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
 import emailjs from "@emailjs/browser";
 
+const HOW_IT_WORKS = [
+  {
+    heading: "Capture it",
+    body: "Just type what's on your mind — Orbit tidies it up. For things with a deadline, like your home insurance or MOT, add a date and tick 'recurring' if it repeats each year. For everyday things like picking up a prescription or 'buy a loaf of bread', just add it with no date. It's all in one place.",
+  },
+  {
+    heading: "Your views",
+    body: "Orbit organises everything into simple views. 'Dashboard' shows you everything in one place. 'Today' shows what needs attention now — anything in 'Still to do' may have been missed, so worth a look. 'Upcoming' shows what's coming so you can plan ahead. 'Inbox' holds everything you've captured without a date, ready when you need it.",
+  },
+  {
+    heading: "Check in daily",
+    body: "A quick look each day keeps everything calm. Add new things as they come to mind, check what's on your plate, and mark things done when you're ready. No alarms, no guilt — just a gentle place to stay on top of things.",
+  },
+  {
+    heading: "Forgotten your password?",
+    body: "If you ever forget your password, just visit the Orbit home page and click 'Forgot your password' — we'll send a reset link straight to your inbox.",
+  },
+  {
+    heading: "Coming soon",
+    body: "Soon you'll be able to invite a trusted person — a family member or carer — to support you if you need it. You stay in control of what they see.",
+  },
+];
+
 interface ProfileSectionProps {
   onDisplayNameSaved?: (name: string) => void;
   onToast?: (message: string) => void;
@@ -13,6 +36,7 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
   const [displayName, setDisplayName] = useState("");
   const [feedback, setFeedback] = useState("");
   const [isSending, setIsSending] = useState(false);
+  const [openSection, setOpenSection] = useState<number | null>(null);
 
   useEffect(() => {
     async function loadProfile() {
@@ -139,8 +163,33 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
       </div>
 
       <div className={card}>
-        <h2 className="text-2xl font-bold mb-2">How Orbit Works</h2>
-        <p className="text-gray-400">Guide coming soon.</p>
+        <h2 className="text-2xl font-bold mb-4">How Orbit Works</h2>
+        <div className="divide-y divide-gray-100">
+          {HOW_IT_WORKS.map((section, i) => (
+            <div key={section.heading}>
+              <button
+                className="flex w-full items-center justify-between py-4 text-left"
+                onClick={() => setOpenSection(openSection === i ? null : i)}
+                aria-expanded={openSection === i}
+              >
+                <span className="text-lg font-semibold text-indigo-950">{section.heading}</span>
+                <svg
+                  className={`h-5 w-5 flex-shrink-0 text-gray-400 transition-transform duration-300 ${openSection === i ? "rotate-180" : ""}`}
+                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              <div className={`grid transition-all duration-300 ${openSection === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                <div className="overflow-hidden">
+                  <p className="pb-4 text-gray-600" style={{ fontSize: "16px", lineHeight: "1.8" }}>
+                    {section.body}
+                  </p>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className={card}>
