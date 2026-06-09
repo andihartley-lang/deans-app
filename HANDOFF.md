@@ -32,17 +32,24 @@ All core features are complete:
 - Help and Settings page — four sections, About You working, others placeholder
 - Toast notifications — single shared purple toast system (components/Toast.tsx)
 - Page metadata
-- Recurring tasks — annual renewals auto-detected at capture, inline completion prompt, new task created on confirm
+- Recurring tasks — full feature complete (see below)
 
-## What Was Just Completed
-Recurring tasks feature. Five keywords (insurance, mot, road tax, boiler service, tv licence) are detected in `saveItem` after AI title parsing and silently set `is_recurring: true` on the Supabase insert. A new `completeItemWithRecurring` function in page.tsx completes the current item, inserts a new identical one with `is_recurring: true` and the chosen due date, and shows a toast "Done — your [title] is saved for [dd/mm/yy]". TaskCard and InboxSection both show an inline prompt when a recurring item is completed — checkbox "Add a reminder for next year" (ticked by default), DatePicker pre-set to one year from today, and a Confirm button. Ticked + confirm = recurring; unticked + confirm = normal complete; non-recurring items complete immediately with no prompt.
+## Recurring Tasks Feature (completed this session)
+Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
+- Checkbox "Add a reminder for next year" (ticked by default)
+- Date picker pre-set to one year from the task's own due date (falls back to one year from today if no due date)
+- Date picker hides when checkbox is unticked, reappears when reticked
+- Confirm button
+
+Ticked + confirm: completes current item, creates new identical recurring item with chosen date, toast "Done — your [title] is saved for [dd/mm/yy]". Unticked + confirm: completes normally. Non-recurring items complete immediately with no prompt.
+
+Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their own per-card state. Logic lives in `completeItemWithRecurring` in page.tsx.
 
 ## Known Issues
-- Settings section cards reported as inconsistent width by the user — not reproducible in code or in pixel-measurement testing; defensive w-full classes added, root cause unconfirmed
-- MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing issue, separate from recurring feature)
+- Settings section cards reported as inconsistent width — not reproducible in testing; defensive w-full classes added
+- MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing, separate from recurring feature)
 - View all buttons not wired up
-- Date picker in the recurring prompt shows date in the picker's own format ("9 Jun 2027") rather than dd/mm/yy — dd/mm/yy appears correctly in the toast
-- Help and Settings sections Security, How Orbit Works and Share Your Thoughts are all placeholders — need building
+- Help and Settings sections Security, How Orbit Works and Share Your Thoughts are all placeholders
 
 ## Next Priorities In Order
 1. Wire up feedback form in Help and Settings

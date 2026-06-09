@@ -2,22 +2,23 @@
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
 ## SESSION 5 — June 2026 (2026-06-09)
-Status: Recurring tasks feature complete.
+Status: Recurring tasks feature complete and refined.
 
 ### Completed
 - Added `is_recurring?: boolean` to the `Item` type
 - Keyword detection at capture: `saveItem` checks for insurance, mot, road tax, boiler service, tv licence (case-insensitive) and silently sets `is_recurring: true` on insert — no UI change at capture
 - `completeItemWithRecurring` function in page.tsx: completes current item, inserts new identical item with `is_recurring: true` and chosen due date, refreshes list, shows toast "Done — your [title] is saved for [dd/mm/yy]"
-- TaskCard now a "use client" component with inline recurring prompt: when Complete is clicked on a recurring item, card expands to show checkbox "Add a reminder for next year" (ticked by default), DatePicker pre-set to one year from today, and Confirm button. Ticked + confirm → recurring completion. Unticked + confirm → normal completion. Non-recurring items complete immediately as before
+- TaskCard now a "use client" component with inline recurring prompt: when Complete is clicked on a recurring item, card expands to show checkbox "Add a reminder for next year" (ticked by default), DatePicker, and Confirm button. Ticked + confirm → recurring completion. Unticked + confirm → normal completion. Non-recurring items complete immediately as before
 - InboxSection refactored to use an `InboxCard` sub-component with identical recurring prompt logic and own per-card state
-- `nextYearISO()` and `formatDDMMYY()` helpers added to lib/itemUtils.ts
+- `nextYearISO()`, `nextYearFromDate()` and `formatDDMMYY()` helpers added to lib/itemUtils.ts
 - UpcomingSection threads `completeItemWithRecurring` through to TaskCard
+- Date picker in recurring prompt hides when checkbox is unticked; reappears when ticked
+- Suggested reminder date is one year from the task's own due date (falls back to one year from today if task has no due date)
 
 ### Known Issues Outstanding
 - Settings section cards inconsistent width — not reproducible; defensive w-full classes already added
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing)
 - View all buttons not wired up
-- Date picker in recurring prompt shows "9 Jun 2027" format rather than dd/mm/yy in the card UI (dd/mm/yy appears correctly in the toast)
 
 ### Next Priorities
 1. Wire up feedback form
