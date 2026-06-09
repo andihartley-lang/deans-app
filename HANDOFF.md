@@ -46,7 +46,7 @@ Ticked + confirm: completes current item, creates new identical recurring item w
 
 Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their own per-card state. Logic lives in `completeItemWithRecurring` in page.tsx.
 
-## EmailJS Feedback Form (complete — pending Vercel env var confirmation)
+## EmailJS Feedback Form (complete)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Service ID: `service_ecsh1ih` (in source)
 - Template ID: `template_3etw4ta` (in source)
@@ -55,18 +55,14 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - On failure: shows toast "Something went wrong — please try again"
 - Send button disabled when textarea is empty or while sending
 
-**Action required:** Confirm `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY=yueNLUFED-Z-NSr5W` is set in Vercel → Project → Settings → Environment Variables. Without it the send will fail on the live URL. After adding it, redeploy (or push any change) to pick it up.
-
 ## Known Issues
-- Vercel env var for EmailJS public key may not yet be confirmed set — actual email delivery needs user to test by signing in and sending a real message
 - Settings section cards reported as inconsistent width — not reproducible in testing; defensive w-full classes added
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing, separate from recurring feature)
 - View all buttons not wired up
 - Security and How Orbit Works sections are placeholders
 
 ## Next Priorities In Order
-1. Confirm Vercel env var is set and verify real email delivery (user signs in, sends message, checks inbox)
-2. How Orbit Works — design and content for help section
+1. How Orbit Works — design and content for help section
 3. Domain registration — orbit.co.uk
 4. Email address — hello@orbit.co.uk
 5. T&Cs and privacy policy
