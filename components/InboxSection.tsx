@@ -80,10 +80,12 @@ function InboxCard({
             Add a reminder for next year
           </label>
 
-          <DatePicker
-            value={reminderDate}
-            onChange={setReminderDate}
-          />
+          {addReminder && (
+            <DatePicker
+              value={reminderDate}
+              onChange={setReminderDate}
+            />
+          )}
 
           <button
             onClick={handleConfirm}
