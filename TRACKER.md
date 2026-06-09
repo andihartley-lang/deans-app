@@ -1,6 +1,32 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
+## SESSION 7 — June 2026 (2026-06-09)
+Status: How Orbit Works accordion complete and verified on live URL.
+
+### Completed
+- Replaced "Guide coming soon." placeholder in How Orbit Works card with five accordion sections: Capture it, Your views, Check in daily, Forgotten your password?, Coming soon
+- One section open at a time — opening a new one closes the previous; tapping an open section closes it
+- Smooth expand/collapse via CSS grid row transition (grid-rows-[0fr] → grid-rows-[1fr])
+- Arrow rotates 180° when section is open
+- Body text set at 16px minimum with 1.8 line-height for accessibility
+- Card styling matches the rest of Help & Settings exactly
+- Verified on live URL: all five headings visible when collapsed, correct open/close behaviour, correct aria-expanded state, 16px confirmed
+
+### Known Issues Outstanding
+- Settings section cards inconsistent width — not reproducible; defensive w-full classes already added
+- MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing)
+- View all buttons not wired up
+- Security section is a placeholder
+
+### Next Priorities
+1. Domain registration — orbit.co.uk
+2. Email address — hello@orbit.co.uk
+3. T&Cs and privacy policy
+4. Security section — change password
+
+---
+
 ## SESSION 6 — June 2026 (2026-06-09)
 Status: EmailJS feedback form wired up and verified on live URL.
 

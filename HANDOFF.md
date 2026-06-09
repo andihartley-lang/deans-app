@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-09)
+Last updated: June 2026 (2026-06-09, session 7)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -29,11 +29,12 @@ All core features are complete:
 - Natural language capture — AI fires for inputs over 6 words, extracts title only
 - Date picker — calendar only, optional
 - Time-sensitive task prompt — gentle amber card, Add a date or No date needed
-- Help and Settings page — About You and Share Your Thoughts working; Security and How Orbit Works placeholder
+- Help and Settings page — About You, How Orbit Works, and Share Your Thoughts all working; Security placeholder
 - Toast notifications — single shared purple toast system (components/Toast.tsx)
 - Page metadata
 - Recurring tasks — full feature complete (see below)
 - Feedback form — working EmailJS integration in Share Your Thoughts (see below)
+- How Orbit Works — five accordion sections, smooth expand/collapse, one open at a time (see below)
 
 ## Recurring Tasks Feature (complete)
 Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
@@ -45,6 +46,9 @@ Five keywords detected at capture (insurance, mot, road tax, boiler service, tv 
 Ticked + confirm: completes current item, creates new identical recurring item with chosen date, toast "Done — your [title] is saved for [dd/mm/yy]". Unticked + confirm: completes normally. Non-recurring items complete immediately with no prompt.
 
 Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their own per-card state. Logic lives in `completeItemWithRecurring` in page.tsx.
+
+## How Orbit Works Accordion (complete)
+Five accordion sections in the How Orbit Works card: Capture it, Your views, Check in daily, Forgotten your password?, Coming soon. One section open at a time — CSS grid row transition for smooth expand/collapse, arrow rotates on open. Body text at 16px / 1.8 line-height for accessibility. Verified on live URL.
 
 ## EmailJS Feedback Form (complete)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
@@ -59,13 +63,13 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Settings section cards reported as inconsistent width — not reproducible in testing; defensive w-full classes added
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing, separate from recurring feature)
 - View all buttons not wired up
-- Security and How Orbit Works sections are placeholders
+- Security section is a placeholder
 
 ## Next Priorities In Order
-1. How Orbit Works — design and content for help section
-3. Domain registration — orbit.co.uk
-4. Email address — hello@orbit.co.uk
-5. T&Cs and privacy policy
+1. Domain registration — orbit.co.uk
+2. Email address — hello@orbit.co.uk
+3. T&Cs and privacy policy
+4. Security section — change password
 
 ## Supabase Notes
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at
