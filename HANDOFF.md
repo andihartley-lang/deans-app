@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-09, session 7)
+Last updated: June 2026 (2026-06-09, session 8)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -66,10 +66,25 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Security section is a placeholder
 
 ## Next Priorities In Order
-1. Domain registration — orbit.co.uk
-2. Email address — hello@orbit.co.uk
-3. T&Cs and privacy policy
-4. Security section — change password
+
+### Critical — before public launch
+1. Account deletion — build self-service account deletion flow in Help & Settings; must delete all associated data (tasks, profile, account); aligns with Privacy Policy 30-day commitment
+2. Security review — confirm RLS is correctly configured on all tables; confirm users can only access their own records; confirm no secrets are exposed client-side
+3. Domain registration — orbit.co.uk
+4. Email address — hello@orbit.co.uk
+
+### High — do soon after launch
+5. Sensitive information warning — brief in-app notice that Orbit is for task management only, not storage of sensitive information; location TBD, likely Help & Settings or task capture area
+6. AI transparency — confirm exactly what data is sent to Anthropic, what is stored in Supabase, and what is retained in logs; add any required user-facing disclosure
+7. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+8. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+
+### Lower priority — post launch
+9. GDPR export features — assess effort for "export my data" and "download my account data" functionality; do not build yet
+
+### Feature backlog
+- Security section — change password
+- View all buttons not wired up
 
 ## Supabase Notes
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at

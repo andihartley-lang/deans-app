@@ -13,17 +13,41 @@ Status: How Orbit Works accordion complete and verified on live URL.
 - Card styling matches the rest of Help & Settings exactly
 - Verified on live URL: all five headings visible when collapsed, correct open/close behaviour, correct aria-expanded state, 16px confirmed
 
+### Also completed this session
+- Terms of Service page (/terms) — dark landing-page styling, 11 sections, context-aware back button
+- Privacy Policy page (/privacy) — same styling, 13 sections, context-aware back button
+- Landing page footer — Terms and Privacy links
+- Signup flow — terms/privacy checkbox, Create Account button disabled until ticked
+- Help & Settings — Terms and Privacy links at the bottom
+- Back button fix — uses router.back() so it returns to auth page, Help & Settings, or landing page as appropriate
+
+### Compliance and Legal Actions Noted
+The following actions were identified and must be tracked. They are not yet built.
+
+**Critical — before public launch:**
+- Account deletion — self-service flow in Help & Settings; must delete tasks, profile and account; aligns with Privacy Policy 30-day commitment
+- Security review — audit RLS on all tables; confirm users can only access own records; confirm no client-side secret exposure
+
+**High — do soon after launch:**
+- Sensitive information warning — in-app notice that Orbit is not for sensitive data; location TBD
+- AI transparency — confirm and document exactly what is sent to Anthropic, stored in Supabase, retained in logs; add user-facing disclosure if needed
+- Data retention — confirm completed tasks retained indefinitely; assess alignment with Privacy Policy; decide on automated deletion if needed
+- Company information — update "Orbit, a business" in Terms and Privacy once Orbit Limited is incorporated
+
+**Lower priority — post launch:**
+- GDPR export features — assess effort only; do not build yet
+
 ### Known Issues Outstanding
 - Settings section cards inconsistent width — not reproducible; defensive w-full classes already added
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing)
 - View all buttons not wired up
-- Security section is a placeholder
+- Security section — change password (placeholder)
 
 ### Next Priorities
-1. Domain registration — orbit.co.uk
-2. Email address — hello@orbit.co.uk
-3. T&Cs and privacy policy
-4. Security section — change password
+1. Account deletion flow (critical — before launch)
+2. Security review (critical — before launch)
+3. Domain registration — orbit.co.uk
+4. Email address — hello@orbit.co.uk
 
 ---
 
