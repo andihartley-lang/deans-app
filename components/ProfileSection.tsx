@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { supabase } from "@/lib/supabase";
+import emailjs from "@emailjs/browser";
 
 interface ProfileSectionProps {
   onDisplayNameSaved?: (name: string) => void;
@@ -10,6 +11,8 @@ interface ProfileSectionProps {
 
 export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileSectionProps) {
   const [displayName, setDisplayName] = useState("");
+  const [feedback, setFeedback] = useState("");
+  const [isSending, setIsSending] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -68,6 +71,34 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
     onToast?.("Profile saved.");
   }
 
+  async function sendFeedback() {
+    if (!feedback.trim() || isSending) return;
+    setIsSending(true);
+
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    try {
+      await emailjs.send(
+        "service_ecsh1ih",
+        "template_3etw4ta",
+        {
+          message: feedback.trim(),
+          user_name: displayName || "Orbit user",
+          user_email: user?.email ?? "",
+        },
+        { publicKey: process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY }
+      );
+      setFeedback("");
+      onToast?.("Thank you — your thoughts help shape Orbit");
+    } catch {
+      onToast?.("Something went wrong — please try again");
+    } finally {
+      setIsSending(false);
+    }
+  }
+
   const card = "bg-white rounded-3xl shadow-lg p-8 w-full";
 
   return (
@@ -116,10 +147,18 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
         <h2 className="text-2xl font-bold mb-2">Share Your Thoughts</h2>
         <p className="text-gray-600 mb-4">We'd love to hear how Orbit is working for you.</p>
         <textarea
-          disabled
-          placeholder="Feedback coming soon."
-          className="border rounded-xl p-3 w-full h-28 text-gray-400 bg-gray-50 cursor-not-allowed resize-none"
+          value={feedback}
+          onChange={(e) => setFeedback(e.target.value)}
+          placeholder="Tell us what's working, what isn't, or what you'd love to see"
+          className="border rounded-xl p-3 w-full h-28 resize-none mb-4"
         />
+        <button
+          onClick={sendFeedback}
+          disabled={isSending || !feedback.trim()}
+          className="bg-indigo-600 text-white px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+        >
+          {isSending ? "Sending..." : "Send"}
+        </button>
       </div>
 
     </div>
