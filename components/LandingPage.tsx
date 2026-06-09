@@ -108,6 +108,15 @@ export default function LandingPage() {
           </div>
         </div>
       </section>
+
+      <footer className="max-w-6xl mx-auto px-6 py-6 flex justify-center gap-6 border-t border-white/10">
+        <Link href="/terms" className="text-sm text-indigo-300 hover:text-white transition">
+          Terms of Service
+        </Link>
+        <Link href="/privacy" className="text-sm text-indigo-300 hover:text-white transition">
+          Privacy Policy
+        </Link>
+      </footer>
     </main>
   );
 }

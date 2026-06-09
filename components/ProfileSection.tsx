@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import emailjs from "@emailjs/browser";
 
@@ -208,6 +209,15 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
         >
           {isSending ? "Sending..." : "Send"}
         </button>
+      </div>
+
+      <div className="flex justify-center gap-6 py-2">
+        <Link href="/terms" className="text-sm text-gray-400 hover:text-gray-600 transition">
+          Terms of Service
+        </Link>
+        <Link href="/privacy" className="text-sm text-gray-400 hover:text-gray-600 transition">
+          Privacy Policy
+        </Link>
       </div>
 
     </div>

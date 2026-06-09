@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Toast from "@/components/Toast";
 
@@ -21,6 +22,7 @@ export default function AuthSection() {
   const [password, setPassword] = useState("");
   const [user, setUser] = useState<any>(null);
 
+  const [agreedToTerms, setAgreedToTerms] = useState(false);
   const [authView, setAuthView] = useState<"signin" | "signup" | "forgot" | "forgotSent">("signin");
   const [resetEmail, setResetEmail] = useState("");
 
@@ -193,7 +195,30 @@ export default function AuthSection() {
               className={inputClasses}
             />
 
-            <button onClick={signUp} className={primaryButtonClasses}>
+            <label className="flex items-start gap-3 cursor-pointer">
+              <input
+                type="checkbox"
+                checked={agreedToTerms}
+                onChange={(e) => setAgreedToTerms(e.target.checked)}
+                className="mt-0.5 h-4 w-4 flex-shrink-0 accent-yellow-400"
+              />
+              <span className="text-sm text-indigo-200 leading-relaxed">
+                I agree to the{" "}
+                <Link href="/terms" target="_blank" className="underline hover:text-white transition">
+                  Terms of Service
+                </Link>
+                {" "}and{" "}
+                <Link href="/privacy" target="_blank" className="underline hover:text-white transition">
+                  Privacy Policy
+                </Link>
+              </span>
+            </label>
+
+            <button
+              onClick={signUp}
+              disabled={!agreedToTerms}
+              className={`${primaryButtonClasses} disabled:opacity-40 disabled:cursor-not-allowed`}
+            >
               Create Free Account
             </button>
           </div>
