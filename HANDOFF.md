@@ -76,6 +76,11 @@ Implemented as a second paragraph in the "Capture it" section of How Orbit Works
 - Route is authenticated, validated, and rate-limited (see Security Hardening below)
 - Outstanding: user-facing disclosure and AI transparency review (see priorities below)
 
+## Domain & Email (complete)
+- orbitlife.co.uk registered via Cloudflare; root and www resolving
+- hello@orbitlife.co.uk receiving via Cloudflare Email Routing, forwarding to the owner's Gmail
+- Terms of Service and Privacy Policy contact addresses updated to hello@orbitlife.co.uk
+
 ## EmailJS Feedback Form (complete)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Service ID: `service_ecsh1ih` (in source)
@@ -84,6 +89,7 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - On success: clears textarea, shows toast "Thank you — your thoughts help shape Orbit"
 - On failure: shows toast "Something went wrong — please try again"
 - Send button disabled when textarea is empty or while sending
+- Note: the allowed domain must be switched to https://www.orbitlife.co.uk once users are directed to the new domain — the feedback form will then stop working on deans-app.vercel.app, as the free tier allows only one domain
 
 ## Account Deletion (complete)
 Self-service account deletion via the "Your Account" card in Help & Settings (ProfileSection.tsx), last card on the page:
@@ -120,20 +126,17 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 
 ## Next Priorities In Order
 
-### Critical — before public launch
-1. Domain registration — orbit.co.uk
-2. Email address — hello@orbit.co.uk
-
 ### High — do soon after launch
-3. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-4. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-5. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+1. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+2. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+3. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
 
 ### Feature backlog
 - Security section — change password
 - View all buttons not wired up
 
 ## Outstanding — Deferred
+- Dedicated mailbox or send-as capability for hello@orbitlife.co.uk — needed before public launch (currently forwarding-only via Cloudflare Email Routing)
 - ICO registration — user action (Andy), required before public beta
 - Leaked password protection — Supabase feature requires a paid tier; deferred until upgrade
 - Terms acceptance timestamp — record when a user agreed to Terms/Privacy; deferred

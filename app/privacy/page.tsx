@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 const sections = [
   {
     heading: "Who We Are",
-    body: "Orbit is a personal task management and life administration application operated by Orbit, a business based in the United Kingdom. We act as the data controller for the personal data you provide when using the service. For privacy-related enquiries please contact hello@orbit.co.uk",
+    body: "Orbit is a personal task management and life administration application operated by Orbit, a business based in the United Kingdom. We act as the data controller for the personal data you provide when using the service. For privacy-related enquiries please contact hello@orbitlife.co.uk",
   },
   {
     heading: "What Data We Collect",
@@ -42,7 +42,7 @@ const sections = [
   },
   {
     heading: "Your Rights",
-    body: "Under UK GDPR, you may have the right to access your personal data, correct inaccurate personal data, request deletion of your personal data, restrict processing of your personal data, object to certain processing activities, request transfer of your personal data where applicable, and withdraw consent where processing is based on consent. To exercise any of these rights please contact hello@orbit.co.uk. We will respond in accordance with applicable legal requirements. You also have the right to lodge a complaint with the UK Information Commissioner's Office (ICO).",
+    body: "Under UK GDPR, you may have the right to access your personal data, correct inaccurate personal data, request deletion of your personal data, restrict processing of your personal data, object to certain processing activities, request transfer of your personal data where applicable, and withdraw consent where processing is based on consent. To exercise any of these rights please contact hello@orbitlife.co.uk. We will respond in accordance with applicable legal requirements. You also have the right to lodge a complaint with the UK Information Commissioner's Office (ICO).",
   },
   {
     heading: "Cookies",
@@ -54,7 +54,7 @@ const sections = [
   },
   {
     heading: "Contact",
-    body: "For privacy-related enquiries please contact hello@orbit.co.uk",
+    body: "For privacy-related enquiries please contact hello@orbitlife.co.uk",
   },
 ];
 

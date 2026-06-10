@@ -46,7 +46,7 @@ const sections = [
   },
   {
     heading: "Contact",
-    body: "hello@orbit.co.uk",
+    body: "hello@orbitlife.co.uk",
   },
 ];
 
