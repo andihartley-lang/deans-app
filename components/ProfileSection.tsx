@@ -39,6 +39,8 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
   const [isSending, setIsSending] = useState(false);
   const [openSection, setOpenSection] = useState<number | null>(null);
   const [howItWorksOpen, setHowItWorksOpen] = useState(false);
+  const [accountStep, setAccountStep] = useState<"default" | "confirm" | "final">("default");
+  const [isDeleting, setIsDeleting] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -122,6 +124,35 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
       onToast?.("Something went wrong — please try again");
     } finally {
       setIsSending(false);
+    }
+  }
+
+  async function deleteAccount() {
+    setIsDeleting(true);
+
+    const {
+      data: { session },
+    } = await supabase.auth.getSession();
+
+    try {
+      const response = await fetch("/api/delete-account", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${session?.access_token ?? ""}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error("Delete failed");
+      }
+
+      await supabase.auth.signOut();
+      onToast?.("Your account has been deleted.");
+      window.location.href = "/";
+    } catch {
+      onToast?.("Something went wrong — please try again");
+      setAccountStep("default");
+      setIsDeleting(false);
     }
   }
 
@@ -226,6 +257,66 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
         >
           {isSending ? "Sending..." : "Send"}
         </button>
+      </div>
+
+      <div className={card}>
+        <h2 className="text-2xl font-bold mb-2">Your Account</h2>
+        <p className="text-gray-600 mb-4">Your account, your choice — manage it here.</p>
+
+        {accountStep === "default" && (
+          <button
+            onClick={() => setAccountStep("confirm")}
+            className="text-indigo-950 font-medium"
+          >
+            Delete my account
+          </button>
+        )}
+
+        {accountStep === "confirm" && (
+          <div>
+            <p className="text-gray-600 mb-4">
+              Deleting your account will permanently remove your tasks, your profile, and your sign-in details. This cannot be undone.
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setAccountStep("default")}
+                className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
+              >
+                Keep my account
+              </button>
+              <button
+                onClick={() => setAccountStep("final")}
+                className="border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl"
+              >
+                Delete my account
+              </button>
+            </div>
+          </div>
+        )}
+
+        {accountStep === "final" && (
+          <div>
+            <p className="text-gray-600 mb-4">
+              Last check — delete your account permanently?
+            </p>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setAccountStep("default")}
+                disabled={isDeleting}
+                className="bg-indigo-600 text-white px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={deleteAccount}
+                disabled={isDeleting}
+                className="border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Yes, delete everything
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="flex justify-center gap-6 py-2">
