@@ -56,7 +56,7 @@ export default function ResetPasswordPage() {
               href="/auth?view=forgot"
               className="bg-indigo-600 text-white px-6 py-3 rounded-xl inline-block"
             >
-              Back to sign in
+              Request a new link
             </Link>
           </>
         ) : done ? (
