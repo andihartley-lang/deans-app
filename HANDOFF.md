@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-10, session 9)
+Last updated: June 2026 (2026-06-10, session 10)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -20,20 +20,21 @@ Orbit is a calm life-admin application.
 The app is a working authenticated multi-user application deployed on Vercel.
 
 All core features are complete:
-- Authentication — signup, login, logout, session persistence, auth gates
+- Authentication — signup, login, logout, session persistence; /app checks for a valid session on load, redirects to /auth if absent, and shows a calm loading state in the meantime (see Security Hardening below)
 - Auth page — redesigned into two dark-themed views (Sign In, Create Account) matching the landing page, URL-driven via ?view=
-- Password reset — forgot password link on landing page, /reset-password page, confirmation message
-- User-owned items with RLS
+- Password reset — forgot password link on landing page, /reset-password page, confirmation message; invalid/expired links show a calm message with a link back to sign-in (see Security Hardening below)
+- User-owned items with RLS — reviewed and confirmed correct on items and profiles tables
 - Profiles and display name — a profiles row is guaranteed for every authenticated session (created on app load if missing, regardless of entry path); save handler upserts on user_id, then confirms the write via re-fetch before showing success and updating the dashboard (see Profile Creation Guarantee below)
 - View filtering — Today, Upcoming, Inbox, Dashboard all mutually exclusive
-- Natural language capture — AI fires for inputs over 6 words, extracts title only (see AI Processing section below)
+- Natural language capture — AI fires for inputs over 6 words, extracts title only; route requires a verified Supabase token, validates input length server-side, and rate-limits per user (see AI Processing and Security Hardening below)
 - Date picker — calendar only, optional
 - Time-sensitive task prompt — gentle amber card, Add a date or No date needed
-- Help and Settings page — About You, How Orbit Works, and Share Your Thoughts all working; Security placeholder
+- Help and Settings page — About You, How Orbit Works, Share Your Thoughts, and Your Account (self-service deletion) all working; Security section change-password is a placeholder
+- Account deletion — self-service flow in Help & Settings, fully working (see below)
 - Toast notifications — single shared purple toast system (components/Toast.tsx)
 - Page metadata
 - Recurring tasks — full feature complete (see below)
-- Feedback form — working EmailJS integration in Share Your Thoughts (see below)
+- Feedback form — working EmailJS integration in Share Your Thoughts, domain-restricted public key (see below)
 - How Orbit Works — five accordion sections, smooth expand/collapse, one open at a time (see below)
 - Legal pages — Terms of Service and Privacy Policy pages live; linked from landing page, signup flow, and Help & Settings (see below)
 
@@ -61,20 +62,41 @@ Five accordion sections in the How Orbit Works card: Capture it, Your views, Che
 
 ## AI Processing (current implementation)
 - Trigger: only fires when user input exceeds 6 words
-- What is sent to Anthropic: the user's raw task description verbatim, wrapped in a system prompt
+- What is sent to Anthropic: the user's raw task description verbatim, wrapped in a system prompt — confirmed no email, user ID, or display name is ever included
 - What Anthropic returns: a clean 3–5 word title as JSON
 - What is stored in Supabase: the returned title only — the original input is never written to the database
 - Original text may still appear in Vercel infrastructure logs and Anthropic API logs — both outside Orbit's direct control
+- Route is authenticated, validated, and rate-limited (see Security Hardening below)
 - Outstanding: user-facing disclosure and AI transparency review (see priorities below)
 
 ## EmailJS Feedback Form (complete)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Service ID: `service_ecsh1ih` (in source)
 - Template ID: `template_3etw4ta` (in source)
-- Public Key: `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` — stored in `.env.local` (not committed), must also be set in Vercel environment variables
+- Public Key: `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` — stored in `.env.local` (not committed), must also be set in Vercel environment variables; domain restriction enabled on this key
 - On success: clears textarea, shows toast "Thank you — your thoughts help shape Orbit"
 - On failure: shows toast "Something went wrong — please try again"
 - Send button disabled when textarea is empty or while sending
+
+## Account Deletion (complete)
+Self-service account deletion via the "Your Account" card in Help & Settings (ProfileSection.tsx), last card on the page:
+- Inline two-step confirmation, no modal — "Delete my account" → confirm step → final "Yes, delete everything" step; "Keep my account" / "Cancel" return to default state at any point
+- Both buttons disabled during the request to prevent double submission
+- Server route app/api/delete-account/route.ts verifies the caller's Supabase access token, then deletes items, the profile row, and the auth user (via service-role key) in that order, checking for errors at each step
+- On success: signs out locally, shows purple toast "Your account has been deleted.", redirects to landing page
+- On failure: shows toast "Something went wrong — please try again", returns to default state, does not sign out
+- No email/password re-entry, no countdown, no red/alarmist styling
+- Verified end-to-end on local dev and live URL
+
+## Security Hardening (complete)
+Read-only audit performed across five areas (parse-item auth, secrets handling, silent write failures, Anthropic payload contents, auth gates), followed by fixes:
+- parse-item route (app/api/parse-item/route.ts) requires a verified Supabase access token (401 if missing/invalid), enforces the 6-word minimum and a 500-character maximum server-side (400 with clear error otherwise), and applies a per-user in-memory rate limit of 30 calls/hour (resets on deploy, per-instance — acceptable at current scale); client sends the token in the Authorization header
+- /app checks for a valid session before rendering; redirects to /auth if absent; shows a calm "Loading your day..." state while checking — no authenticated content can flash for unauthenticated visitors
+- /reset-password shows a calm plain-English message ("This reset link has expired or already been used. Please request a new one from the sign-in page.") with a link back to sign-in for any invalid/expired link, instead of a raw Supabase error
+- Background profile-creation inserts (ensureProfile, signIn) now log to console on failure for visibility in dev/Vercel logs; no user-facing error added
+- RLS policies reviewed and confirmed correct on items and profiles tables
+- EmailJS public key domain-restricted
+- Secrets handling, git history, and Anthropic payload all verified clean — no leaked secrets, .env.local never committed
 
 ## Profile Creation Guarantee (complete)
 A profiles row is now guaranteed to exist for every authenticated user, regardless of how they arrived in the app:
@@ -92,23 +114,25 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 ## Next Priorities In Order
 
 ### Critical — before public launch
-1. Account deletion — self-service flow in Help & Settings; must delete: all tasks, profile record, and Supabase auth account; must include a confirmation step with permanent deletion warning; aligns with Privacy Policy 30-day commitment
-2. Security review — confirm RLS is correctly configured on all tables; confirm users can only access their own records; confirm no secrets are exposed client-side
-3. Domain registration — orbit.co.uk
-4. Email address — hello@orbit.co.uk
+1. Domain registration — orbit.co.uk
+2. Email address — hello@orbit.co.uk
 
 ### High — do soon after launch
-5. Sensitive information warning — brief in-app notice that Orbit is for task management only, not storage of sensitive information; location TBD, likely Help & Settings or task capture area
-6. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-7. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-8. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
-
-### Lower priority — post launch
-9. GDPR export features — assess effort for "export my data" and "download my account data" functionality; do not build yet
+3. Sensitive information warning — brief in-app notice that Orbit is for task management only, not storage of sensitive information; location TBD, likely Help & Settings or task capture area
+4. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+5. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+6. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
 
 ### Feature backlog
 - Security section — change password
 - View all buttons not wired up
+
+## Outstanding — Deferred
+- ICO registration — user action (Andy), required before public beta
+- Leaked password protection — Supabase feature requires a paid tier; deferred until upgrade
+- Terms acceptance timestamp — record when a user agreed to Terms/Privacy; deferred
+- Foreign keys with cascade rules — items/profiles to auth.users; technical debt, not blocking
+- GDPR data export — "export my data" / "download my account data"; post-launch, do not build yet
 
 ## Supabase Notes
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at

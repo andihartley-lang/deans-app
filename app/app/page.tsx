@@ -119,10 +119,14 @@ async function ensureProfile() {
     .single();
 
   if (!profile) {
-    await supabase.from("profiles").insert({
+    const { error } = await supabase.from("profiles").insert({
       user_id: user.id,
       display_name: "",
     });
+
+    if (error) {
+      console.error("Failed to create profile row:", error);
+    }
   }
 }
 

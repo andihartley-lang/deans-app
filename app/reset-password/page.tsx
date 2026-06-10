@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 import { supabase } from "@/lib/supabase";
 import Toast from "@/components/Toast";
 
@@ -8,6 +9,7 @@ export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [done, setDone] = useState(false);
+  const [linkError, setLinkError] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
@@ -32,7 +34,7 @@ export default function ResetPasswordPage() {
     const { error } = await supabase.auth.updateUser({ password });
 
     if (error) {
-      triggerToast(error.message);
+      setLinkError(true);
       return;
     }
 
@@ -44,7 +46,20 @@ export default function ResetPasswordPage() {
       <Toast message={toastMessage} show={showToast} />
 
       <div className="bg-white rounded-3xl shadow-lg p-8 w-full max-w-md">
-        {done ? (
+        {linkError ? (
+          <>
+            <h2 className="text-3xl font-bold mb-2">Link expired</h2>
+            <p className="text-gray-600 mb-6">
+              This reset link has expired or already been used. Please request a new one from the sign-in page.
+            </p>
+            <Link
+              href="/auth?view=forgot"
+              className="bg-indigo-600 text-white px-6 py-3 rounded-xl inline-block"
+            >
+              Back to sign in
+            </Link>
+          </>
+        ) : done ? (
           <>
             <h2 className="text-3xl font-bold mb-6">Your password has been updated.</h2>
             <button

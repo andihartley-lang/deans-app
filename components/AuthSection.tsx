@@ -104,9 +104,13 @@ export default function AuthSection() {
       .single();
 
     if (!profile) {
-      await supabase.from("profiles").insert({
+      const { error: insertError } = await supabase.from("profiles").insert({
         user_id: user.id,
       });
+
+      if (insertError) {
+        console.error("Failed to create profile row:", insertError);
+      }
     }
 
     setUser(user);
