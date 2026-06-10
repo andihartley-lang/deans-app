@@ -65,6 +65,7 @@ if (!user) {
 useEffect(() => {
   fetchItems();
   fetchDisplayName();
+  ensureProfile();
 }, []);
 
 async function fetchDisplayName() {
@@ -82,6 +83,27 @@ async function fetchDisplayName() {
 
   if (profile?.display_name) {
     setDisplayName(profile.display_name);
+  }
+}
+
+async function ensureProfile() {
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+
+  if (!user) return;
+
+  const { data: profile } = await supabase
+    .from("profiles")
+    .select("id")
+    .eq("user_id", user.id)
+    .single();
+
+  if (!profile) {
+    await supabase.from("profiles").insert({
+      user_id: user.id,
+      display_name: "",
+    });
   }
 }
 

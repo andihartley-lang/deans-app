@@ -73,10 +73,10 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
 
     const { error } = await supabase
       .from("profiles")
-      .update({
-        display_name: displayName.trim(),
-      })
-      .eq("user_id", user.id);
+      .upsert(
+        { user_id: user.id, display_name: displayName.trim() },
+        { onConflict: "user_id" }
+      );
 
     if (error) {
       onToast?.(error.message);
