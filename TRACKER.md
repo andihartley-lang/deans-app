@@ -1,6 +1,29 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
+## SESSION 11 — June 2026 (2026-06-10)
+Status: Sensitive information notice implemented via How Orbit Works content.
+
+### Completed
+- How Orbit Works "Capture it" section extended with a second paragraph: "Orbit is for reminders and everyday life admin — things to do, not things to keep secret. There's no need to store passwords, bank details, or medical records here; Orbit only ever needs the reminder, like 'renew home insurance', never the policy number."
+- First paragraph of "Capture it" left unchanged; second paragraph matches existing accordion text styling (16px / 1.8 line-height, text-gray-600)
+- This satisfies the "Sensitive information warning" item from Next Priorities — implemented as in-app content rather than a separate banner/popup
+
+### Considered and Rejected
+- Capture-area helper text (e.g. placeholder hint or microcopy near the input) — rejected: adds visual noise to the calm capture experience and competes with the primary "just type what's on your mind" interaction
+- Persistent banner across the app — rejected: alarmist tone, conflicts with "no alarms, no guilt" product principle, and would be seen repeatedly after the message has registered
+- One-time popup/modal on first use — rejected: interrupts onboarding, easy to dismiss without reading, not revisitable later
+- Automated detection of sensitive input (e.g. flagging numbers that look like card/account numbers) — rejected: adds complexity and false positives/negatives, and runs counter to "no mocked or simulated data / no AI features beyond what's instructed"; a calm, always-available explanation in How Orbit Works was judged sufficient
+
+### Next Priorities
+1. Domain registration — orbit.co.uk
+2. Email address — hello@orbit.co.uk
+3. AI transparency — assess whether additional user-facing disclosure is needed beyond the Privacy Policy
+4. Data retention policy decision
+5. Company information update — legal entity name once Orbit Limited is incorporated
+
+---
+
 ## SESSION 10 — June 2026 (2026-06-10)
 Status: Security review complete; fixes applied and verified on live URL.
 

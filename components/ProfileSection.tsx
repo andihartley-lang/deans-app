@@ -8,7 +8,10 @@ import emailjs from "@emailjs/browser";
 const HOW_IT_WORKS = [
   {
     heading: "Capture it",
-    body: "Just type what's on your mind — Orbit tidies it up. For things with a deadline, like your home insurance or MOT, add a date and tick 'recurring' if it repeats each year. For everyday things like picking up a prescription or 'buy a loaf of bread', just add it with no date. It's all in one place.",
+    body: [
+      "Just type what's on your mind — Orbit tidies it up. For things with a deadline, like your home insurance or MOT, add a date and tick 'recurring' if it repeats each year. For everyday things like picking up a prescription or 'buy a loaf of bread', just add it with no date. It's all in one place.",
+      "Orbit is for reminders and everyday life admin — things to do, not things to keep secret. There's no need to store passwords, bank details, or medical records here; Orbit only ever needs the reminder, like 'renew home insurance', never the policy number.",
+    ],
   },
   {
     heading: "Your views",
@@ -229,9 +232,15 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
                   </button>
                   <div className={`grid transition-all duration-300 ${openSection === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
                     <div className="overflow-hidden">
-                      <p className="pb-4 text-gray-600" style={{ fontSize: "16px", lineHeight: "1.8" }}>
-                        {section.body}
-                      </p>
+                      {(Array.isArray(section.body) ? section.body : [section.body]).map((paragraph, pi, arr) => (
+                        <p
+                          key={pi}
+                          className={`text-gray-600 ${pi > 0 ? "mt-3" : ""} ${pi === arr.length - 1 ? "pb-4" : ""}`}
+                          style={{ fontSize: "16px", lineHeight: "1.8" }}
+                        >
+                          {paragraph}
+                        </p>
+                      ))}
                     </div>
                   </div>
                 </div>

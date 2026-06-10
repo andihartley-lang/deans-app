@@ -52,6 +52,13 @@ Both TaskCard (Upcoming) and InboxCard (Inbox) implement the prompt with their o
 ## How Orbit Works Accordion (complete)
 Five accordion sections in the How Orbit Works card: Capture it, Your views, Check in daily, Forgotten your password?, Coming soon. One section open at a time — CSS grid row transition for smooth expand/collapse, arrow rotates on open. Body text at 16px / 1.8 line-height for accessibility. Verified on live URL.
 
+"Capture it" now has a second paragraph implementing the sensitive information notice (see Sensitive Information Notice below). `body` in `HOW_IT_WORKS` (ProfileSection.tsx) can be a string or an array of strings, rendered as one `<p>` per paragraph with consistent styling.
+
+## Sensitive Information Notice (complete)
+Implemented as a second paragraph in the "Capture it" section of How Orbit Works, rather than a banner, popup, or capture-area helper text:
+- "Orbit is for reminders and everyday life admin — things to do, not things to keep secret. There's no need to store passwords, bank details, or medical records here; Orbit only ever needs the reminder, like 'renew home insurance', never the policy number."
+- Capture-area helper text, persistent banners, one-time popups, and automated sensitive-input detection were all considered and deliberately rejected — they either add visual noise/alarm to the calm capture experience or add complexity disproportionate to the risk; an always-available explanation in How Orbit Works was judged sufficient (see TRACKER SESSION 11 for full reasoning)
+
 ## Legal Pages (complete)
 - Terms of Service at `/terms` — 11 sections, dark landing-page styling, context-aware back button
 - Privacy Policy at `/privacy` — 13 sections, same styling, context-aware back button
@@ -118,10 +125,9 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 2. Email address — hello@orbit.co.uk
 
 ### High — do soon after launch
-3. Sensitive information warning — brief in-app notice that Orbit is for task management only, not storage of sensitive information; location TBD, likely Help & Settings or task capture area
-4. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-5. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-6. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+3. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+4. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+5. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
 
 ### Feature backlog
 - Security section — change password
