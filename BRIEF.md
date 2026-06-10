@@ -116,6 +116,23 @@ Future. Orbit recognises related tasks and groups automatically.
 - Date always user-controlled via calendar picker
 - Icon and category handled by keyword matching — no API call
 
+## Sensitive Information Detection (Future Consideration)
+Orbit does not currently analyse task content for passwords, bank details, government identifiers, medical record numbers, or other sensitive information.
+
+Future detection may be considered if real-world user behaviour demonstrates a genuine need. Any implementation must remain calm, non-blocking, and user-controlled.
+
+Orbit should guide users toward storing reminders rather than secrets, but must not create a feeling of surveillance or interrupt the core capture experience.
+
+The following approaches have been considered and are currently rejected:
+
+Permanent warnings beneath the capture box
+Popups or modal warnings during capture
+Alarmist or high-friction alerts
+Automatic blocking of task creation
+Continuous monitoring that creates a feeling of being watched
+
+Any future safeguard should only be introduced if supported by evidence from real users and must remain consistent with Orbit's principles of dignity, independence, and low cognitive load.
+
 ## Tech Stack
 - Frontend: Next.js App Router, React, TypeScript, TailwindCSS
 - Backend: Supabase
