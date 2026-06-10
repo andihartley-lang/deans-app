@@ -10,7 +10,7 @@ Last updated: June 2026 (2026-06-10, session 10)
 
 ## Project
 Orbit is a calm life-admin application.
-- Live URL: https://deans-app.vercel.app
+- Live URL: https://www.orbitlife.co.uk (deans-app.vercel.app and orbitlife.co.uk both redirect here)
 - Local: localhost:3000
 - GitHub: deans-app repo
 - Supabase: live database, RLS enabled
@@ -34,7 +34,7 @@ All core features are complete:
 - Toast notifications — single shared purple toast system (components/Toast.tsx)
 - Page metadata
 - Recurring tasks — full feature complete (see below)
-- Feedback form — working EmailJS integration in Share Your Thoughts, domain-restricted public key (see below)
+- Feedback form — working EmailJS integration in Share Your Thoughts, domain restriction currently inactive (see below)
 - How Orbit Works — five accordion sections, smooth expand/collapse, one open at a time (see below)
 - Legal pages — Terms of Service and Privacy Policy pages live; linked from landing page, signup flow, and Help & Settings (see below)
 
@@ -81,15 +81,17 @@ Implemented as a second paragraph in the "Capture it" section of How Orbit Works
 - hello@orbitlife.co.uk receiving via Cloudflare Email Routing, forwarding to the owner's Gmail
 - Terms of Service and Privacy Policy contact addresses updated to hello@orbitlife.co.uk
 
-## EmailJS Feedback Form (complete)
+## EmailJS Feedback Form (complete, domain restriction inactive)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Service ID: `service_ecsh1ih` (in source)
 - Template ID: `template_3etw4ta` (in source)
-- Public Key: `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` — stored in `.env.local` (not committed), must also be set in Vercel environment variables; domain restriction enabled on this key
+- Public Key: `NEXT_PUBLIC_EMAILJS_PUBLIC_KEY` — stored in `.env.local` (not committed), must also be set in Vercel environment variables
 - On success: clears textarea, shows toast "Thank you — your thoughts help shape Orbit"
 - On failure: shows toast "Something went wrong — please try again"
 - Send button disabled when textarea is empty or while sending
-- Note: the allowed domain must be switched to https://www.orbitlife.co.uk once users are directed to the new domain — the feedback form will then stop working on deans-app.vercel.app, as the free tier allows only one domain
+- Domain restriction currently NOT active — the previously configured restriction was found blank in EmailJS Account → Security (possibly never saved, possibly related to an EmailJS service incident on 10 June 2026, possibly a free-tier limitation requiring a paid plan for domain whitelisting)
+- With no restriction active, the public key works from any domain, including localhost
+- Action carried forward: retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security once the service incident is resolved; if a paid plan is required, decide whether to pay or accept the unrestricted public key as a known low-severity risk
 
 ## Account Deletion (complete)
 Self-service account deletion via the "Your Account" card in Help & Settings (ProfileSection.tsx), last card on the page:
@@ -108,7 +110,7 @@ Read-only audit performed across five areas (parse-item auth, secrets handling, 
 - /reset-password shows a calm plain-English message ("This reset link has expired or already been used. Please request a new one from the sign-in page.") with a "Request a new link" button (to /auth?view=forgot) for any invalid/expired link, instead of a raw Supabase error
 - Background profile-creation inserts (ensureProfile, signIn) now log to console on failure for visibility in dev/Vercel logs; no user-facing error added
 - RLS policies reviewed and confirmed correct on items and profiles tables
-- EmailJS public key domain-restricted
+- EmailJS public key domain restriction currently inactive — see EmailJS Feedback Form section
 - Secrets handling, git history, and Anthropic payload all verified clean — no leaked secrets, .env.local never committed
 
 ## Profile Creation Guarantee (complete)
