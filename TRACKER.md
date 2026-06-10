@@ -1,6 +1,25 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
+## SESSION 9 — June 2026 (2026-06-10)
+Status: Profile creation gap verified and fixed; tested on dev and live.
+
+### Completed
+- Investigated suspected bug: a profiles row was only ever created inside the explicit sign-in function, so a new user who confirms via the email confirmation link (auto-session) reached the app with no profiles row
+- Confirmed root cause: signup does not create a profiles row; only AuthSection's signIn() did, via select-then-insert-if-missing; email confirmation auto-session and password reset completion both bypass signIn() and land directly in /app
+- Confirmed impact: saveProfile previously used update-then-confirm, which silently no-ops on a missing row and then fails the confirm re-fetch with a raw Postgres error, so the display name could never be saved for affected accounts
+- Fix 1 — saveProfile in ProfileSection.tsx now uses upsert on profiles with onConflict on user_id, so a missing row is created rather than the save failing; existing behaviour preserved (await, error checks, re-fetch confirmation, success toast only after confirmation, error toast on failure, confirmed name propagated to dashboard greeting)
+- Fix 2 — app/app/page.tsx now guarantees a profiles row exists on every authenticated session load (ensureProfile, same select-then-insert-if-missing pattern as signIn), covering all entry paths: explicit sign-in, email confirmation auto-session, password reset completion, and session restore
+- signIn()'s existing profile creation left in place as a harmless duplicate guarantee
+- Tested on local dev and on live URL, including direct recreation of the missing-row state — display name save now succeeds and a profiles row is created where previously none existed
+
+### Next Priorities
+1. Security review (critical — before launch)
+2. Domain registration — orbit.co.uk
+3. Email address — hello@orbit.co.uk
+
+---
+
 ## SESSION 8 — June 2026 (2026-06-09)
 Status: Legal pages, compliance actions recorded, HANDOFF updated.
 
@@ -258,7 +277,7 @@ Status: Multi-user architecture complete.
 - Logout redirects to /
 - Authentication UI cleanup — removed test language
 - profiles table created: id, user_id, display_name, created_at
-- Profile created automatically on login
+- A profiles row is now guaranteed for every authenticated session — created on app load if missing, regardless of entry path (explicit sign-in, email confirmation auto-session, password reset completion, or session restore); the display name save uses an upsert as a safety net so it can never fail due to a missing row (see SESSION 9)
 - ProfileSection.tsx created with display name field
 - Display name: optional, 30 char max, whitespace trimmed
 - RLS enabled on items and profiles

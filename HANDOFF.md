@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-09, session 9)
+Last updated: June 2026 (2026-06-10, session 9)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -24,7 +24,7 @@ All core features are complete:
 - Auth page — redesigned into two dark-themed views (Sign In, Create Account) matching the landing page, URL-driven via ?view=
 - Password reset — forgot password link on landing page, /reset-password page, confirmation message
 - User-owned items with RLS
-- Profiles and display name — save handler confirms the write via re-fetch before showing success and updating the dashboard
+- Profiles and display name — a profiles row is guaranteed for every authenticated session (created on app load if missing, regardless of entry path); save handler upserts on user_id, then confirms the write via re-fetch before showing success and updating the dashboard (see Profile Creation Guarantee below)
 - View filtering — Today, Upcoming, Inbox, Dashboard all mutually exclusive
 - Natural language capture — AI fires for inputs over 6 words, extracts title only (see AI Processing section below)
 - Date picker — calendar only, optional
@@ -76,6 +76,13 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - On failure: shows toast "Something went wrong — please try again"
 - Send button disabled when textarea is empty or while sending
 
+## Profile Creation Guarantee (complete)
+A profiles row is now guaranteed to exist for every authenticated user, regardless of how they arrived in the app:
+- On every authenticated session load in app/app/page.tsx, `ensureProfile()` checks for a profiles row by user_id and inserts one with an empty display name if missing — covers explicit sign-in, email confirmation auto-session, password reset completion, and session restore
+- AuthSection's signIn() retains its own select-then-insert-if-missing check as a harmless duplicate guarantee
+- ProfileSection's saveProfile() upserts on profiles with onConflict on user_id (confirmed unique constraint), so saving a display name can never fail due to a missing row — write is then confirmed via re-fetch before the success toast and dashboard update
+- Verified on local dev and live URL, including direct recreation of the missing-row state
+
 ## Known Issues
 - Settings section cards reported as inconsistent width — not reproducible in testing; defensive w-full classes added
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing, separate from recurring feature)
@@ -105,7 +112,7 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 
 ## Supabase Notes
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at
-- profiles table: id, user_id, display_name, created_at
+- profiles table: id, user_id (unique constraint, used for upsert onConflict), display_name, created_at
 - RLS enabled on both tables
 - Redirect URLs include: http://localhost:3000 and https://deans-app.vercel.app and https://deans-app.vercel.app/reset-password
 - Email rate limit on free tier: 2 per hour — affects signup and password reset testing
