@@ -22,7 +22,7 @@ The app is a working authenticated multi-user application deployed on Vercel.
 All core features are complete:
 - Authentication — signup, login, logout, session persistence; /app checks for a valid session on load, redirects to /auth if absent, and shows a calm loading state in the meantime (see Security Hardening below)
 - Auth page — redesigned into two dark-themed views (Sign In, Create Account) matching the landing page, URL-driven via ?view=
-- Password reset — forgot password link on landing page, /reset-password page, confirmation message; invalid/expired links show a calm message with a link back to sign-in (see Security Hardening below)
+- Password reset — forgot password link on landing page, /reset-password page, confirmation message; invalid/expired links show a calm message with a "Request a new link" button (see Security Hardening below)
 - User-owned items with RLS — reviewed and confirmed correct on items and profiles tables
 - Profiles and display name — a profiles row is guaranteed for every authenticated session (created on app load if missing, regardless of entry path); save handler upserts on user_id, then confirms the write via re-fetch before showing success and updating the dashboard (see Profile Creation Guarantee below)
 - View filtering — Today, Upcoming, Inbox, Dashboard all mutually exclusive
@@ -92,7 +92,7 @@ Self-service account deletion via the "Your Account" card in Help & Settings (Pr
 Read-only audit performed across five areas (parse-item auth, secrets handling, silent write failures, Anthropic payload contents, auth gates), followed by fixes:
 - parse-item route (app/api/parse-item/route.ts) requires a verified Supabase access token (401 if missing/invalid), enforces the 6-word minimum and a 500-character maximum server-side (400 with clear error otherwise), and applies a per-user in-memory rate limit of 30 calls/hour (resets on deploy, per-instance — acceptable at current scale); client sends the token in the Authorization header
 - /app checks for a valid session before rendering; redirects to /auth if absent; shows a calm "Loading your day..." state while checking — no authenticated content can flash for unauthenticated visitors
-- /reset-password shows a calm plain-English message ("This reset link has expired or already been used. Please request a new one from the sign-in page.") with a link back to sign-in for any invalid/expired link, instead of a raw Supabase error
+- /reset-password shows a calm plain-English message ("This reset link has expired or already been used. Please request a new one from the sign-in page.") with a "Request a new link" button (to /auth?view=forgot) for any invalid/expired link, instead of a raw Supabase error
 - Background profile-creation inserts (ensureProfile, signIn) now log to console on failure for visibility in dev/Vercel logs; no user-facing error added
 - RLS policies reviewed and confirmed correct on items and profiles tables
 - EmailJS public key domain-restricted

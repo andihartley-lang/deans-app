@@ -8,7 +8,7 @@ Status: Security review complete; fixes applied and verified on live URL.
 - Read-only security audit performed across five areas: parse-item route authentication, secrets handling, silent database write failures, data sent to Anthropic, and auth gates on /app and /reset-password
 - parse-item route secured: requires a verified Supabase access token (returns 401 if missing or invalid), enforces the 6-word minimum and a 500-character maximum server-side, and applies a per-user in-memory rate limit (30 calls/hour); client now sends the access token in the Authorization header
 - Auth gate added to /app: checks for a valid session before rendering, redirects to /auth if absent, and shows a calm "Loading your day..." state while checking — authenticated content cannot flash for unauthenticated visitors
-- Reset-password page: an invalid or expired link now shows a calm plain-English message ("This reset link has expired or already been used. Please request a new one from the sign-in page.") with a link back to sign-in, instead of a raw Supabase error
+- Reset-password page: an invalid or expired link now shows a calm plain-English message ("This reset link has expired or already been used. Please request a new one from the sign-in page.") with a "Request a new link" button (to /auth?view=forgot), instead of a raw Supabase error
 - Background profile-creation inserts (ensureProfile in app/app/page.tsx, signIn in AuthSection.tsx) now log to console on failure for visibility in development and Vercel logs; no user-facing error added — saveProfile's upsert remains the user-facing safety net
 - RLS policies reviewed and confirmed correct on items and profiles tables
 - EmailJS domain restriction enabled on the public key
