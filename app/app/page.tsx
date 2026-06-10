@@ -28,6 +28,24 @@ const [currentView, setCurrentView] = useState("dashboard");
 const [displayName, setDisplayName] = useState("");
 const [showToast, setShowToast] = useState(false);
 const [toastMessage, setToastMessage] = useState("");
+const [authChecked, setAuthChecked] = useState(false);
+
+useEffect(() => {
+  async function checkAuth() {
+    const {
+      data: { user },
+    } = await supabase.auth.getUser();
+
+    if (!user) {
+      window.location.href = "/auth";
+      return;
+    }
+
+    setAuthChecked(true);
+  }
+
+  checkAuth();
+}, []);
 
 useEffect(() => {
   if (!showToast) return;
@@ -63,10 +81,11 @@ if (!user) {
 }
 
 useEffect(() => {
+  if (!authChecked) return;
   fetchItems();
   fetchDisplayName();
   ensureProfile();
-}, []);
+}, [authChecked]);
 
 async function fetchDisplayName() {
   const {
@@ -226,9 +245,16 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
 
     if (title.trim().split(/\s+/).length > 6) {
       try {
+        const {
+          data: { session },
+        } = await supabase.auth.getSession();
+
         const res = await fetch("/api/parse-item", {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${session?.access_token ?? ""}`,
+          },
           body: JSON.stringify({ input: title }),
         });
         const parsed = await res.json();
@@ -261,6 +287,14 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
     setPendingTitle("");
     setShowDateNudge(false);
     setTimeout(() => datePickerRef.current?.open(), 0);
+  }
+
+  if (!authChecked) {
+    return (
+      <main className="min-h-screen bg-[#f3f4f8] flex items-center justify-center">
+        <p className="text-gray-400">Loading your day...</p>
+      </main>
+    );
   }
 
   return (
