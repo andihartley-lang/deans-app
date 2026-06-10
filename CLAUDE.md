@@ -52,5 +52,10 @@ Before the final commit of every session:
 2. Overwrite HANDOFF.md completely with the current project state
 3. Commit all changes including the updated md files
 
+## Documentation Update Policy
+Do not update TRACKER.md or HANDOFF.md after every commit or deployment.
+Update them once at the end of a development session, or when a significant feature, architecture change, compliance decision, or project-state change has been completed.
+Avoid creating documentation noise from minor UI tweaks, bug fixes, or styling changes.
+
 ## Brief Updates
 Only update BRIEF.md when the user explicitly requests it. BRIEF.md contains product decisions and principles that should not change automatically.

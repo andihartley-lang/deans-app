@@ -38,6 +38,7 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
   const [feedback, setFeedback] = useState("");
   const [isSending, setIsSending] = useState(false);
   const [openSection, setOpenSection] = useState<number | null>(null);
+  const [howItWorksOpen, setHowItWorksOpen] = useState(false);
 
   useEffect(() => {
     async function loadProfile() {
@@ -164,32 +165,48 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
       </div>
 
       <div className={card}>
-        <h2 className="text-2xl font-bold mb-4">How Orbit Works</h2>
-        <div className="divide-y divide-gray-100">
-          {HOW_IT_WORKS.map((section, i) => (
-            <div key={section.heading}>
-              <button
-                className="flex w-full items-center justify-between py-4 text-left"
-                onClick={() => setOpenSection(openSection === i ? null : i)}
-                aria-expanded={openSection === i}
-              >
-                <span className="text-lg font-semibold text-indigo-950">{section.heading}</span>
-                <svg
-                  className={`h-5 w-5 flex-shrink-0 text-gray-400 transition-transform duration-300 ${openSection === i ? "rotate-180" : ""}`}
-                  fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-              <div className={`grid transition-all duration-300 ${openSection === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
-                <div className="overflow-hidden">
-                  <p className="pb-4 text-gray-600" style={{ fontSize: "16px", lineHeight: "1.8" }}>
-                    {section.body}
-                  </p>
+        <button
+          className="flex w-full items-center justify-between text-left"
+          onClick={() => setHowItWorksOpen((open) => !open)}
+          aria-expanded={howItWorksOpen}
+        >
+          <h2 className="text-2xl font-bold">How Orbit Works</h2>
+          <svg
+            className={`h-5 w-5 flex-shrink-0 text-gray-400 transition-transform duration-300 ${howItWorksOpen ? "rotate-180" : ""}`}
+            fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+          >
+            <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+          </svg>
+        </button>
+        <div className={`grid transition-all duration-300 ${howItWorksOpen ? "grid-rows-[1fr] mt-4" : "grid-rows-[0fr]"}`}>
+          <div className="overflow-hidden">
+            <div className="divide-y divide-gray-100">
+              {HOW_IT_WORKS.map((section, i) => (
+                <div key={section.heading}>
+                  <button
+                    className="flex w-full items-center justify-between py-4 text-left"
+                    onClick={() => setOpenSection(openSection === i ? null : i)}
+                    aria-expanded={openSection === i}
+                  >
+                    <span className="text-lg font-semibold text-indigo-950">{section.heading}</span>
+                    <svg
+                      className={`h-5 w-5 flex-shrink-0 text-gray-400 transition-transform duration-300 ${openSection === i ? "rotate-180" : ""}`}
+                      fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  <div className={`grid transition-all duration-300 ${openSection === i ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}>
+                    <div className="overflow-hidden">
+                      <p className="pb-4 text-gray-600" style={{ fontSize: "16px", lineHeight: "1.8" }}>
+                        {section.body}
+                      </p>
+                    </div>
+                  </div>
                 </div>
-              </div>
+              ))}
             </div>
-          ))}
+          </div>
         </div>
       </div>
 
