@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-10, session 10)
+Last updated: June 2026 (2026-06-15, session 12)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -37,6 +37,8 @@ All core features are complete:
 - Feedback form — working EmailJS integration in Share Your Thoughts, domain restriction currently inactive (see below)
 - How Orbit Works — five accordion sections, smooth expand/collapse, one open at a time (see below)
 - Legal pages — Terms of Service and Privacy Policy pages live; linked from landing page, signup flow, and Help & Settings (see below)
+- Mobile responsiveness — full mobile layout pass complete (see below)
+- Orbit logo — globe icon added to desktop sidebar and landing page nav (see below)
 
 ## Recurring Tasks Feature (complete)
 Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
@@ -66,6 +68,23 @@ Implemented as a second paragraph in the "Capture it" section of How Orbit Works
 - Linked from landing page footer
 - Linked from signup flow — checkbox "I agree to the Terms of Service and Privacy Policy" required; Create Account button disabled until ticked
 - Linked from bottom of Help & Settings page
+
+## Mobile Responsiveness (complete)
+Full mobile layout pass, all changes scoped behind `md:` breakpoints with desktop unchanged:
+- Desktop sidebar hidden below `md`; mobile bottom navigation bar added with Dashboard, Today, Upcoming, Inbox, Help, Logout (44px+ tap targets, matches sidebar colours/active states)
+- Main layout, input panel, and date nudge banner all stack vertically on mobile (`flex-col md:flex-row`); input panel and Add button padding reduced on mobile
+- Task cards and inbox cards: reduced padding, titles truncate correctly with more room, Complete button no longer overlaps content, task/inbox icons reduced (`w-10 h-10 md:w-16 md:h-16`)
+- DatePicker dropdown and ProfileSection buttons wrap/stack correctly on mobile, no horizontal overflow
+- Hero section padding/fonts scale down on mobile; subtext no longer hidden behind input panel
+- Dashboard view (Soon, Later, Inbox sections) capped at 3 items on mobile only, with "View all"/"See all" links remaining visible; desktop shows all items unchanged
+- `next.config.ts` devIndicators repositioned to top-right (dev-only, no production impact)
+- Verified at 375px and 1280px via Playwright screenshots; desktop confirmed pixel-identical
+
+## Orbit Logo (complete)
+- `public/orbit-icon.png` (cropped globe-with-orbital-ring graphic) added to the repo
+- Desktop sidebar: icon at 80×80px, fits within the 128px sidebar with padding either side
+- Landing page nav: icon at 112×112px, displayed inline with the "Orbit" wordmark
+- Not added to mobile bottom nav, hero section, or auth pages — see Known Issues for mobile dashboard logo visibility
 
 ## AI Processing (current implementation)
 - Trigger: only fires when user input exceeds 6 words
@@ -125,13 +144,18 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - MOT and compound keywords not always triggering time-sensitive date nudge (pre-existing, separate from recurring feature)
 - View all buttons not wired up
 - Security section is a placeholder
+- Orbit logo not visible anywhere on the mobile dashboard view (desktop sidebar and landing nav only) — agreed acceptable for now
 
 ## Next Priorities In Order
 
 ### High — do soon after launch
-1. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-2. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-3. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+1. Supabase redirect URLs — add orbitlife.co.uk (root and /reset-password) to the allowed redirect URLs list (currently only deans-app.vercel.app and localhost)
+2. EmailJS domain restriction — retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security
+3. Beta launch outreach plan — plan and execute outreach for beta testers
+4. Stripe integration — plan and begin payment/subscription integration
+5. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+6. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+7. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
 
 ### Feature backlog
 - Security section — change password
@@ -149,8 +173,9 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at
 - profiles table: id, user_id (unique constraint, used for upsert onConflict), display_name, created_at
 - RLS enabled on both tables
-- Redirect URLs include: http://localhost:3000 and https://deans-app.vercel.app and https://deans-app.vercel.app/reset-password
+- Redirect URLs include: http://localhost:3000 and https://deans-app.vercel.app and https://deans-app.vercel.app/reset-password — orbitlife.co.uk not yet added (see Next Priorities)
 - Email rate limit on free tier: 2 per hour — affects signup and password reset testing
+- Database cleaned (2026-06-15): 33 orphaned items (no matching user) deleted; index added on items.user_id for query performance
 
 ## Environment Variables
 - .env.local contains NEXT_PUBLIC_SUPABASE_URL, NEXT_PUBLIC_SUPABASE_ANON_KEY, ANTHROPIC_API_KEY, NEXT_PUBLIC_EMAILJS_PUBLIC_KEY

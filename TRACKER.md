@@ -1,6 +1,34 @@
 # Orbit — Development Tracker
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
+## SESSION 12 — June 2026 (2026-06-15)
+Status: Full mobile responsiveness pass complete; Orbit logo added; database cleanup performed.
+
+### Completed
+- Full mobile responsiveness implemented across the app, all changes scoped behind `md:` breakpoints with desktop unchanged:
+  - Mobile bottom navigation bar (Dashboard, Today, Upcoming, Inbox, Help, Logout) replacing the sidebar below `md`
+  - Main layout, input panel, and date nudge banner stack vertically on mobile; input panel padding reduced
+  - Task/inbox card padding reduced, titles truncate correctly, Complete button no longer overlaps content, icons reduced on mobile
+  - Hero section padding/fonts scale down on mobile; subtext no longer hidden behind input panel
+  - Dashboard view (Soon, Later, Inbox) capped at 3 items on mobile only, "View all"/"See all" links remain visible; desktop unchanged
+  - Verified at 375px and 1280px via Playwright; desktop confirmed pixel-identical
+- Orbit globe logo added: desktop sidebar (80×80px) and landing page nav (112×112px); `public/orbit-icon.png` (cropped) tracked in git
+- Database cleaned: 33 orphaned items (no matching user) deleted from the items table; index added on items.user_id
+
+### Known Issues
+- Orbit logo not visible anywhere on the mobile dashboard view — agreed acceptable for now
+
+### Next Priorities
+1. Supabase redirect URLs — add orbitlife.co.uk to allowed redirect URLs
+2. EmailJS domain restriction — retry adding https://www.orbitlife.co.uk
+3. Beta launch outreach plan
+4. Stripe integration
+5. AI transparency — assess whether additional user-facing disclosure is needed
+6. Data retention policy decision
+7. Company information update — legal entity name once Orbit Limited is incorporated
+
+---
+
 ## SESSION 11 — June 2026 (2026-06-10)
 Status: Sensitive information notice implemented via How Orbit Works content.
 
