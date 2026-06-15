@@ -5,7 +5,7 @@ export default function LandingPage() {
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 via-indigo-900 to-indigo-950 text-white">
       <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
         <div className="flex items-center gap-2">
-          <Image src="/orbit-icon.png" alt="Orbit" width={28} height={28} />
+          <Image src="/orbit-icon.png" alt="Orbit" width={112} height={112} />
           <span className="text-2xl font-semibold">Orbit</span>
         </div>
 

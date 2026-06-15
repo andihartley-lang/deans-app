@@ -14,7 +14,7 @@ export default function Sidebar({
     <div className="hidden md:flex w-32 min-h-screen bg-gradient-to-b from-indigo-950 to-purple-900 text-white flex-col items-center py-8 rounded-r-3xl shadow-2xl">
 
       <div className="mb-10">
-        <Image src="/orbit-icon.png" alt="Orbit" width={64} height={64} />
+        <Image src="/orbit-icon.png" alt="Orbit" width={80} height={80} />
       </div>
 
       <div className="flex flex-col gap-8 text-sm items-center">
