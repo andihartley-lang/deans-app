@@ -10,9 +10,9 @@ export default function HeroSection({
   displayName,
 }: HeroSectionProps) {
   return (
-    <div className="bg-gradient-to-r from-indigo-950 to-purple-800 px-12 py-10 text-white shadow-xl">
+    <div className="bg-gradient-to-r from-indigo-950 to-purple-800 px-4 md:px-12 pt-6 pb-12 md:py-10 text-white shadow-xl">
 
-      <p className="text-indigo-100 text-xl">
+      <p className="text-indigo-100 text-base md:text-xl">
 
         {currentView === "today" &&
           "Focus on what matters today."}
@@ -28,7 +28,7 @@ export default function HeroSection({
 
       </p>
 
-      <h1 className="text-6xl font-bold mb-3">
+      <h1 className="text-3xl md:text-6xl font-bold mb-3">
 
         {currentView === "dashboard" && (displayName ? `${greeting}, ${displayName}` : greeting)}
 
@@ -37,7 +37,7 @@ export default function HeroSection({
       </h1>
 
       {currentView === "dashboard" && (
-        <p className="text-indigo-100 text-xl">
+        <p className="text-indigo-100 text-base md:text-xl">
           Here’s what’s in your orbit.
         </p>
       )}

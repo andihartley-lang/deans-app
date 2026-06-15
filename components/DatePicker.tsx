@@ -84,12 +84,12 @@ export default forwardRef<DatePickerHandle, DatePickerProps>(function DatePicker
     : null;
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative w-full md:w-auto">
       <button
         type="button"
         onClick={() => !disabled && setOpen(o => !o)}
         disabled={disabled}
-        className="border border-gray-200 rounded-2xl px-4 py-4 bg-white text-sm outline-none disabled:opacity-50 min-w-[152px] text-left flex items-center gap-2"
+        className="border border-gray-200 rounded-2xl px-4 py-4 bg-white text-sm outline-none disabled:opacity-50 w-full md:min-w-[152px] md:w-auto text-left flex items-center gap-2"
       >
         <span className="text-gray-400">📅</span>
         {displayLabel ? (
@@ -109,7 +109,7 @@ export default forwardRef<DatePickerHandle, DatePickerProps>(function DatePicker
       </button>
 
       {open && (
-        <div className="absolute top-full mt-2 left-0 z-50 bg-white rounded-3xl shadow-xl p-4 w-64">
+        <div className="absolute top-full mt-2 left-0 right-0 md:right-auto z-50 bg-white rounded-3xl shadow-xl p-4 w-full md:w-64 overflow-x-hidden">
           <div className="flex items-center justify-between mb-3">
             <button
               onClick={prevMonth}

@@ -63,7 +63,7 @@ export default function UpcomingSection({
     );
 
     return (
-      <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
+      <div className="bg-white rounded-3xl shadow-lg p-4 md:p-8 mb-8">
 
         <div className="mb-8">
           <h2 className="text-2xl font-semibold text-indigo-950 mb-6">
@@ -137,7 +137,7 @@ export default function UpcomingSection({
     );
 
     return (
-    <div className="bg-white rounded-3xl shadow-lg p-8 mb-8">
+    <div className="bg-white rounded-3xl shadow-lg p-4 md:p-8 mb-8">
 
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-4xl font-bold text-indigo-950">
@@ -199,15 +199,19 @@ export default function UpcomingSection({
             </h3>
           </div>
           <div className="space-y-4">
-            {soonItems.map((item) => (
-              <TaskCard
+            {soonItems.map((item, index) => (
+              <div
                 key={item.id}
-                item={item}
-                getItemIcon={getItemIcon}
-                completeItem={completeItem}
-                completeItemWithRecurring={completeItemWithRecurring}
-                colour="red"
-              />
+                className={currentView === "dashboard" && index >= 3 ? "hidden md:block" : ""}
+              >
+                <TaskCard
+                  item={item}
+                  getItemIcon={getItemIcon}
+                  completeItem={completeItem}
+                  completeItemWithRecurring={completeItemWithRecurring}
+                  colour="red"
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -222,15 +226,19 @@ export default function UpcomingSection({
             </h3>
           </div>
           <div className="space-y-4">
-            {laterItems.map((item) => (
-              <TaskCard
+            {laterItems.map((item, index) => (
+              <div
                 key={item.id}
-                item={item}
-                getItemIcon={getItemIcon}
-                completeItem={completeItem}
-                completeItemWithRecurring={completeItemWithRecurring}
-                colour="blue"
-              />
+                className={currentView === "dashboard" && index >= 3 ? "hidden md:block" : ""}
+              >
+                <TaskCard
+                  item={item}
+                  getItemIcon={getItemIcon}
+                  completeItem={completeItem}
+                  completeItemWithRecurring={completeItemWithRecurring}
+                  colour="blue"
+                />
+              </div>
             ))}
           </div>
         </div>

@@ -286,16 +286,16 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
             <p className="text-gray-600 mb-4">
               Deleting your account will permanently remove your tasks, your profile, and your sign-in details. This cannot be undone.
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setAccountStep("default")}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
+                className="w-full md:w-auto bg-indigo-600 text-white px-6 py-3 rounded-xl"
               >
                 Keep my account
               </button>
               <button
                 onClick={() => setAccountStep("final")}
-                className="border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl"
+                className="w-full md:w-auto border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl"
               >
                 Delete my account
               </button>
@@ -308,18 +308,18 @@ export default function ProfileSection({ onDisplayNameSaved, onToast }: ProfileS
             <p className="text-gray-600 mb-4">
               Last check — delete your account permanently?
             </p>
-            <div className="flex gap-3">
+            <div className="flex flex-wrap gap-3">
               <button
                 onClick={() => setAccountStep("default")}
                 disabled={isDeleting}
-                className="bg-indigo-600 text-white px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full md:w-auto bg-indigo-600 text-white px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Cancel
               </button>
               <button
                 onClick={deleteAccount}
                 disabled={isDeleting}
-                className="border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full md:w-auto border-2 border-indigo-600 text-indigo-600 px-6 py-3 rounded-xl disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Yes, delete everything
               </button>

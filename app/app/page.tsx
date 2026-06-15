@@ -302,7 +302,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
   }
 
   return (
-  <main className="min-h-screen bg-[#f3f4f8] flex">
+  <main className="min-h-screen bg-[#f3f4f8] flex flex-col md:flex-row overflow-x-hidden">
 <Sidebar
   currentView={currentView}
   setCurrentView={setCurrentView}
@@ -314,11 +314,11 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
      <HeroSection currentView={currentView} greeting={getGreeting()} displayName={displayName} />
 
       {/* CONTENT WRAPPER */}
-      <div className="max-w-6xl mx-auto -mt-10 pb-12 px-6">
+      <div className="max-w-6xl mx-auto -mt-10 pb-20 md:pb-12 px-6">
 
         {/* INPUT PANEL */}
         {currentView !== "settings" && (
-  <div className="bg-white rounded-3xl shadow-xl p-4 flex gap-3 items-center mb-8">
+  <div className="bg-white rounded-3xl shadow-xl p-3 md:p-4 flex flex-col md:flex-row gap-3 items-center mb-8">
 
     <input
       type="text"
@@ -327,7 +327,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       onChange={(e) => setTitle(e.target.value)}
       onKeyDown={(e) => e.key === "Enter" && addItem()}
       disabled={isAdding}
-      className="flex-1 border border-gray-200 rounded-2xl p-4 text-lg outline-none disabled:opacity-50"
+      className="w-full md:flex-1 border border-gray-200 rounded-2xl p-3 md:p-4 text-lg outline-none disabled:opacity-50"
     />
 
     <DatePicker
@@ -340,7 +340,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
     <button
       onClick={addItem}
       disabled={isAdding}
-      className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-4 rounded-2xl transition disabled:opacity-50 disabled:cursor-not-allowed"
+      className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-8 py-3 md:py-4 rounded-2xl transition disabled:opacity-50 disabled:cursor-not-allowed"
     >
       {isAdding ? "Adding..." : "Add"}
     </button>
@@ -349,20 +349,20 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
 )}
 
 {showDateNudge && currentView !== "settings" && (
-  <div className="bg-amber-50 border border-amber-100 rounded-3xl shadow-lg px-8 py-6 flex items-center justify-between mb-8 -mt-4">
+  <div className="bg-amber-50 border border-amber-100 rounded-3xl shadow-lg px-8 py-6 flex flex-col md:flex-row items-center justify-between mb-8 -mt-4 gap-3 md:gap-0">
     <p className="text-indigo-950 text-base font-medium">
       This one might need a date — want to add one?
     </p>
-    <div className="flex gap-3">
+    <div className="flex flex-col md:flex-row gap-2 md:gap-3 w-full md:w-auto">
       <button
         onClick={handleAddDate}
-        className="bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-2xl transition"
+        className="w-full md:w-auto bg-yellow-400 hover:bg-yellow-300 text-black font-semibold px-6 py-3 rounded-2xl transition"
       >
         Add a date
       </button>
       <button
         onClick={saveWithNoDate}
-        className="bg-white border border-amber-200 hover:bg-amber-100 text-indigo-950 font-medium px-6 py-3 rounded-2xl transition"
+        className="w-full md:w-auto bg-white border border-amber-200 hover:bg-amber-100 text-indigo-950 font-medium px-6 py-3 rounded-2xl transition"
       >
         No date needed
       </button>

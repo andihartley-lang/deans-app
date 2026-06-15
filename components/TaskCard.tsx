@@ -62,17 +62,17 @@ export default function TaskCard({
   }
 
   return (
-    <div className={`${styles.card} rounded-3xl p-5 shadow-sm`}>
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
+    <div className={`${styles.card} rounded-3xl p-3 md:p-5 shadow-sm`}>
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
+        <div className="flex items-center gap-4 min-w-0 flex-1">
           <div
-            className={`${styles.icon} text-3xl w-16 h-16 rounded-2xl flex items-center justify-center`}
+            className={`${styles.icon} text-3xl w-10 h-10 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0`}
           >
             {getItemIcon(item.title)}
           </div>
 
-          <div>
-            <div className={`text-2xl font-semibold ${styles.title}`}>
+          <div className="min-w-0 flex-1">
+            <div className={`text-2xl font-semibold ${styles.title} truncate`}>
               {item.title}
             </div>
             <div className={styles.date}>
@@ -87,7 +87,7 @@ export default function TaskCard({
         {!showPrompt && (
           <button
             onClick={handleCompleteClick}
-            className={`border rounded-2xl px-6 py-3 ${styles.button}`}
+            className={`w-full md:w-auto border rounded-2xl px-6 py-3 min-h-[44px] min-w-[44px] flex-shrink-0 ${styles.button}`}
           >
             Complete
           </button>

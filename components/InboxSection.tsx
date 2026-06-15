@@ -47,13 +47,13 @@ function InboxCard({
   }
 
   return (
-    <div className="bg-gradient-to-r from-yellow-50 to-white border border-yellow-100 rounded-3xl p-5 shadow-sm">
+    <div className="bg-gradient-to-r from-yellow-50 to-white border border-yellow-100 rounded-3xl p-3 md:p-5 shadow-sm">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-4">
-          <div className="bg-yellow-100 text-3xl w-16 h-16 rounded-2xl flex items-center justify-center">
+        <div className="flex items-center gap-4 min-w-0 flex-1">
+          <div className="bg-yellow-100 text-3xl w-10 h-10 md:w-16 md:h-16 rounded-2xl flex items-center justify-center flex-shrink-0">
             {getItemIcon(item.title)}
           </div>
-          <div className="text-2xl font-semibold text-indigo-950">
+          <div className="text-2xl font-semibold text-indigo-950 truncate min-w-0 flex-1">
             {item.title}
           </div>
         </div>
@@ -61,7 +61,7 @@ function InboxCard({
         {!showPrompt && (
           <button
             onClick={handleCompleteClick}
-            className="border border-yellow-200 rounded-full w-14 h-14 text-xl hover:bg-yellow-50"
+            className="border border-yellow-200 rounded-full w-14 h-14 min-h-[44px] min-w-[44px] text-xl hover:bg-yellow-50 flex-shrink-0"
           >
             ✓
           </button>
@@ -107,7 +107,7 @@ export default function InboxSection({
   completeItemWithRecurring,
 }: InboxSectionProps) {
   return currentView === "dashboard" || currentView === "inbox" ? (
-    <div className="bg-white rounded-3xl shadow-lg p-8">
+    <div className="bg-white rounded-3xl shadow-lg p-4 md:p-8">
       <div className="flex items-center justify-between mb-6">
         <h2 className="text-4xl font-bold text-indigo-950">Inbox</h2>
         <span className="text-indigo-600">View all</span>
@@ -116,14 +116,18 @@ export default function InboxSection({
       <div className="space-y-4">
         {items
           .filter((item) => item.status !== "completed" && !item.due_date)
-          .map((item) => (
-            <InboxCard
+          .map((item, index) => (
+            <div
               key={item.id}
-              item={item}
-              getItemIcon={getItemIcon}
-              completeItem={completeItem}
-              completeItemWithRecurring={completeItemWithRecurring}
-            />
+              className={currentView === "dashboard" && index >= 3 ? "hidden md:block" : ""}
+            >
+              <InboxCard
+                item={item}
+                getItemIcon={getItemIcon}
+                completeItem={completeItem}
+                completeItemWithRecurring={completeItemWithRecurring}
+              />
+            </div>
           ))}
       </div>
     </div>
