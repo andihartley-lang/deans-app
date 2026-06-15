@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { supabase } from "@/lib/supabase";
 interface SidebarProps {
   currentView: string;
@@ -12,8 +13,8 @@ export default function Sidebar({
     <>
     <div className="hidden md:flex w-32 min-h-screen bg-gradient-to-b from-indigo-950 to-purple-900 text-white flex-col items-center py-8 rounded-r-3xl shadow-2xl">
 
-      <div className="bg-yellow-400 text-indigo-950 font-bold text-3xl w-14 h-14 rounded-2xl flex items-center justify-center mb-10 shadow-lg">
-        O
+      <div className="mb-10">
+        <Image src="/orbit-icon.png" alt="Orbit" width={40} height={40} />
       </div>
 
       <div className="flex flex-col gap-8 text-sm items-center">

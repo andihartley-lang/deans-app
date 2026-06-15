@@ -1,9 +1,13 @@
+import Image from "next/image";
 import Link from "next/link";
 export default function LandingPage() {
   return (
     <main className="min-h-screen bg-gradient-to-b from-indigo-950 via-indigo-900 to-indigo-950 text-white">
       <nav className="max-w-6xl mx-auto flex items-center justify-between px-6 py-5">
-        <div className="text-2xl font-semibold">Orbit</div>
+        <div className="flex items-center gap-2">
+          <Image src="/orbit-icon.png" alt="Orbit" width={24} height={24} />
+          <span className="text-2xl font-semibold">Orbit</span>
+        </div>
 
         <Link
   href="/auth?view=signin"
