@@ -100,7 +100,7 @@ Full mobile layout pass, all changes scoped behind `md:` breakpoints with deskto
 - hello@orbitlife.co.uk receiving via Cloudflare Email Routing, forwarding to the owner's Gmail
 - Terms of Service and Privacy Policy contact addresses updated to hello@orbitlife.co.uk
 
-## EmailJS Feedback Form (complete, domain restriction inactive)
+## EmailJS Feedback Form (complete, unrestricted key accepted for beta)
 Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Service ID: `service_ecsh1ih` (in source)
 - Template ID: `template_3etw4ta` (in source)
@@ -108,10 +108,10 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - On success: clears textarea, shows toast "Thank you — your thoughts help shape Orbit"
 - On failure: shows toast "Something went wrong — please try again"
 - Send button disabled when textarea is empty or while sending
-- Domain restriction currently NOT active — the previously configured restriction was found blank in EmailJS Account → Security (possibly never saved, possibly related to an EmailJS service incident on 10 June 2026, possibly a free-tier limitation requiring a paid plan for domain whitelisting)
-- With no restriction active, the public key works from any domain, including localhost
-- Action carried forward: retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security once the service incident is resolved; if a paid plan is required, decide whether to pay or accept the unrestricted public key as a known low-severity risk
-- Domain restriction retry pending — attempt to add https://www.orbitlife.co.uk in EmailJS Account → Security at start of next session.
+- Domain restriction confirmed unavailable on the EmailJS free tier — it is a paid-only feature, not a one-domain limit as previously thought
+- Decision: accept the unrestricted public key as a low-severity risk for beta. Worst case is junk feedback submissions or quota use; no user data is exposed
+- Feedback notifications arrive at the owner's personal Gmail
+- Post-beta option: move the feedback form to send via Resend through a server-side route, removing the exposed public key entirely
 
 ## Account Deletion (complete)
 Self-service account deletion via the "Your Account" card in Help & Settings (ProfileSection.tsx), last card on the page:
@@ -150,13 +150,13 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 ## Next Priorities In Order
 
 ### High — do soon after launch
-1. EmailJS domain restriction — retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security
-2. Beta launch outreach plan — plan and execute outreach for beta testers
-3. Stripe integration — plan and begin payment/subscription integration
-4. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-5. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-6. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
-7. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
+1. Beta launch outreach plan — plan and execute outreach for beta testers
+2. Stripe integration — plan and begin payment/subscription integration
+3. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+4. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+5. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+6. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
+7. EmailJS — resolved: domain restriction is a paid-only feature; unrestricted public key accepted as low-severity risk for beta. Post-beta option: replace with Resend server-side route.
 
 ### Feature backlog
 - Security section — change password
