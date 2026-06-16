@@ -132,11 +132,7 @@ async function ensureProfile() {
 
 
 function getGreeting() {
-  const hour = new Date(
-  new Date().toLocaleString("en-GB", {
-    timeZone: "Europe/London",
-  })
-).getHours();
+  const hour = new Date().getHours();
 
   if (hour < 12) {
     return "Good morning";
