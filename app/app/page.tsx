@@ -142,7 +142,7 @@ function getGreeting() {
     return "Good morning";
   }
 
-  if (hour < 24) {
+  if (hour < 18) {
     return "Good afternoon";
   }
 
