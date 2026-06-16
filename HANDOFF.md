@@ -15,6 +15,7 @@ Orbit is a calm life-admin application.
 - GitHub: deans-app repo
 - Supabase: live database, RLS enabled
 - Vercel: auto-deploys on GitHub push
+- Connected services: Supabase (project ID: lkwvzgfxcxlnpwobaqfi), Vercel (project ID: prj_qzbTtUZCIxLQxo1eA8hFsX6Bzagv, team ID: team_PSF7LC4kmM3B5QP7K3NXXWqu), Canva
 
 ## Current State
 The app is a working authenticated multi-user application deployed on Vercel.
@@ -175,7 +176,7 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - profiles table: id, user_id (unique constraint, used for upsert onConflict), display_name, created_at
 - RLS enabled on both tables
 - Site URL set to https://www.orbitlife.co.uk; redirect URLs include http://localhost:3000, https://orbitlife.co.uk, https://www.orbitlife.co.uk, https://deans-app.vercel.app, and https://deans-app.vercel.app/reset-password — complete.
-- Email sending via Resend custom SMTP (hello@orbitlife.co.uk); previous 2-per-hour free-tier limit removed. Resend free tier: 100 emails/day, 3,000/month.
+- Email via Resend (custom SMTP): 100 emails/day, 3,000/month — Supabase free-tier 2/hour cap no longer applies
 - Database cleaned (2026-06-15): 33 orphaned items (no matching user) deleted; index added on items.user_id for query performance
 
 ## Environment Variables
