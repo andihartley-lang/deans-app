@@ -2,23 +2,25 @@
 Running log of all development activity. Most recent entry first. Earlier entries are history — do not delete.
 
 ## SESSION 13 — June 2026 (2026-06-16)
-Status: Infrastructure configuration complete; HANDOFF brought fully up to date.
+Status: Infrastructure configuration, end-to-end cold-start test, and two bug fixes complete.
 
 ### Completed
 - Resend configured as custom SMTP provider in Supabase — removes the previous 2-emails-per-hour free-tier limit; sender is hello@orbitlife.co.uk via verified Resend domain (100 emails/day, 3,000/month on free tier)
 - Supabase Site URL and redirect URLs updated to https://www.orbitlife.co.uk (plus orbitlife.co.uk and reset-password paths) — password reset flow verified end to end on the live domain in an incognito session
 - EmailJS domain restriction confirmed unavailable on the free tier (paid-only feature, not a configuration issue); decision: accept unrestricted public key as low-severity risk for beta — worst case is junk feedback or quota use, no data exposure; post-beta option noted: replace with Resend server-side route
-- HANDOFF.md updated throughout: expanded Current State entries for mobile responsiveness, Orbit logo, and email infrastructure; Supabase Notes corrected; connected service IDs (Supabase, Vercel, Canva) added to Project section; Next Priorities cleaned up to reflect completed items; deferred items updated with beta rationale
-
-### No Code Changes
-This session was entirely infrastructure configuration and documentation. No application code was modified.
+- Full cold-start end-to-end test completed on the live URL
+- Time-of-day greeting threshold bug found and fixed: hour < 24 condition was making "Good evening" unreachable; corrected to hour < 18 so afternoon runs 12:00–17:59 and evening from 18:00; timezone conversion via toLocaleString also removed in favour of new Date().getHours() so the browser's local time is used directly
+- Password reset success state bug found and fixed: after a successful updateUser call, the page was falling through to the "Link expired" state because Supabase marks the token as used; fixed by replacing the done state with a toast ("Password updated — please sign in") and an immediate redirect to /auth?view=signin after 1.5s; dead done state and its JSX branch removed
+- Resend email timestamp issue identified: emails appear approximately 4 hours behind actual send time; believed to be a Resend server timezone issue, cosmetic only; logged in Known Issues and Next Priorities for follow-up with Resend support
+- BRIEF.md technical debt entries removed: "No mobile optimisation" and "No self-service account deletion" both deleted as both features are now complete
 
 ### Next Priorities
-1. Beta launch outreach plan
-2. Stripe integration
-3. AI transparency — assess whether additional user-facing disclosure is needed
-4. Data retention policy decision
-5. Company information update — legal entity name once Orbit Limited is incorporated
+1. Resend email timestamp — raise with Resend support
+2. Beta launch outreach plan
+3. Stripe integration
+4. AI transparency — assess whether additional user-facing disclosure is needed
+5. Data retention policy decision
+6. Company information update — legal entity name once Orbit Limited is incorporated
 
 ---
 

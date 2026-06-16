@@ -225,10 +225,8 @@ RLS enabled on both tables. All future tables must have RLS enabled by default.
 - Significant rendering logic remains in app/app/page.tsx
 - Settings card widths inconsistent
 - No error boundaries
-- No mobile optimisation
 - No automated testing
 - View all buttons not wired up
-- No self-service account deletion — required before public launch; must delete tasks, profile and Supabase auth account with confirmation step
 - No GDPR data export functionality — assess effort post launch; do not build yet
 
 ## Go-To-Market Strategy

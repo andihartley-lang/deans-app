@@ -1,5 +1,5 @@
 # Orbit — Handoff Note
-Last updated: June 2026 (2026-06-15, session 12)
+Last updated: June 2026 (2026-06-16, session 13)
 
 ## How to Start a New Session
 1. Read BRIEF.md for full product context
@@ -40,6 +40,8 @@ All core features are complete:
 - Legal pages — Terms of Service and Privacy Policy pages live; linked from landing page, signup flow, and Help & Settings (see below)
 - Mobile responsiveness — full mobile layout implemented with bottom navigation bar (Dashboard, Today, Upcoming, Inbox, Help, Logout), stacked input panel, responsive hero text and padding, 3-item cap per dashboard section on mobile with See all links, reduced task icon size on mobile, overflow containment. All changes scoped behind md: breakpoints — desktop layout unchanged. Orbit globe icon added to desktop sidebar (80px) and landing page nav (112px) using public/orbit-icon.png — transparent background, blue globe on dark navy. orbit-logo.png also in public folder, unused for now. Logo not visible on mobile — acceptable for now.
 - Email infrastructure — Resend configured as custom SMTP provider in Supabase; removes the previous 2-emails-per-hour free-tier limit. Sender is hello@orbitlife.co.uk via verified Resend domain. Supabase Site URL and redirect URLs updated to https://www.orbitlife.co.uk (plus orbitlife.co.uk and reset-password paths). Password reset flow verified working end to end on the live domain in an incognito session.
+- Password reset success state — after a successful password change, page now shows a toast ("Password updated — please sign in") and redirects to /auth?view=signin after 1.5s; previously the done state fell through to the expired link message because Supabase marks the token as used on completion
+- Time-of-day greeting — thresholds corrected; Good afternoon now runs 12:00–17:59 and Good evening from 18:00; previously hour < 24 caught all post-morning hours making Good evening unreachable; timezone conversion via toLocaleString also removed — browser local time used directly via new Date().getHours()
 
 ## Recurring Tasks Feature (complete)
 Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
@@ -147,17 +149,19 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - View all buttons not wired up
 - Security section is a placeholder
 - Orbit logo not visible anywhere on the mobile dashboard view (desktop sidebar and landing nav only) — agreed acceptable for now
+- Resend email timestamps appear approximately 4 hours behind actual send time — believed to be a Resend server timezone issue, cosmetic only, no data impact
 
 ## Next Priorities In Order
 
 ### High — do soon after launch
-1. Beta launch outreach plan — plan and execute outreach for beta testers
-2. Stripe integration — plan and begin payment/subscription integration
-3. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-4. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-5. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
-6. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
-7. EmailJS — resolved: domain restriction is a paid-only feature; unrestricted public key accepted as low-severity risk for beta. Post-beta option: replace with Resend server-side route.
+1. Resend email timestamp — raise with Resend support; emails showing approximately 4 hours behind actual send time, believed to be a server timezone issue
+2. Beta launch outreach plan — plan and execute outreach for beta testers
+3. Stripe integration — plan and begin payment/subscription integration
+4. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+5. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+6. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+7. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
+8. EmailJS — resolved: domain restriction is a paid-only feature; unrestricted public key accepted as low-severity risk for beta. Post-beta option: replace with Resend server-side route.
 
 ### Feature backlog
 - Security section — change password
