@@ -37,8 +37,7 @@ All core features are complete:
 - Feedback form — working EmailJS integration in Share Your Thoughts, domain restriction currently inactive (see below)
 - How Orbit Works — five accordion sections, smooth expand/collapse, one open at a time (see below)
 - Legal pages — Terms of Service and Privacy Policy pages live; linked from landing page, signup flow, and Help & Settings (see below)
-- Mobile responsiveness — full mobile layout pass complete (see below)
-- Orbit logo — globe icon added to desktop sidebar and landing page nav (see below)
+- Mobile responsiveness — full mobile layout implemented with bottom navigation bar (Dashboard, Today, Upcoming, Inbox, Help, Logout), stacked input panel, responsive hero text and padding, 3-item cap per dashboard section on mobile with See all links, reduced task icon size on mobile, overflow containment. All changes scoped behind md: breakpoints — desktop layout unchanged. Orbit globe icon added to desktop sidebar (80px) and landing page nav (112px) using public/orbit-icon.png — transparent background, blue globe on dark navy. orbit-logo.png also in public folder, unused for now. Logo not visible on mobile — acceptable for now.
 
 ## Recurring Tasks Feature (complete)
 Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
@@ -111,6 +110,7 @@ Share Your Thoughts card in ProfileSection.tsx sends feedback via EmailJS:
 - Domain restriction currently NOT active — the previously configured restriction was found blank in EmailJS Account → Security (possibly never saved, possibly related to an EmailJS service incident on 10 June 2026, possibly a free-tier limitation requiring a paid plan for domain whitelisting)
 - With no restriction active, the public key works from any domain, including localhost
 - Action carried forward: retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security once the service incident is resolved; if a paid plan is required, decide whether to pay or accept the unrestricted public key as a known low-severity risk
+- Domain restriction retry pending — attempt to add https://www.orbitlife.co.uk in EmailJS Account → Security at start of next session.
 
 ## Account Deletion (complete)
 Self-service account deletion via the "Your Account" card in Help & Settings (ProfileSection.tsx), last card on the page:
@@ -149,13 +149,15 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 ## Next Priorities In Order
 
 ### High — do soon after launch
-1. Supabase redirect URLs — add orbitlife.co.uk (root and /reset-password) to the allowed redirect URLs list (currently only deans-app.vercel.app and localhost)
-2. EmailJS domain restriction — retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security
-3. Beta launch outreach plan — plan and execute outreach for beta testers
-4. Stripe integration — plan and begin payment/subscription integration
-5. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-6. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-7. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+1. Update Supabase redirect URLs — add https://orbitlife.co.uk and https://www.orbitlife.co.uk to the allowed redirect URLs in Supabase dashboard under Authentication → URL Configuration. Without this, password reset and email confirmation emails will send links that don't work for users on the new domain.
+2. Custom SMTP for Supabase auth emails — the free tier allows only 2 auth emails per hour across the entire project (signup confirmation, password reset). This will block even a small beta of 5 users. Fix before inviting any real users: set up Resend as a custom SMTP provider in Supabase dashboard under Authentication → Settings → SMTP. Resend free tier allows 100 emails per day and 3,000 per month, which is more than sufficient for beta. Steps: create account at resend.com, add and verify orbitlife.co.uk as a sending domain, generate an API key, enter SMTP credentials in Supabase. Sending address should be no-reply@orbitlife.co.uk or hello@orbitlife.co.uk.
+3. EmailJS domain restriction — retry adding https://www.orbitlife.co.uk as the allowed domain in EmailJS Account → Security
+4. Beta launch outreach plan — plan and execute outreach for beta testers
+5. Stripe integration — plan and begin payment/subscription integration
+6. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+7. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+8. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+9. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
 
 ### Feature backlog
 - Security section — change password
@@ -173,7 +175,7 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at
 - profiles table: id, user_id (unique constraint, used for upsert onConflict), display_name, created_at
 - RLS enabled on both tables
-- Redirect URLs include: http://localhost:3000 and https://deans-app.vercel.app and https://deans-app.vercel.app/reset-password — orbitlife.co.uk not yet added (see Next Priorities)
+- Redirect URLs include http://localhost:3000 and https://deans-app.vercel.app and https://deans-app.vercel.app/reset-password — CRITICAL: these must be updated in Supabase dashboard to also include https://orbitlife.co.uk and https://www.orbitlife.co.uk before beta, or password reset and email confirmation links will break for users on the new domain.
 - Email rate limit on free tier: 2 per hour — affects signup and password reset testing
 - Database cleaned (2026-06-15): 33 orphaned items (no matching user) deleted; index added on items.user_id for query performance
 
@@ -187,7 +189,7 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 2. Write the prompt in Claude chat
 3. Paste prompt into Claude Code terminal
 4. Approve changes one at a time
-5. Test on localhost:3000
+5. Test on localhost:3000 or localhost:3001 depending on which port the dev server starts on
 6. Push to GitHub
 7. Test on live URL
 8. Report back to Claude chat
