@@ -9,7 +9,7 @@ const HOW_IT_WORKS = [
   {
     heading: "Capture it",
     body: [
-      "Just type what's on your mind — Orbit tidies it up. For things with a deadline, like your home insurance or MOT, add a date and tick 'recurring' if it repeats each year. For everyday things like picking up a prescription or 'buy a loaf of bread', just add it with no date. It's all in one place.",
+      "Just type what's on your mind — Orbit tidies it up. For things with a deadline, like your home insurance or MOT, just add a date. Orbit recognises tasks that repeat each year and will remind you to reschedule when you mark them as done. For everyday things like picking up a prescription or buying a loaf of bread, you can add it with no date, it's still captured. It's all in one place.",
       "Orbit is for reminders and everyday life admin — things to do, not things to keep secret. There's no need to store passwords, bank details, or medical records here; Orbit only ever needs the reminder, like 'renew home insurance', never the policy number.",
     ],
   },
