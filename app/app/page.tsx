@@ -208,7 +208,7 @@ async function saveItem(itemTitle: string, itemDueDate: string | null) {
       return false;
     }
 
-    const recurringKeywords = ["insurance", "mot", "road tax", "boiler service", "tv licence"];
+    const recurringKeywords = ["insurance", "mot", "road tax", "car tax", "boiler service", "tv licence"];
     const isRecurring = recurringKeywords.some((kw) =>
       itemTitle.toLowerCase().includes(kw)
     );
