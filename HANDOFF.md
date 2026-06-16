@@ -154,18 +154,20 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 ## Next Priorities In Order
 
 ### High — do soon after launch
-1. Resend email timestamp — raise with Resend support; emails showing approximately 4 hours behind actual send time, believed to be a server timezone issue
-2. Beta launch outreach plan — plan and execute outreach for beta testers
-3. Stripe integration — plan and begin payment/subscription integration
-4. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
-5. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
-6. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
-7. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
-8. EmailJS — resolved: domain restriction is a paid-only feature; unrestricted public key accepted as low-severity risk for beta. Post-beta option: replace with Resend server-side route.
+1. App Store distribution — decision required before public launch: full native iOS/Android build, PWA wrapper (e.g. Capacitor or Median.co), or web-only; affects marketing, discoverability, and build effort
+2. Resend email timestamp — raise with Resend support; emails showing approximately 4 hours behind actual send time, believed to be a server timezone issue
+3. Beta launch outreach plan — plan and execute outreach for beta testers
+4. Stripe integration — plan and begin payment/subscription integration
+5. AI transparency — current implementation documented above; assess whether additional user-facing disclosure is required beyond what is in the Privacy Policy
+6. Data retention — confirm whether completed tasks are retained indefinitely and whether this aligns with the Privacy Policy; decide if any automated deletion policy is needed
+7. Company information — update all references to "Orbit, a business" in Terms and Privacy with the actual legal entity name once Orbit Limited is incorporated
+8. Database maintenance completed — 33 orphaned items (null user_id) deleted, user_id index added to items table for query performance.
+9. EmailJS — resolved: domain restriction is a paid-only feature; unrestricted public key accepted as low-severity risk for beta. Post-beta option: replace with Resend server-side route.
 
 ### Feature backlog
 - Security section — change password
 - View all buttons not wired up
+- PWA apple-touch-icon — nice to have before public launch; required for correct home screen icon when users add Orbit to iPhone via Safari
 
 ## Outstanding — Deferred
 - Dedicated mailbox or send-as for hello@orbitlife.co.uk — deliberately deferred until after beta. Currently receives via Cloudflare Email Routing forwarding to the owner's personal Gmail; replies during beta will come from the personal Gmail address, which is acceptable for a small personally-invited group. Post-beta: set up Gmail "Send mail as" using Resend SMTP credentials so replies appear from hello@orbitlife.co.uk.
@@ -174,6 +176,8 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - Terms acceptance timestamp — record when a user agreed to Terms/Privacy; deferred
 - Foreign keys with cascade rules — items/profiles to auth.users; technical debt, not blocking
 - GDPR data export — "export my data" / "download my account data"; post-launch, do not build yet
+- Carer and contact feature — not yet built; user nominates a trusted contact per task who receives a calm notification if a task is overdue and the user has opted them in (documented in BRIEF.md Notification Philosophy Tier 2 and Tier 3); deferred until after beta testing — beta feedback will determine whether required for public launch
+- Handover and migration path — not yet built; user nominates a trusted person to assume account responsibility if they lose capacity (documented in BRIEF.md Handover Principle); roadmap item after household visibility; deferred until after beta testing — beta feedback will determine timing
 
 ## Supabase Notes
 - items table: id, user_id, title, due_date (type: date), status, is_recurring (boolean, default false), created_at, completed_at

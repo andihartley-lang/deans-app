@@ -13,6 +13,7 @@ Status: Infrastructure configuration, end-to-end cold-start test, and two bug fi
 - Password reset success state bug found and fixed: after a successful updateUser call, the page was falling through to the "Link expired" state because Supabase marks the token as used; fixed by replacing the done state with a toast ("Password updated — please sign in") and an immediate redirect to /auth?view=signin after 1.5s; dead done state and its JSX branch removed
 - Resend email timestamp issue identified: emails appear approximately 4 hours behind actual send time; believed to be a Resend server timezone issue, cosmetic only; logged in Known Issues and Next Priorities for follow-up with Resend support
 - BRIEF.md technical debt entries removed: "No mobile optimisation" and "No self-service account deletion" both deleted as both features are now complete
+- Three-way launch readiness review completed (BRIEF.md, HANDOFF.md, TRACKER.md); gaps identified and added to documentation: PWA apple-touch-icon missing, App Store distribution decision outstanding, carer and contact feature not yet built, handover and migration path not yet built — all four added to BRIEF.md Pre-Launch Checklist and HANDOFF.md Next Priorities / Outstanding Deferred
 
 ### Next Priorities
 1. Resend email timestamp — raise with Resend support

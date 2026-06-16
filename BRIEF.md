@@ -229,6 +229,14 @@ RLS enabled on both tables. All future tables must have RLS enabled by default.
 - View all buttons not wired up
 - No GDPR data export functionality — assess effort post launch; do not build yet
 
+## Pre-Launch Checklist
+Items identified as undecided or not yet built that must be resolved before or at public launch:
+
+- PWA apple-touch-icon — currently missing; required for correct home screen icon when users add Orbit to their iPhone via Safari
+- App Store distribution — decision required before public launch: full native iOS/Android build, PWA wrapper approach (e.g. Capacitor or Median.co), or web-only at launch; affects marketing, discoverability, and build effort
+- Carer and contact feature — not yet built; documented in Notification Philosophy (Tier 2 and Tier 3): user nominates a trusted contact per task who receives a calm notification if a task is overdue and the user has opted them in; beta feedback will determine whether this is required before public launch
+- Handover and migration path — not yet built; documented in Handover Principle: user nominates a trusted person to assume account responsibility if they lose capacity; roadmap item after household visibility; beta feedback will determine timing
+
 ## Go-To-Market Strategy
 
 Orbit launches as a consumer product — designed for individual users managing their own life admin. The caregiver and care-home opportunity is a commercial expansion path built on top of the core consumer product, not a replacement for it. The founder story connects both: it is authentic to carers and equally resonant with anyone who has felt overwhelmed by life admin.
