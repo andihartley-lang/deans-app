@@ -8,7 +8,6 @@ import Toast from "@/components/Toast";
 export default function ResetPasswordPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [done, setDone] = useState(false);
   const [linkError, setLinkError] = useState(false);
 
   const [showToast, setShowToast] = useState(false);
@@ -38,7 +37,10 @@ export default function ResetPasswordPage() {
       return;
     }
 
-    setDone(true);
+    triggerToast("Password updated — please sign in");
+    setTimeout(() => {
+      window.location.href = "/auth?view=signin";
+    }, 1500);
   }
 
   return (
@@ -58,18 +60,6 @@ export default function ResetPasswordPage() {
             >
               Request a new link
             </Link>
-          </>
-        ) : done ? (
-          <>
-            <h2 className="text-3xl font-bold mb-6">Your password has been updated.</h2>
-            <button
-              onClick={() => {
-                window.location.href = "/app";
-              }}
-              className="bg-indigo-600 text-white px-6 py-3 rounded-xl"
-            >
-              Continue to Orbit
-            </button>
           </>
         ) : (
           <>
