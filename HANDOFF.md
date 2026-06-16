@@ -44,7 +44,7 @@ All core features are complete:
 - Time-of-day greeting — thresholds corrected; Good afternoon now runs 12:00–17:59 and Good evening from 18:00; previously hour < 24 caught all post-morning hours making Good evening unreachable; timezone conversion via toLocaleString also removed — browser local time used directly via new Date().getHours()
 
 ## Recurring Tasks Feature (complete)
-Five keywords detected at capture (insurance, mot, road tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
+Six keywords detected at capture (insurance, mot, road tax, car tax, boiler service, tv licence) — `saveItem` silently sets `is_recurring: true`. When completing a recurring item, an inline prompt expands on the card:
 - Checkbox "Add a reminder for next year" (ticked by default)
 - Date picker pre-set to one year from the task's own due date (falls back to one year from today if no due date)
 - Date picker hides when checkbox is unticked, reappears when reticked
