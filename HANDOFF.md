@@ -163,7 +163,7 @@ A profiles row is now guaranteed to exist for every authenticated user, regardle
 - View all buttons not wired up
 
 ## Outstanding — Deferred
-- Dedicated mailbox or send-as capability for hello@orbitlife.co.uk — needed before public launch (currently forwarding-only via Cloudflare Email Routing)
+- Dedicated mailbox or send-as for hello@orbitlife.co.uk — deliberately deferred until after beta. Currently receives via Cloudflare Email Routing forwarding to the owner's personal Gmail; replies during beta will come from the personal Gmail address, which is acceptable for a small personally-invited group. Post-beta: set up Gmail "Send mail as" using Resend SMTP credentials so replies appear from hello@orbitlife.co.uk.
 - ICO registration — user action (Andy), required before public beta
 - Leaked password protection — Supabase feature requires a paid tier; deferred until upgrade
 - Terms acceptance timestamp — record when a user agreed to Terms/Privacy; deferred
